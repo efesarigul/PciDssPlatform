@@ -1,0 +1,18 @@
+# .NET derleme çıktıları
+bin/
+obj/
+.vs/
+*.user
+
+# Yüklenen kanıt dosyaları (kuruma ait veri, depoya girmemeli)
+backend/PciDss.API/uploads/
+
+# Frontend
+node_modules/
+dist/
+
+# Editör / işletim sistemi
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
