@@ -12,10 +12,18 @@ public abstract class OrgControllerBase : ControllerBase
     protected int OrgId => int.Parse(User.FindFirst("org")!.Value);
 }
 
-public class AuthController(IAuthService auth) : OrgControllerBase
+public class AuthController(IAuthService auth, IDemoService demo) : OrgControllerBase
 {
     [HttpPost("register")] public async Task<ActionResult<AuthResultDto>> Register(RegisterDto dto) => Ok(await auth.RegisterAsync(dto));
     [HttpPost("login")]    public async Task<ActionResult<AuthResultDto>> Login(LoginDto dto)       => Ok(await auth.LoginAsync(dto));
+    // Demo kurumu sıfırlar ve giriş yapar (Demo:Enabled kapalıysa 400)
+    [HttpPost("demo")]     public async Task<ActionResult<AuthResultDto>> Demo()                    => Ok(await demo.ResetAndLoginAsync());
+}
+
+[Authorize]
+public class GapController(IGapService gap) : OrgControllerBase
+{
+    [HttpGet] public async Task<ActionResult<GapAnalysisDto>> Get() => Ok(await gap.GetAsync(OrgId));
 }
 
 [Authorize]
@@ -43,4 +51,7 @@ public class FilesController(IFileService files) : OrgControllerBase
         => Ok(await files.UploadAsync(OrgId, file, requirementCode));
 
     [HttpGet] public async Task<ActionResult<List<PolicyDto>>> List() => Ok(await files.ListAsync(OrgId));
+
+    [HttpPost("{id:int}/analyze")]
+    public async Task<IActionResult> Reanalyze(int id) { await files.ReanalyzeAsync(OrgId, id); return NoContent(); }
 }

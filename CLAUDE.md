@@ -4,7 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Phase 1 skeleton of an AI-assisted PCI DSS pre-assessment platform: organizations register, fill in a self-declaration survey mapped to PCI DSS requirements, and upload evidence documents. The AI gap analysis (Phase 2/3) does not exist yet.
+Phase 1 skeleton of an AI-assisted PCI DSS pre-assessment platform: organizations register, fill in a self-declaration survey mapped to PCI DSS requirements, and upload evidence documents. A gap analysis (`GapService`, `/gap` page) scores the declarations, evidence and AI verdicts on the fly. Phase 2 AI analysis exists: `ai-service/` is a Python FastAPI RAG service (LangChain chunking → Gemini embeddings → ChromaDB → Gemini structured verdict). `AnalysisWorker` (a hosted service in `Services.cs`) polls for `Pending` policies that have a `RequirementId`, posts them to `AiService:Url` `/analyze`, and writes `AiVerdict`/`AiSummary`/`AiGaps`/`AiQuotes` back to `Policy`. The persisted `Finding` entity (Phase 3) does not exist yet.
+
+The Gemini key lives in `ai-service/.env` (gitignored, template in `.env.example`); never put it in `appsettings.json` or `frontend/.env`, which are committed. Model names are configurable via `GEMINI_MODELS` (a fallback chain, since Google retires and overloads models often).
+
+`POST /api/auth/demo` (`DemoService`, gated by `Demo:Enabled`) resets a fixed demo org to a scripted SAQ A-EP state and logs in. It is meant for presentations. `demo/` holds a sample evidence file to upload live.
 
 User-facing strings, error messages, code comments and the README are in Turkish — keep new ones in Turkish.
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { scopeApi } from "../api";
+import { Icon, PageHeader } from "../ui";
 
 export const SAQ_LABEL = {
   A: "A", AEP: "A-EP", B: "B", BIP: "B-IP", C: "C", CVT: "C-VT", P2PE: "P2PE", SPoC: "SPoC",
@@ -71,9 +72,8 @@ export default function Scope() {
 
   return (
     <section>
-      <h2>Kapsam Belirleme</h2>
-      <p className="muted">Kart ödemelerini nasıl kabul ettiğinizi beyan edin. Size uygun SAQ (öz değerlendirme anketi) tipi
-        ve buna göre sorulacak PCI DSS gereksinimleri bu cevaplardan belirlenir.</p>
+      <PageHeader eyebrow="Adım 1 / 4" title="Kapsam Belirleme"
+        subtitle="Kart ödemelerini nasıl kabul ettiğinizi beyan edin. Size uygun SAQ (öz değerlendirme anketi) tipi ve buna göre sorulacak PCI DSS gereksinimleri bu cevaplardan belirlenir." />
 
       <div className="card">
         <h3>Kurum tipi</h3>
@@ -106,16 +106,19 @@ export default function Scope() {
 
         {result && (
           <div className="saq-result">
-            <div className="saq-badge">SAQ {SAQ_LABEL[result.saqType]}</div>
-            <p>{result.explanation}</p>
-            <p className="muted">Bu SAQ kapsamında {result.questionCount} gereksinim sorulacak. Kesin SAQ tipini edinci bankanız onaylar.</p>
+            <span className="saq-icon"><Icon name="checkCircle" size={22} /></span>
+            <div>
+              <div className="saq-title">Size uygun anket: <span className="saq-badge">SAQ {SAQ_LABEL[result.saqType]}</span></div>
+              <p>{result.explanation}</p>
+              <p className="muted">Bu SAQ kapsamında <strong>{result.questionCount} gereksinim</strong> sorulacak. Kesin SAQ tipini edinci bankanız onaylar.</p>
+            </div>
           </div>
         )}
 
         <div className="actions">
           <span />
           {result
-            ? <button onClick={() => nav("/survey")}>Beyan Anketine Geç →</button>
+            ? <button onClick={() => nav("/survey")}>Beyan Anketine Geç <Icon name="arrowRight" size={16} /></button>
             : <button disabled={saving} onClick={save}>{saving ? "Kaydediliyor…" : "SAQ Tipini Belirle"}</button>}
         </div>
       </div>

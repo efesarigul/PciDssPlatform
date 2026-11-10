@@ -22,6 +22,11 @@ api.interceptors.response.use(
 export const authApi = {
   login: (email, password) => api.post("/auth/login", { email, password }).then((r) => r.data),
   register: (dto) => api.post("/auth/register", dto).then((r) => r.data),
+  demo: () => api.post("/auth/demo").then((r) => r.data),
+};
+
+export const gapApi = {
+  get: () => api.get("/gap").then((r) => r.data),
 };
 
 export const scopeApi = {
@@ -37,6 +42,7 @@ export const surveyApi = {
 
 export const filesApi = {
   list: () => api.get("/files").then((r) => r.data),
+  reanalyze: (id) => api.post(`/files/${id}/analyze`),
   upload: (file, requirementCode, onProgress) => {
     const form = new FormData();
     form.append("file", file);

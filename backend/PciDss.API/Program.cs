@@ -15,6 +15,19 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IScopeService, ScopeService>();
 builder.Services.AddScoped<ISurveyService, SurveyService>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IGapService, GapService>();
+builder.Services.AddScoped<IDemoService, DemoService>();
+
+// Faz 2: Python RAG servisi (ai-service). Kapalıysa belgeler "Analiz bekliyor" durumunda kalır.
+if (cfg.GetValue("AiService:Enabled", true))
+{
+    builder.Services.AddHttpClient<AnalysisService>(c =>
+    {
+        c.BaseAddress = new Uri(cfg["AiService:Url"] ?? "http://localhost:8000/");
+        c.Timeout = TimeSpan.FromMinutes(3);
+    });
+    builder.Services.AddHostedService<AnalysisWorker>();
+}
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(o => o.TokenValidationParameters = new TokenValidationParameters
@@ -34,6 +47,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// Veritabanı yoksa oluşturur ve bekleyen migration'ları uygular (yeni kurulumda dotnet ef gerekmez)
+using (var scope = app.Services.CreateScope())
+    scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
 
 // BusinessException -> 400
 app.Use(async (ctx, next) =>

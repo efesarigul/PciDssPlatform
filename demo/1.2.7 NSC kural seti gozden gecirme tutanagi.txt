@@ -1,0 +1,17 @@
+Örnek E-Ticaret A.Ş.
+PCI DSS 1.2.7 · NSC yapılandırmalarının periyodik gözden geçirilmesi
+
+AĞ GÜVENLİK KONTROLLERİ KURAL SETİ GÖZDEN GEÇİRME TUTANAĞI
+
+Tarih        : 15.10.2026
+Katılımcılar : Bilgi Güvenliği Yöneticisi, Ağ ve Sistem Ekibi Lideri, Uygulama Geliştirme Sorumlusu
+Kapsam       : Web sunucuları önündeki güvenlik duvarı ve WAF kural setleri
+
+1. Gözden geçirilen kural sayısı: 142
+2. İş gerekçesi bulunmayan ve kaldırılan kural sayısı: 6
+3. Kapsamı daraltılan (ANY -> belirli kaynak/hedef) kural sayısı: 4
+4. Yönetim erişimi yalnızca yönetim VLAN'ından izinli olacak şekilde güncellendi.
+
+Sonraki gözden geçirme: 15.04.2027 (en geç 6 ayda bir)
+
+(Demo amaçlı örnek kanıt belgesi. Sunumda "Kanıt Yükleme" ekranına sürükleyin.)

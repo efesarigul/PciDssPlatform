@@ -71,7 +71,17 @@ public class Policy : BaseEntity
     public string ContentType { get; set; } = null!;
     public long SizeBytes { get; set; }
     public string Sha256 { get; set; } = null!;
-    public AnalysisStatus Status { get; set; } = AnalysisStatus.Pending; // Faz 2'de AI servisi günceller
+    public AnalysisStatus Status { get; set; } = AnalysisStatus.Pending; // AnalysisWorker günceller
+
+    // YZ (RAG) analiz sonucu. Failed durumunda AiSummary hata mesajını taşır.
+    public ComplianceVerdict? AiVerdict { get; set; }
+    public double? AiConfidence { get; set; }
+    public string? AiSummary { get; set; }
+    public string? AiGaps { get; set; }    // satır satır eksikler
+    public string? AiQuotes { get; set; }  // satır satır belgeden alıntılar
+    public string? AiModel { get; set; }
+    public DateTime? AnalyzedAt { get; set; }
+
     public int OrganizationId { get; set; }
     public Organization Organization { get; set; } = null!;
     public int? RequirementId { get; set; }
@@ -79,6 +89,24 @@ public class Policy : BaseEntity
 }
 
 public enum AnalysisStatus { Pending, Processing, Completed, Failed }
+
+// YZ'nin kanıt belgesi için kararı. Sıra önemli: küçük değer daha iyi (birden fazla belgede en iyisi seçilir).
+public enum ComplianceVerdict { Compliant, Partial, NonCompliant }
+
+// ---------------- GAP ANALİZİ ----------------
+// Şimdilik beyan ve kanıt durumundan anlık hesaplanır; Faz 3'te kalıcı Finding varlığına dönüşecek.
+public enum FindingSeverity { Critical, Medium, Low }
+
+public enum FindingKind
+{
+    NotInPlace,      // Kontrol uygulanmıyor
+    NotTested,       // Kontrol test edilmedi
+    Unanswered,      // Beyan verilmedi
+    MissingEvidence, // Uygulanıyor denildi ama zorunlu kanıt yok
+    AiNonCompliant,  // Kanıt yüklendi ama YZ'ye göre gereksinimi karşılamıyor
+    AiPartial,       // Kanıt YZ'ye göre gereksinimi kısmen karşılıyor
+    Compensating     // Telafi edici kontrolle karşılanıyor (CCW)
+}
 
 // ---------------- KAPSAM (SAQ belirleme) ----------------
 public enum EntityType { Merchant, ServiceProvider }

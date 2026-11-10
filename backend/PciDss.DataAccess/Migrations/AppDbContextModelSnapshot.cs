@@ -54,6 +54,27 @@ namespace PciDss.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<double?>("AiConfidence")
+                        .HasColumnType("float");
+
+                    b.Property<string>("AiGaps")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AiModel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AiQuotes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AiSummary")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("AiVerdict")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("AnalyzedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("ContentType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

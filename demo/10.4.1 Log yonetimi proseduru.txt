@@ -1,0 +1,22 @@
+Örnek E-Ticaret A.Ş.
+LOG YÖNETİMİ PROSEDÜRÜ (Sürüm 1.0)
+
+1. Amaç
+Bu prosedür, bilgi sistemlerinde üretilen kayıtların (log) toplanması ve saklanmasına ilişkin kuralları belirler.
+
+2. Kapsam
+Web sunucuları, veritabanı sunucuları ve güvenlik duvarları.
+
+3. Kayıtların toplanması
+Tüm sunucuların sistem kayıtları merkezi log sunucusuna gönderilir. Kayıtlar 12 ay saklanır,
+son 3 aylık kayıtlar anında erişilebilir durumdadır.
+
+4. Kayıtların incelenmesi
+Kayıtlar, Sistem Yöneticisi tarafından ayda bir kez gözden geçirilir. Bir güvenlik olayından
+şüphelenildiğinde ilgili kayıtlar ayrıca incelenir.
+
+5. Sorumluluklar
+Prosedürün uygulanmasından Bilgi İşlem Müdürü sorumludur.
+
+(Demo amaçlı örnek kanıt belgesi. Kasıtlı olarak eksik yazılmıştır: PCI DSS 10.4.1 kayıtların
+en az günde bir kez incelenmesini ister.)
