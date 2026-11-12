@@ -2,7 +2,7 @@ import { Fragment, useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { filesApi, surveyApi } from "../api";
-import { Icon, PageHeader } from "../ui";
+import { Checklist, Icon, PageHeader } from "../ui";
 
 const fmtSize = (b) => (b > 1048576 ? `${(b / 1048576).toFixed(1)} MB` : `${Math.ceil(b / 1024)} KB`);
 const VERDICT = { Compliant: "Uyumlu", Partial: "Kısmen uyumlu", NonCompliant: "Uyumsuz" };
@@ -33,10 +33,17 @@ function AiDetail({ f, onRetry }) {
         {f.ai.model !== "demo" && <button className="link" onClick={onRetry}>Yeniden analiz et</button>}
       </div>
       <p>{f.ai.summary}</p>
+      {f.ai.checks ? (
+        <>
+          <Checklist checks={f.ai.checks} />
+          <p className="muted small">Değerlendirme, bu gereksinime yüklenen tüm belgeler birlikte incelenerek yapıldı.</p>
+        </>
+      ) : (
       <div className="ai-cols">
         {f.ai.gaps.length > 0 && <div><h4>Eksikler</h4><ul>{f.ai.gaps.map((g) => <li key={g}>{g}</li>)}</ul></div>}
         {f.ai.quotes.length > 0 && <div><h4>Belgeden dayanak</h4>{f.ai.quotes.map((q) => <blockquote key={q}>“{q}”</blockquote>)}</div>}
       </div>
+      )}
     </div>
   );
 }

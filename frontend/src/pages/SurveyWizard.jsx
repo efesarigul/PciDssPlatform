@@ -13,6 +13,7 @@ const OPTIONS = [
   { value: "NotTested", label: "Test edilmedi", justify: "Bu gereksinimin neden değerlendirme dışında bırakıldığını açıklayın." },
   { value: "NotInPlace", label: "Uygulanmıyor" },
 ];
+export const ANSWER_LABEL = Object.fromEntries(OPTIONS.map((o) => [o.value, o.label]));
 
 export const SECTIONS = {
   1: "Ağ güvenlik kontrolleri", 2: "Güvenli yapılandırma", 3: "Saklanan hesap verisinin korunması",

@@ -17,6 +17,8 @@ builder.Services.AddScoped<ISurveyService, SurveyService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IGapService, GapService>();
 builder.Services.AddScoped<IDemoService, DemoService>();
+builder.Services.AddScoped<IAuditorAccessService, AuditorAccessService>();
+builder.Services.AddScoped<IAuditService, AuditService>();
 
 // Faz 2: Python RAG servisi (ai-service). Kapalıysa belgeler "Analiz bekliyor" durumunda kalır.
 if (cfg.GetValue("AiService:Enabled", true))
@@ -24,7 +26,8 @@ if (cfg.GetValue("AiService:Enabled", true))
     builder.Services.AddHttpClient<AnalysisService>(c =>
     {
         c.BaseAddress = new Uri(cfg["AiService:Url"] ?? "http://localhost:8000/");
-        c.Timeout = TimeSpan.FromMinutes(3);
+        // YZ servisi sırayla birkaç modeli dener (her biri GEMINI_TIMEOUT, varsayılan 2 dk)
+        c.Timeout = TimeSpan.FromMinutes(7);
     });
     builder.Services.AddHostedService<AnalysisWorker>();
 }

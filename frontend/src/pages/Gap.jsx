@@ -7,7 +7,7 @@ import { SECTIONS } from "./SurveyWizard";
 
 const SEVERITY = { Critical: "Kritik", Medium: "Orta", Low: "Düşük" };
 const SEVERITY_ICON = { Critical: "alert", Medium: "info", Low: "help" };
-const EVIDENCE_KINDS = ["MissingEvidence", "AiNonCompliant", "AiPartial"];
+const EVIDENCE_KINDS = ["MissingEvidence", "AiNonCompliant", "AiPartial", "AuditorRejected"];
 const level = (score) => (score >= 90 ? "good" : score >= 70 ? "mid" : "bad");
 
 // Kritik bulgu varken skor ne olursa olsun denetime hazır sayılmaz
@@ -100,6 +100,12 @@ export default function Gap() {
             <Icon name={v.icon} size={18} />
             <span><strong>{v.text}</strong><span>{v.sub}</span></span>
           </div>
+          {data.auditorApproved + data.auditorRejected > 0 && (
+            <div className="auditor-line">
+              <Icon name="shield" size={14} /> Denetçi: <b className="ok-text">{data.auditorApproved} onaylı</b>
+              {data.auditorRejected > 0 && <> · <b className="error-text">{data.auditorRejected} reddedilen</b></>}
+            </div>
+          )}
         </div>
         <div className="kpis">
           <Kpi icon="checkCircle" tone="good" value={data.inPlace} total={data.total} label="Uygulanan kontrol" />
@@ -159,6 +165,7 @@ export default function Gap() {
               <div className="finding-meta">
                 <span className={`sev ${f.severity.toLowerCase()}`}>{SEVERITY[f.severity]}</span>
                 {f.kind.startsWith("Ai") && <span className="ai-tag"><Icon name="sparkles" size={12} /> YZ</span>}
+                {f.kind === "AuditorRejected" && <span className="ai-tag auditor-tag"><Icon name="shield" size={12} /> Denetçi</span>}
                 <span className="code">{f.requirementCode}</span>
                 <span className="finding-req">{f.requirementTitle}</span>
               </div>

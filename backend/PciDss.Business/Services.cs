@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -39,11 +40,12 @@ public class AuthService(IRepository<User> users, IRepository<Organization> orgs
         var user = new User
         {
             FullName = dto.FullName, Email = dto.Email, Organization = org,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password)
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+            Role = dto.IsAuditor ? UserRole.Auditor : UserRole.OrgUser
         };
         await users.AddAsync(user);
         await users.SaveChangesAsync();
-        return new AuthResultDto(CreateToken(user), user.FullName, org.Name);
+        return new AuthResultDto(CreateToken(user), user.FullName, org.Name, user.Role);
     }
 
     public async Task<AuthResultDto> LoginAsync(LoginDto dto)
@@ -51,7 +53,7 @@ public class AuthService(IRepository<User> users, IRepository<Organization> orgs
         var user = await users.Query().Include(u => u.Organization).FirstOrDefaultAsync(u => u.Email == dto.Email);
         if (user is null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
             throw new BusinessException("E-posta veya parola hatalı.");
-        return new AuthResultDto(CreateToken(user), user.FullName, user.Organization.Name);
+        return new AuthResultDto(CreateToken(user), user.FullName, user.Organization.Name, user.Role);
     }
 
     private string CreateToken(User u)
@@ -179,7 +181,8 @@ public interface ISurveyService
 }
 
 public class SurveyService(IRepository<SurveyQuestion> questions, IRepository<SurveyAnswer> answers,
-                           IRepository<ScopeProfile> scopes, IRepository<Policy> policies) : ISurveyService
+                           IRepository<ScopeProfile> scopes, IRepository<Policy> policies,
+                           IRepository<AuditorReview> reviews) : ISurveyService
 {
     // SAQ'ta bu cevaplar gerekçe (açıklama) olmadan kabul edilmez
     private static readonly AnswerValue[] NeedsJustification =
@@ -192,6 +195,7 @@ public class SurveyService(IRepository<SurveyQuestion> questions, IRepository<Su
             .ToDictionaryAsync(a => a.SurveyQuestionId);
         var withEvidence = await EvidenceRequirementIdsAsync(orgId);
         var ai = await BestAiResultsAsync(orgId);
+        var myReviews = await ReviewsAsync(orgId);
 
         var list = await questions.Query().Include(q => q.Requirement)
             .Where(SaqRules.QuestionsFor(saq)).OrderBy(q => q.Order).ToListAsync();
@@ -200,8 +204,23 @@ public class SurveyService(IRepository<SurveyQuestion> questions, IRepository<Su
             myAnswers.TryGetValue(q.Id, out var a);
             return new QuestionDto(q.Id, q.Order, q.Text, q.EvidenceRequired, q.EvidenceHint,
                 q.Requirement.Code, q.Requirement.Title, q.Requirement.Description, q.Requirement.Section,
-                a?.Value, a?.Comment, withEvidence.Contains(q.RequirementId), ai.GetValueOrDefault(q.RequirementId));
+                a?.Value, a?.Comment, withEvidence.Contains(q.RequirementId), ai.GetValueOrDefault(q.RequirementId),
+                myReviews.GetValueOrDefault(q.RequirementId));
         }).ToList());
+    }
+
+    // Denetçi kararları. Karardan sonra gereksinime yeni belge yüklendiyse veya belge yeniden analiz edildiyse
+    // karar "eskimiş" sayılır: denetçi baktığı kanıttan farklı bir kanıtı onaylamış olmasın.
+    private async Task<Dictionary<int, AuditorReviewDto>> ReviewsAsync(int orgId)
+    {
+        var lastEvidence = await policies.Query().Where(p => p.OrganizationId == orgId && p.RequirementId != null)
+            .GroupBy(p => p.RequirementId!.Value)
+            .Select(g => new { g.Key, Last = g.Max(p => p.AnalyzedAt > p.CreatedAt ? p.AnalyzedAt!.Value : p.CreatedAt) })
+            .ToDictionaryAsync(x => x.Key, x => x.Last);
+        return (await reviews.Query().Where(r => r.OrganizationId == orgId)
+                .Select(r => new { r.RequirementId, r.Decision, r.Note, r.AuditorUser.FullName, r.ReviewedAt }).ToListAsync())
+            .ToDictionary(r => r.RequirementId, r => new AuditorReviewDto(r.Decision, r.Note, r.FullName, r.ReviewedAt,
+                lastEvidence.TryGetValue(r.RequirementId, out var last) && last > r.ReviewedAt));
     }
 
     // Upsert: wizard her adımda kaydedebilir
@@ -260,16 +279,19 @@ public class SurveyService(IRepository<SurveyQuestion> questions, IRepository<Su
         (await policies.Query().Where(p => p.OrganizationId == orgId && p.RequirementId != null)
             .Select(p => p.RequirementId!.Value).Distinct().ToListAsync()).ToHashSet();
 
-    // Gereksinim başına YZ'nin en iyi değerlendirdiği belge: bir belge uyumluysa diğerleri eksik sayılmaz
+    // Gereksinim başına en son YZ değerlendirmesi. Her analiz gereksinime o ana kadar yüklenmiş tüm belgeleri
+    // birlikte incelediği için en yenisi en kapsamlısıdır (en iyisini seçmek, uyumsuz belgeyi gizlerdi).
     private async Task<Dictionary<int, EvidenceAiDto>> BestAiResultsAsync(int orgId) =>
         (await policies.Query()
             .Where(p => p.OrganizationId == orgId && p.RequirementId != null &&
                         p.Status == AnalysisStatus.Completed && p.AiVerdict != null)
-            .Select(p => new { RequirementId = p.RequirementId!.Value, Verdict = p.AiVerdict!.Value, p.AiSummary, p.AiGaps, p.OriginalFileName })
+            .Select(p => new { RequirementId = p.RequirementId!.Value, Verdict = p.AiVerdict!.Value, p.AiSummary, p.AiGaps,
+                               p.AiChecks, p.OriginalFileName, p.AnalyzedAt, p.Id })
             .ToListAsync())
         .GroupBy(p => p.RequirementId)
-        .ToDictionary(g => g.Key, g => g.OrderBy(p => p.Verdict)
-            .Select(p => new EvidenceAiDto(p.Verdict, p.AiSummary, AiText.Lines(p.AiGaps), p.OriginalFileName)).First());
+        .ToDictionary(g => g.Key, g => g.OrderByDescending(p => p.AnalyzedAt).ThenByDescending(p => p.Id)
+            .Select(p => new EvidenceAiDto(p.Verdict, p.AiSummary, AiText.Lines(p.AiGaps), p.OriginalFileName,
+                AiText.Checks(p.AiChecks))).First());
 }
 
 // ---------------- GAP ANALİZİ ----------------
@@ -294,16 +316,24 @@ public class GapService(ISurveyService survey) : IGapService
         return new GapAnalysisDto(s.SaqType, Score(qs), qs.Count, qs.Count(q => q.CurrentAnswer != null),
             qs.Count(q => q.CurrentAnswer is AnswerValue.InPlace or AnswerValue.InPlaceWithCcw),
             qs.Count(q => q.CurrentAnswer == AnswerValue.NotInPlace),
-            qs.Count(MissingEvidence), sections, findings);
+            qs.Count(MissingEvidence), sections, findings,
+            qs.Count(q => ReviewIs(q, ReviewDecision.Approved)), qs.Count(q => ReviewIs(q, ReviewDecision.Rejected)));
     }
 
     private static bool MissingEvidence(QuestionDto q) => q.EvidenceRequired && !q.EvidenceUploaded &&
         q.CurrentAnswer is AnswerValue.InPlace or AnswerValue.InPlaceWithCcw;
 
-    // Uygulanıyor = 1 puan; kanıtı eksikse veya YZ kısmen uyumlu bulduysa 0,5; YZ uyumsuz bulduysa 0.
+    // Denetçi kararı yalnızca güncelse (karardan sonra kanıt değişmediyse) geçerlidir
+    private static bool ReviewIs(QuestionDto q, ReviewDecision d) =>
+        q.CurrentAnswer is AnswerValue.InPlace or AnswerValue.InPlaceWithCcw && q.Review is { Stale: false } r && r.Decision == d;
+
+    // Denetçi kararı YZ kararının önüne geçer: onay = 1, ret = 0.
+    // Aksi halde: Uygulanıyor = 1 puan; kanıtı eksikse veya YZ kısmen uyumlu bulduysa 0,5; YZ uyumsuz bulduysa 0.
     // Uygulanmıyor / test edilmedi / cevapsız = 0. "Uygulanamaz" cevapları paydaya katılmaz.
     private static double Points(QuestionDto q) => q.CurrentAnswer switch
     {
+        AnswerValue.InPlace or AnswerValue.InPlaceWithCcw when ReviewIs(q, ReviewDecision.Approved) => 1,
+        AnswerValue.InPlace or AnswerValue.InPlaceWithCcw when ReviewIs(q, ReviewDecision.Rejected) => 0,
         AnswerValue.InPlace or AnswerValue.InPlaceWithCcw when MissingEvidence(q) => 0.5,
         AnswerValue.InPlace or AnswerValue.InPlaceWithCcw => q.EvidenceAi?.Verdict switch
         {
@@ -314,8 +344,10 @@ public class GapService(ISurveyService survey) : IGapService
         _ => 0
     };
 
+    // Denetçinin onayladığı kanıt için YZ bulgusu gösterilmez
     private static bool AiVerdictIs(QuestionDto q, ComplianceVerdict v) =>
-        q.CurrentAnswer is AnswerValue.InPlace or AnswerValue.InPlaceWithCcw && q.EvidenceAi?.Verdict == v;
+        q.CurrentAnswer is AnswerValue.InPlace or AnswerValue.InPlaceWithCcw && q.EvidenceAi?.Verdict == v &&
+        !ReviewIs(q, ReviewDecision.Approved);
 
     private static int Score(IEnumerable<QuestionDto> qs)
     {
@@ -337,6 +369,8 @@ public class GapService(ISurveyService survey) : IGapService
                 "Kontrolü test edin ve sonucunu belgeleyin." + hint),
             null => (FindingKind.Unanswered, FindingSeverity.Medium, "Beyan verilmedi.",
                 "Bu gereksinim için beyanınızı tamamlayın."),
+            _ when ReviewIs(q, ReviewDecision.Rejected) => (FindingKind.AuditorRejected, FindingSeverity.Critical,
+                "Denetçi kanıtlı beyanı reddetti.", $"{q.Review!.AuditorName}: {q.Review.Note}"),
             _ when MissingEvidence(q) => (FindingKind.MissingEvidence, FindingSeverity.Medium,
                 "Uygulandığı beyan edildi ancak kanıt yüklenmedi.", "Kanıt belgesini yükleyin." + hint),
             _ when AiVerdictIs(q, ComplianceVerdict.NonCompliant) => (FindingKind.AiNonCompliant, FindingSeverity.Critical,
@@ -353,10 +387,168 @@ public class GapService(ISurveyService survey) : IGapService
     }
 }
 
+// ---------------- DENETÇİ ERİŞİMİ (kurum tarafı) ----------------
+public interface IAuditorAccessService
+{
+    Task<List<AuditorAccessDto>> ListAsync(int orgId);
+    Task<AuditorAccessDto> GrantAsync(int orgId, GrantAuditorDto dto);
+    Task RevokeAsync(int orgId, int accessId);
+}
+
+public class AuditorAccessService(IRepository<AuditorAccess> access, IRepository<User> users) : IAuditorAccessService
+{
+    public async Task<List<AuditorAccessDto>> ListAsync(int orgId) =>
+        await access.Query().Where(a => a.OrganizationId == orgId).OrderBy(a => a.CreatedAt)
+            .Select(a => new AuditorAccessDto(a.Id, a.AuditorUser.FullName, a.AuditorUser.Email,
+                a.AuditorUser.Organization.Name, a.CreatedAt))
+            .ToListAsync();
+
+    public async Task<AuditorAccessDto> GrantAsync(int orgId, GrantAuditorDto dto)
+    {
+        var email = dto.Email?.Trim() ?? "";
+        var auditor = await users.Query().Include(u => u.Organization)
+                          .FirstOrDefaultAsync(u => u.Email == email && u.Role == UserRole.Auditor)
+                      ?? throw new BusinessException("Bu e-postayla kayıtlı bir denetçi hesabı bulunamadı.");
+        if (await access.Query().AnyAsync(a => a.OrganizationId == orgId && a.AuditorUserId == auditor.Id))
+            throw new BusinessException("Bu denetçinin zaten erişimi var.");
+        var a = new AuditorAccess { OrganizationId = orgId, AuditorUserId = auditor.Id };
+        await access.AddAsync(a);
+        await access.SaveChangesAsync();
+        return new AuditorAccessDto(a.Id, auditor.FullName, auditor.Email, auditor.Organization.Name, a.CreatedAt);
+    }
+
+    // Erişim kaldırılır; denetçinin verdiği kararlar kurumda kayıt olarak kalır
+    public async Task RevokeAsync(int orgId, int accessId)
+    {
+        var a = await access.Query().FirstOrDefaultAsync(x => x.Id == accessId && x.OrganizationId == orgId)
+                ?? throw new BusinessException("Erişim kaydı bulunamadı.");
+        access.Remove(a);
+        await access.SaveChangesAsync();
+    }
+}
+
+// ---------------- DENETÇİ PANELİ ----------------
+public interface IAuditService
+{
+    Task<List<AuditOrgDto>> OrganizationsAsync(int auditorId);
+    Task<AuditOrgDetailDto> OrganizationAsync(int auditorId, int orgId);
+    Task<AuditorReviewDto> ReviewAsync(int auditorId, int orgId, int questionId, ReviewDto dto);
+    Task<(string Path, string ContentType, string FileName)> FileAsync(int auditorId, int orgId, int policyId);
+}
+
+/// <summary>
+/// Denetçi yalnızca kendisine erişim verilmiş kurumları görür ve hiçbir kurum verisini değiştiremez; yalnızca karar verir.
+/// Kuyruğa yalnızca kanıtlı beyanlar girer; YZ kontrolü bitmeden karar verilemez.
+/// </summary>
+public class AuditService(IRepository<AuditorAccess> access, IRepository<AuditorReview> reviews,
+                          IRepository<SurveyQuestion> questions, IRepository<Policy> policies,
+                          ISurveyService survey, IFileService files, IConfiguration cfg) : IAuditService
+{
+    public async Task<List<AuditOrgDto>> OrganizationsAsync(int auditorId)
+    {
+        var grants = await access.Query().Where(a => a.AuditorUserId == auditorId).OrderBy(a => a.Organization.Name)
+            .Select(a => new { a.OrganizationId, a.Organization.Name, a.CreatedAt, Saq = (SaqType?)a.Organization.Scope!.SaqType })
+            .ToListAsync();
+        var result = new List<AuditOrgDto>();
+        foreach (var g in grants)
+        {
+            // Kapsamı belirlenmemiş kurumda henüz incelenecek beyan yoktur
+            var items = g.Saq is null ? [] : await ItemsAsync(g.OrganizationId);
+            result.Add(new AuditOrgDto(g.OrganizationId, g.Name, g.Saq, g.CreatedAt, items.Count,
+                items.Count(i => i.State is AuditItemState.Ready or AuditItemState.Stale),
+                items.Count(i => i.State == AuditItemState.Approved),
+                items.Count(i => i.State == AuditItemState.Rejected)));
+        }
+        return result;
+    }
+
+    public async Task<AuditOrgDetailDto> OrganizationAsync(int auditorId, int orgId)
+    {
+        var name = await RequireAccessAsync(auditorId, orgId);
+        var s = await survey.GetQuestionsAsync(orgId);
+        var items = await ItemsAsync(orgId, s);
+        var declarationOnly = s.Questions.Count(q => q.CurrentAnswer is AnswerValue.InPlace or AnswerValue.InPlaceWithCcw &&
+                                                     items.All(i => i.Question.Id != q.Id));
+        return new AuditOrgDetailDto(orgId, name, s.SaqType, declarationOnly, items);
+    }
+
+    public async Task<AuditorReviewDto> ReviewAsync(int auditorId, int orgId, int questionId, ReviewDto dto)
+    {
+        await RequireAccessAsync(auditorId, orgId);
+        var note = dto.Note?.Trim();
+        if (dto.Decision == ReviewDecision.Rejected && string.IsNullOrEmpty(note))
+            throw new BusinessException("Ret kararı için gerekçe yazmalısınız; kurum bu gerekçeyi bulgu olarak görür.");
+        if (note?.Length > 2000) throw new BusinessException("Not en fazla 2000 karakter olabilir.");
+
+        var item = (await ItemsAsync(orgId)).FirstOrDefault(i => i.Question.Id == questionId)
+                   ?? throw new BusinessException("Bu gereksinim için incelenecek kanıtlı beyan yok.");
+        if (item.State == AuditItemState.WaitingSystem)
+            throw new BusinessException("Kanıtın sistem (YZ) kontrolü tamamlanmadan karar verilemez.");
+
+        var requirementId = await questions.Query().Where(q => q.Id == questionId).Select(q => q.RequirementId).FirstAsync();
+        var r = await reviews.Query().FirstOrDefaultAsync(x => x.OrganizationId == orgId && x.RequirementId == requirementId);
+        if (r is null) await reviews.AddAsync(r = new AuditorReview { OrganizationId = orgId, RequirementId = requirementId });
+        r.AuditorUserId = auditorId;
+        r.Decision = dto.Decision;
+        r.Note = string.IsNullOrEmpty(note) ? null : note;
+        r.ReviewedAt = DateTime.UtcNow;
+        await reviews.SaveChangesAsync();
+
+        var reviewed = (await survey.GetQuestionsAsync(orgId)).Questions.First(q => q.Id == questionId);
+        return reviewed.Review!;
+    }
+
+    // Denetçinin belgeyi kendisinin okuyabilmesi için. Dosya adı diskte GUID'dir; istemciden yol alınmaz.
+    public async Task<(string Path, string ContentType, string FileName)> FileAsync(int auditorId, int orgId, int policyId)
+    {
+        await RequireAccessAsync(auditorId, orgId);
+        var p = await policies.Query().FirstOrDefaultAsync(x => x.Id == policyId && x.OrganizationId == orgId)
+                ?? throw new BusinessException("Belge bulunamadı.");
+        var path = Path.GetFullPath(Path.Combine(cfg["Storage:Root"] ?? "uploads", orgId.ToString(), p.StoredFileName));
+        if (!File.Exists(path)) throw new BusinessException("Belge dosyası sunucuda bulunamadı.");
+        // İçerik türü istemcinin bildirdiğinden değil uzantıdan belirlenir
+        var type = Path.GetExtension(p.StoredFileName).ToLowerInvariant() switch
+        {
+            ".pdf" => "application/pdf",
+            ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            _ => "text/plain; charset=utf-8"
+        };
+        return (path, type, p.OriginalFileName);
+    }
+
+    private async Task<string> RequireAccessAsync(int auditorId, int orgId) =>
+        await access.Query().Where(a => a.AuditorUserId == auditorId && a.OrganizationId == orgId)
+            .Select(a => a.Organization.Name).FirstOrDefaultAsync()
+        ?? throw new BusinessException("Bu kuruma erişim yetkiniz yok.");
+
+    // Kanıt yüklenmiş ve cevaplanmış gereksinimler; durum YZ analizine ve denetçi kararına göre belirlenir
+    private async Task<List<AuditItemDto>> ItemsAsync(int orgId, SurveyDto? s = null)
+    {
+        s ??= await survey.GetQuestionsAsync(orgId);
+        var byReq = (await files.ListAsync(orgId)).Where(f => f.RequirementCode != null)
+            .GroupBy(f => f.RequirementCode!).ToDictionary(g => g.Key, g => g.ToList());
+        return s.Questions
+            .Where(q => q.CurrentAnswer != null && byReq.ContainsKey(q.RequirementCode))
+            .Select(q =>
+            {
+                var docs = byReq[q.RequirementCode];
+                // Yeni yüklenen belge analiz edilirken de beklenir: denetçi YZ'nin görmediği kanıta karar vermesin
+                var state = docs.Any(f => f.Status is AnalysisStatus.Pending or AnalysisStatus.Processing) ||
+                            !docs.Any(f => f.Status == AnalysisStatus.Completed) ? AuditItemState.WaitingSystem
+                    : q.Review is null ? AuditItemState.Ready
+                    : q.Review.Stale ? AuditItemState.Stale
+                    : q.Review.Decision == ReviewDecision.Approved ? AuditItemState.Approved : AuditItemState.Rejected;
+                return new AuditItemDto(q, state, docs);
+            })
+            .ToList();
+    }
+}
+
 // ---------------- DEMO ----------------
 public interface IDemoService
 {
     Task<AuthResultDto> ResetAndLoginAsync();
+    Task<AuthResultDto> AuditorLoginAsync();
 }
 
 /// <summary>
@@ -365,11 +557,39 @@ public interface IDemoService
 /// </summary>
 public class DemoService(IAuthService auth, IScopeService scope, IRepository<User> users,
                          IRepository<SurveyQuestion> questions, IRepository<SurveyAnswer> answers,
-                         IRepository<Policy> policies, IConfiguration cfg) : IDemoService
+                         IRepository<Policy> policies, IRepository<AuditorAccess> access,
+                         IRepository<AuditorReview> reviews, IConfiguration cfg) : IDemoService
 {
     private const string Email = "demo@ornek-eticaret.test";
     private const string Password = "DemoSunum-2026!";
     private const string OrgName = "Örnek E-Ticaret A.Ş. (Demo)";
+    // Demo kurumunun erişim verdiği demo denetçi
+    private const string AuditorEmail = "demo-denetci@ornek-denetim.test";
+    private const string AuditorFirm = "Örnek Denetim Ltd. (Demo)";
+
+    /// <summary>
+    /// Demo denetçiyle giriş. Demo kurumu sıfırlamaz: sunumda kurum tarafında yapılanları (canlı yüklenen belge vb.)
+    /// denetçi tarafında göstermek için. Demo kurumu hiç oluşturulmadıysa bir kez hazırlanır.
+    /// </summary>
+    public async Task<AuthResultDto> AuditorLoginAsync()
+    {
+        if (!cfg.GetValue<bool>("Demo:Enabled")) throw new BusinessException("Demo hesabı bu ortamda kapalı.");
+        if (!await users.Query().AnyAsync(u => u.Email == Email)) await ResetAndLoginAsync();
+        await EnsureAuditorAccessAsync(await users.Query().Where(u => u.Email == Email).Select(u => u.OrganizationId).FirstAsync());
+        return await auth.LoginAsync(new LoginDto(AuditorEmail, Password));
+    }
+
+    private async Task EnsureAuditorAccessAsync(int orgId)
+    {
+        if (!await users.Query().AnyAsync(u => u.Email == AuditorEmail))
+            await auth.RegisterAsync(new RegisterDto("Demo Denetçi", AuditorEmail, Password, AuditorFirm, IsAuditor: true));
+        var auditorId = await users.Query().Where(u => u.Email == AuditorEmail).Select(u => u.Id).FirstAsync();
+        if (!await access.Query().AnyAsync(a => a.OrganizationId == orgId && a.AuditorUserId == auditorId))
+        {
+            await access.AddAsync(new AuditorAccess { OrganizationId = orgId, AuditorUserId = auditorId });
+            await access.SaveChangesAsync();
+        }
+    }
 
     // Varsayılan cevap "Uygulanıyor"; senaryoyu bunlar belirler
     private static readonly Dictionary<string, (AnswerValue Value, string Comment)> Scenario = new()
@@ -400,6 +620,7 @@ public class DemoService(IAuthService auth, IScopeService scope, IRepository<Use
         // (farklı veritabanları aynı uploads klasörünü paylaşabilir, aynı orgId başka kuruma ait olabilir).
         var dir = Path.Combine(cfg["Storage:Root"] ?? "uploads", orgId.ToString());
         foreach (var a in await answers.ListAsync(a => a.OrganizationId == orgId)) answers.Remove(a);
+        foreach (var r in await reviews.ListAsync(r => r.OrganizationId == orgId)) reviews.Remove(r);
         foreach (var p in await policies.ListAsync(p => p.OrganizationId == orgId))
         {
             try { File.Delete(Path.Combine(dir, p.StoredFileName)); }
@@ -446,6 +667,7 @@ public class DemoService(IAuthService auth, IScopeService scope, IRepository<Use
             });
         }
         await answers.SaveChangesAsync();
+        await EnsureAuditorAccessAsync(orgId); // "Denetçi Erişimi" ekranında hazır bir denetçi görünsün
         return await auth.LoginAsync(new LoginDto(Email, Password));
     }
 }
@@ -504,7 +726,7 @@ public class FileService(IRepository<Policy> policies, IRepository<Requirement> 
         .Select(p => new PolicyDto(p.Id, p.OriginalFileName, p.SizeBytes, p.Requirement?.Code, p.Status, p.CreatedAt,
             p.Status is AnalysisStatus.Completed or AnalysisStatus.Failed
                 ? new AiResultDto(p.AiVerdict, p.AiConfidence, p.AiSummary, AiText.Lines(p.AiGaps),
-                    AiText.Lines(p.AiQuotes), p.AiModel, p.AnalyzedAt)
+                    AiText.Lines(p.AiQuotes), p.AiModel, p.AnalyzedAt, AiText.Checks(p.AiChecks))
                 : null))
         .ToList();
 
@@ -523,18 +745,24 @@ public static class AiText
 {
     public static List<string> Lines(string? s) =>
         string.IsNullOrWhiteSpace(s) ? [] : s.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
+
+    private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
+    public static string? ChecksJson(List<AiCheckDto>? checks) => checks is { Count: > 0 } ? JsonSerializer.Serialize(checks, Json) : null;
+    public static List<AiCheckDto>? Checks(string? json) =>
+        string.IsNullOrWhiteSpace(json) ? null : JsonSerializer.Deserialize<List<AiCheckDto>>(json, Json);
 }
 
 // ---------------- YZ ANALİZİ (Faz 2) ----------------
 /// <summary>
 /// Bekleyen kanıt belgelerini Python RAG servisine (ai-service) gönderir ve sonucu Policy'ye yazar.
-/// Yalnızca bir gereksinimle ilişkilendirilmiş belgeler analiz edilir.
+/// Yalnızca bir gereksinimle ilişkilendirilmiş belgeler analiz edilir. Kanıt çoğu zaman birkaç belgeye dağıldığı için
+/// (politika + tutanak + log) gereksinime ait tüm belgeler birlikte gönderilir ve kontrol listesiyle karşılaştırılır.
 /// </summary>
 public class AnalysisService(HttpClient http, IRepository<Policy> policies, IRepository<SurveyQuestion> questions,
                              IConfiguration cfg)
 {
     private record AiResponse(string Verdict, double Confidence, string Summary, List<string> Gaps,
-                              List<string> Quotes, string Model);
+                              List<string> Quotes, string Model, List<AiCheckDto>? Checks);
 
     /// <summary>Sıradaki bekleyen belgeyi analiz eder; bekleyen yoksa false döner.</summary>
     public async Task<bool> ProcessNextAsync(CancellationToken ct)
@@ -546,22 +774,36 @@ public class AnalysisService(HttpClient http, IRepository<Policy> policies, IRep
 
         p.Status = AnalysisStatus.Processing;
         await policies.SaveChangesAsync();
+        // Aynı analize dahil edilen, sırada bekleyen diğer belgeler de bu sonucu alır (ayrıca analiz edilmez)
+        var batchPending = new List<Policy>();
         try
         {
             var q = await questions.Query().FirstOrDefaultAsync(x => x.RequirementId == p.RequirementId, ct);
-            var path = Path.Combine(cfg["Storage:Root"] ?? "uploads", p.OrganizationId.ToString(), p.StoredFileName);
-            // Dosya belleğe okunur: analiz sürerken diskte kilitli kalmasın (demo sıfırlama silebilsin)
-            using var form = new MultipartFormDataContent
+            var dir = Path.Combine(cfg["Storage:Root"] ?? "uploads", p.OrganizationId.ToString());
+            var docs = await policies.Query()
+                .Where(x => x.OrganizationId == p.OrganizationId && x.RequirementId == p.RequirementId)
+                .OrderBy(x => x.CreatedAt).ToListAsync(ct);
+            // Dosyalar belleğe okunur: analiz sürerken diskte kilitli kalmasın (demo sıfırlama silebilsin)
+            using var form = new MultipartFormDataContent();
+            foreach (var d in docs)
             {
-                { new ByteArrayContent(await File.ReadAllBytesAsync(path, ct)), "file", p.OriginalFileName },
-                { new StringContent(p.Id.ToString()), "policy_id" },
-                { new StringContent(p.OrganizationId.ToString()), "org_id" },
-                { new StringContent(p.Requirement!.Code), "requirement_code" },
-                { new StringContent(p.Requirement.Title), "requirement_title" },
-                { new StringContent(p.Requirement.Description), "requirement_description" },
-                { new StringContent(q?.Text ?? ""), "question" },
-                { new StringContent(q?.EvidenceHint ?? ""), "evidence_hint" },
-            };
+                var path = Path.Combine(dir, d.StoredFileName);
+                if (d.Id != p.Id && !File.Exists(path)) continue;
+                form.Add(new ByteArrayContent(await File.ReadAllBytesAsync(path, ct)), "files", d.OriginalFileName);
+                form.Add(new StringContent(d.Id.ToString()), "policy_ids");
+                if (d.Id != p.Id && d.Status == AnalysisStatus.Pending) batchPending.Add(d);
+            }
+            form.Add(new StringContent(p.Id.ToString()), "target_policy_id");
+            foreach (var (value, name) in new[]
+            {
+                (p.OrganizationId.ToString(), "org_id"),
+                (p.Requirement!.Code, "requirement_code"),
+                (p.Requirement.Title, "requirement_title"),
+                (p.Requirement.Description, "requirement_description"),
+                (q?.Text ?? "", "question"),
+                (q?.EvidenceHint ?? "", "evidence_hint"),
+            })
+                form.Add(new StringContent(value), name);
             using var res = await http.PostAsync("analyze", form, ct);
             if (!res.IsSuccessStatusCode)
             {
@@ -569,17 +811,25 @@ public class AnalysisService(HttpClient http, IRepository<Policy> policies, IRep
                 throw new InvalidOperationException(err?.GetValueOrDefault("detail")?.ToString() ?? $"YZ servisi {(int)res.StatusCode} döndü.");
             }
             var r = (await res.Content.ReadFromJsonAsync<AiResponse>(ct))!;
-            p.AiVerdict = Enum.Parse<ComplianceVerdict>(r.Verdict);
-            p.AiConfidence = r.Confidence;
-            p.AiSummary = r.Summary;
-            p.AiGaps = string.Join('\n', r.Gaps);
-            p.AiQuotes = string.Join('\n', r.Quotes);
-            p.AiModel = r.Model;
-            p.Status = AnalysisStatus.Completed;
+            var now = DateTime.UtcNow;
+            foreach (var d in batchPending.Prepend(p))
+            {
+                d.AiVerdict = Enum.Parse<ComplianceVerdict>(r.Verdict);
+                d.AiConfidence = r.Confidence;
+                d.AiSummary = r.Summary;
+                // Satır bazlı saklanır; YZ'nin metnindeki satır sonları maddeleri bölmesin
+                d.AiGaps = string.Join('\n', r.Gaps.Select(g => g.ReplaceLineEndings(" ")));
+                d.AiQuotes = string.Join('\n', r.Quotes.Select(x => x.ReplaceLineEndings(" ")));
+                d.AiChecks = AiText.ChecksJson(r.Checks);
+                d.AiModel = r.Model;
+                d.Status = AnalysisStatus.Completed;
+                d.AnalyzedAt = now;
+            }
         }
         catch (Exception ex) when (ex is not OperationCanceledException || !ct.IsCancellationRequested)
         {
             p.AiVerdict = null;
+            p.AiChecks = null;
             p.AiSummary = ex switch
             {
                 HttpRequestException => "YZ servisine ulaşılamadı. ai-service çalışıyor mu?",

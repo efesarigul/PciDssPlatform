@@ -22,6 +22,75 @@ namespace PciDss.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("PciDss.Entities.AuditorAccess", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AuditorUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuditorUserId");
+
+                    b.HasIndex("OrganizationId", "AuditorUserId")
+                        .IsUnique();
+
+                    b.ToTable("AuditorAccesses");
+                });
+
+            modelBuilder.Entity("PciDss.Entities.AuditorReview", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AuditorUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Decision")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequirementId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReviewedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuditorUserId");
+
+                    b.HasIndex("RequirementId");
+
+                    b.HasIndex("OrganizationId", "RequirementId")
+                        .IsUnique();
+
+                    b.ToTable("AuditorReviews");
+                });
+
             modelBuilder.Entity("PciDss.Entities.Organization", b =>
                 {
                     b.Property<int>("Id")
@@ -53,6 +122,9 @@ namespace PciDss.DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AiChecks")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double?>("AiConfidence")
                         .HasColumnType("float");
@@ -1462,6 +1534,52 @@ namespace PciDss.DataAccess.Migrations
                     b.HasIndex("OrganizationId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("PciDss.Entities.AuditorAccess", b =>
+                {
+                    b.HasOne("PciDss.Entities.User", "AuditorUser")
+                        .WithMany()
+                        .HasForeignKey("AuditorUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PciDss.Entities.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AuditorUser");
+
+                    b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("PciDss.Entities.AuditorReview", b =>
+                {
+                    b.HasOne("PciDss.Entities.User", "AuditorUser")
+                        .WithMany()
+                        .HasForeignKey("AuditorUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PciDss.Entities.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PciDss.Entities.Requirement", "Requirement")
+                        .WithMany()
+                        .HasForeignKey("RequirementId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AuditorUser");
+
+                    b.Navigation("Organization");
+
+                    b.Navigation("Requirement");
                 });
 
             modelBuilder.Entity("PciDss.Entities.Policy", b =>

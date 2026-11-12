@@ -23,6 +23,23 @@ export const authApi = {
   login: (email, password) => api.post("/auth/login", { email, password }).then((r) => r.data),
   register: (dto) => api.post("/auth/register", dto).then((r) => r.data),
   demo: () => api.post("/auth/demo").then((r) => r.data),
+  demoAuditor: () => api.post("/auth/demo-auditor").then((r) => r.data),
+};
+
+// Kurum tarafı: denetçilere verilen erişimler
+export const auditorsApi = {
+  list: () => api.get("/auditors").then((r) => r.data),
+  grant: (email) => api.post("/auditors", { email }).then((r) => r.data),
+  revoke: (id) => api.delete(`/auditors/${id}`),
+};
+
+// Denetçi paneli
+export const auditApi = {
+  orgs: () => api.get("/audit/orgs").then((r) => r.data),
+  org: (orgId) => api.get(`/audit/orgs/${orgId}`).then((r) => r.data),
+  review: (orgId, questionId, decision, note) =>
+    api.put(`/audit/orgs/${orgId}/reviews/${questionId}`, { decision, note }).then((r) => r.data),
+  file: (orgId, id) => api.get(`/audit/orgs/${orgId}/files/${id}`, { responseType: "blob" }).then((r) => r.data),
 };
 
 export const gapApi = {

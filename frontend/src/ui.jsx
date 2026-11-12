@@ -17,6 +17,10 @@ const ICONS = {
   arrowRight: <><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></>,
   arrowLeft: <><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></>,
   lock: <><rect width="18" height="11" x="3" y="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></>,
+  users: <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></>,
+  building: <><rect width="16" height="20" x="4" y="2" rx="2" /><path d="M9 22v-4h6v4" /><path d="M8 6h.01" /><path d="M16 6h.01" /><path d="M12 6h.01" /><path d="M12 10h.01" /><path d="M12 14h.01" /><path d="M16 10h.01" /><path d="M16 14h.01" /><path d="M8 10h.01" /><path d="M8 14h.01" /></>,
+  external: <><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></>,
+  x: <><path d="M18 6 6 18" /><path d="m6 6 12 12" /></>,
   info: <><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></>,
 };
 
@@ -34,6 +38,38 @@ export function Logo({ light = false }) {
     <div className={`brand ${light ? "light" : ""}`}>
       <span className="brand-mark"><Icon name="shield" size={20} /></span>
       <span className="brand-text"><strong>PCI DSS</strong><span>Ön Değerlendirme</span></span>
+    </div>
+  );
+}
+
+const CHECK = {
+  Met: { icon: "check", label: "Karşılandı" },
+  Partial: { icon: "info", label: "Kısmen" },
+  NotMet: { icon: "x", label: "Karşılanmadı" },
+};
+
+// YZ'nin denetçi kontrol listesi maddelerine göre değerlendirmesi (madde, gerekçe, belgeden alıntı)
+export function Checklist({ checks }) {
+  if (!checks?.length) return null;
+  const met = checks.filter((c) => c.status === "Met").length;
+  return (
+    <div className="checklist">
+      <div className="checklist-head">
+        <h4>Kontrol listesi</h4>
+        <span className="muted small">{met}/{checks.length} madde karşılandı</span>
+      </div>
+      <ul>
+        {checks.map((c) => (
+          <li key={c.id} className={`check ${c.status.toLowerCase()}`}>
+            <span className="check-icon" title={CHECK[c.status]?.label}><Icon name={CHECK[c.status]?.icon ?? "help"} size={13} /></span>
+            <div>
+              <strong>{c.text}</strong>
+              <span className="check-finding">{c.finding}</span>
+              {c.quote && <blockquote>“{c.quote}”{c.file && <cite>{c.file}</cite>}</blockquote>}
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

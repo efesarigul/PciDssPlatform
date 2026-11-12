@@ -14,6 +14,8 @@ public class AppDbContext : DbContext
     public DbSet<SurveyAnswer> SurveyAnswers => Set<SurveyAnswer>();
     public DbSet<Policy> Policies => Set<Policy>();
     public DbSet<ScopeProfile> ScopeProfiles => Set<ScopeProfile>();
+    public DbSet<AuditorAccess> AuditorAccesses => Set<AuditorAccess>();
+    public DbSet<AuditorReview> AuditorReviews => Set<AuditorReview>();
 
     // Seed satırlarında sabit tarih: aksi halde her derlemede sahte migration üretilir
     private static readonly DateTime Seed = new(2026, 1, 1);
@@ -41,6 +43,25 @@ public class AppDbContext : DbContext
         b.Entity<Policy>()
             .HasOne(p => p.Requirement).WithMany()
             .OnDelete(DeleteBehavior.SetNull);
+
+        // Denetçi erişimi: kurum + denetçi başına tek kayıt. Denetçi kullanıcısı başka bir kuruma (denetim firmasına)
+        // bağlı olduğundan kullanıcı ilişkisi kaskat silinmez (SQL Server çoklu kaskat yolu hatası).
+        b.Entity<AuditorAccess>()
+            .HasIndex(a => new { a.OrganizationId, a.AuditorUserId }).IsUnique();
+        b.Entity<AuditorAccess>()
+            .HasOne(a => a.AuditorUser).WithMany()
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Kurum + gereksinim başına tek denetçi kararı (son karar geçerli)
+        b.Entity<AuditorReview>()
+            .HasIndex(r => new { r.OrganizationId, r.RequirementId }).IsUnique();
+        b.Entity<AuditorReview>()
+            .HasOne(r => r.AuditorUser).WithMany()
+            .OnDelete(DeleteBehavior.Restrict);
+        b.Entity<AuditorReview>()
+            .HasOne(r => r.Requirement).WithMany()
+            .OnDelete(DeleteBehavior.Restrict);
+        b.Entity<AuditorReview>().Property(r => r.Note).HasMaxLength(2000);
 
         // PCI DSS v4.0.1 alt gereksinimleri. Metinler resmi belgelerden kopyalanmamış Türkçe özetlerdir.
         // Applicability: gereksinimin hangi SAQ'larda sorulduğu (SAQ D hepsini kapsar). Eşleme ön değerlendirme

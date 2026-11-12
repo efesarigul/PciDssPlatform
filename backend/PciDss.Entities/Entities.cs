@@ -16,7 +16,8 @@ public class Organization : BaseEntity
     public ScopeProfile? Scope { get; set; }
 }
 
-public enum UserRole { Admin, OrgUser }
+// Auditor: denetim firması kullanıcısı. Kendi kurumu denetim firmasıdır; müşteri kurumları yalnızca AuditorAccess ile görür.
+public enum UserRole { Admin, OrgUser, Auditor }
 
 public class User : BaseEntity
 {
@@ -79,6 +80,7 @@ public class Policy : BaseEntity
     public string? AiSummary { get; set; }
     public string? AiGaps { get; set; }    // satır satır eksikler
     public string? AiQuotes { get; set; }  // satır satır belgeden alıntılar
+    public string? AiChecks { get; set; }  // kontrol listesi maddelerinin sonucu (JSON); analiz gereksinimin tüm belgeleriyle yapılır
     public string? AiModel { get; set; }
     public DateTime? AnalyzedAt { get; set; }
 
@@ -93,6 +95,32 @@ public enum AnalysisStatus { Pending, Processing, Completed, Failed }
 // YZ'nin kanıt belgesi için kararı. Sıra önemli: küçük değer daha iyi (birden fazla belgede en iyisi seçilir).
 public enum ComplianceVerdict { Compliant, Partial, NonCompliant }
 
+// ---------------- DENETÇİ ----------------
+/// <summary>Kurumun bir denetçiye verdiği erişim. Erişimi yalnızca kurum verir ve geri alır.</summary>
+public class AuditorAccess : BaseEntity
+{
+    public int OrganizationId { get; set; }
+    public Organization Organization { get; set; } = null!;
+    public int AuditorUserId { get; set; }
+    public User AuditorUser { get; set; } = null!;
+}
+
+public enum ReviewDecision { Approved, Rejected }
+
+/// <summary>Denetçinin bir gereksinimin kanıtlı beyanı için kararı (kurum + gereksinim başına bir kayıt)</summary>
+public class AuditorReview : BaseEntity
+{
+    public int OrganizationId { get; set; }
+    public Organization Organization { get; set; } = null!;
+    public int RequirementId { get; set; }
+    public Requirement Requirement { get; set; } = null!;
+    public int AuditorUserId { get; set; }
+    public User AuditorUser { get; set; } = null!;
+    public ReviewDecision Decision { get; set; }
+    public string? Note { get; set; }
+    public DateTime ReviewedAt { get; set; } = DateTime.UtcNow;
+}
+
 // ---------------- GAP ANALİZİ ----------------
 // Şimdilik beyan ve kanıt durumundan anlık hesaplanır; Faz 3'te kalıcı Finding varlığına dönüşecek.
 public enum FindingSeverity { Critical, Medium, Low }
@@ -105,6 +133,7 @@ public enum FindingKind
     MissingEvidence, // Uygulanıyor denildi ama zorunlu kanıt yok
     AiNonCompliant,  // Kanıt yüklendi ama YZ'ye göre gereksinimi karşılamıyor
     AiPartial,       // Kanıt YZ'ye göre gereksinimi kısmen karşılıyor
+    AuditorRejected, // Denetçi kanıtlı beyanı reddetti
     Compensating     // Telafi edici kontrolle karşılanıyor (CCW)
 }
 
