@@ -26,7 +26,7 @@ if (cfg.GetValue("AiService:Enabled", true))
     builder.Services.AddHttpClient<AnalysisService>(c =>
     {
         c.BaseAddress = new Uri(cfg["AiService:Url"] ?? "http://localhost:8000/");
-        // YZ servisi sırayla birkaç modeli dener (her biri GEMINI_TIMEOUT, varsayılan 2 dk)
+        // Yerel model maddeleri tek tek değerlendirir; ilk çağrıda model belleğe yüklenir (LLM_TIMEOUT, varsayılan 3 dk)
         c.Timeout = TimeSpan.FromMinutes(7);
     });
     builder.Services.AddHostedService<AnalysisWorker>();

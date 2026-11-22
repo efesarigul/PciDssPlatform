@@ -9,15 +9,15 @@ const VERDICT = { Compliant: "Uyumlu", Partial: "Kısmen uyumlu", NonCompliant: 
 const inQueue = (f) => f.requirementCode && (f.status === "Pending" || f.status === "Processing");
 
 function StatusBadge({ f }) {
-  if (!f.requirementCode) return <span className="badge pending" title="YZ analizi için gereksinim seçilmeli">Gereksinim seçilmedi</span>;
+  if (!f.requirementCode) return <span className="badge pending" title="Otomatik analiz için gereksinim seçilmeli">Gereksinim seçilmedi</span>;
   if (f.status === "Pending") return <span className="badge pending">Analiz sırada</span>;
-  if (f.status === "Processing") return <span className="badge processing"><span className="spinner" />YZ analiz ediyor</span>;
+  if (f.status === "Processing") return <span className="badge processing"><span className="spinner" />Analiz ediliyor</span>;
   if (f.status === "Failed") return <span className="badge failed">Analiz başarısız</span>;
   return <span className={`badge verdict-${f.ai.verdict.toLowerCase()}`}>{VERDICT[f.ai.verdict]}</span>;
 }
 
 function AiDetail({ f, onRetry }) {
-  if (inQueue(f)) return <p className="muted">Belge parçalara ayrılıyor, gereksinimle en ilgili bölümler bulunup YZ'ye soruluyor…</p>;
+  if (inQueue(f)) return <p className="muted">Belge parçalara ayrılıyor, gereksinimle en ilgili bölümler bulunup kontrol maddeleriyle karşılaştırılıyor…</p>;
   if (f.status === "Failed") return (
     <div className="ai-detail">
       <p className="error-text">{f.ai?.summary}</p>
@@ -28,8 +28,8 @@ function AiDetail({ f, onRetry }) {
   return (
     <div className={`ai-detail verdict-${f.ai.verdict?.toLowerCase()}`}>
       <div className="ai-head">
-        <span className="ai-tag"><Icon name="sparkles" size={12} /> YZ değerlendirmesi</span>
-        <span className="muted small">{f.ai.model} · güven %{Math.round((f.ai.confidence ?? 0) * 100)}</span>
+        <span className="ai-tag"><Icon name="clipboard" size={12} /> Otomatik değerlendirme</span>
+        <span className="muted small">{f.ai.model}</span>
         {f.ai.model !== "demo" && <button className="link" onClick={onRetry}>Yeniden analiz et</button>}
       </div>
       <p>{f.ai.summary}</p>
@@ -116,7 +116,7 @@ export default function Evidence() {
   return (
     <section>
       <PageHeader eyebrow="Adım 3 / 4" title="Kanıt Yükleme"
-        subtitle="Politika, rapor ve yapılandırma çıktılarınızı yükleyin. Bir gereksinimle ilişkilendirilen her belge yapay zekâ ile okunur ve gereksinimi karşılayıp karşılamadığı değerlendirilir.">
+        subtitle="Politika, rapor ve yapılandırma çıktılarınızı yükleyin. Bir gereksinimle ilişkilendirilen her belge otomatik olarak incelenir ve gereksinimi karşılayıp karşılamadığı değerlendirilir.">
         <button onClick={() => nav("/gap")}>Gap Analizini Gör <Icon name="arrowRight" size={16} /></button>
       </PageHeader>
 
@@ -124,13 +124,13 @@ export default function Evidence() {
         <div className="upload-fields">
           <label>İlgili gereksinim
             <select value={reqCode} onChange={(e) => setReqCode(e.target.value)}>
-              <option value="">Genel belge (YZ analizi yapılmaz)</option>
+              <option value="">Genel belge (otomatik analiz yapılmaz)</option>
               {requirements.map((r) => <option key={r.requirementCode} value={r.requirementCode}>{r.requirementCode} · {r.requirementTitle}</option>)}
             </select>
           </label>
           {hint
             ? <div className="hint"><Icon name="file" size={16} /><span>Beklenen kanıt: <strong>{hint}</strong></span></div>
-            : <div className="hint neutral"><Icon name="sparkles" size={16} /><span>YZ analizi için belgeyi bir gereksinimle ilişkilendirin.</span></div>}
+            : <div className="hint neutral"><Icon name="clipboard" size={16} /><span>Otomatik analiz için belgeyi bir gereksinimle ilişkilendirin.</span></div>}
         </div>
 
         <div {...getRootProps()} className={`dropzone ${isDragActive ? "active" : ""}`}>
@@ -160,7 +160,7 @@ export default function Evidence() {
           </div>
         </div>
       <table className="table">
-        <thead><tr><th>Dosya</th><th>Gereksinim</th><th>Boyut</th><th>YZ Analizi</th><th>Tarih</th></tr></thead>
+        <thead><tr><th>Dosya</th><th>Gereksinim</th><th>Boyut</th><th>Analiz</th><th>Tarih</th></tr></thead>
         <tbody>
           {files.length === 0 && <tr><td colSpan={5} className="muted center">Henüz belge yüklenmedi.</td></tr>}
           {files.map((f) => (

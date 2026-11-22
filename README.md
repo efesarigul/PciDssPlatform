@@ -23,7 +23,7 @@ Bu platform süreci denetimden öne çeker:
 
 - **Kurum kaydı ve çok kiracılı yapı.** Her kurum yalnızca kendi verisini görür. Kurum kimliği JWT içinden okunur, istekten alınmaz.
 - **SAQ kapsam belirleme.** Kurum tipi, kart verisi saklama durumu ve ödeme kanallarına göre SAQ tipi belirlenir: A, A-EP, B, B-IP, C, C-VT, P2PE, SPoC, D (Üye İşyeri), D (Servis Sağlayıcı).
-- **PCI DSS v4.0.1 soru seti.** 12 ana gereksinimi kapsayan 55 alt gereksinim, her biri için Türkçe soru ve beklenen kanıt türü.
+- **PCI DSS v4.0.1 soru seti.** 12 ana gereksinimi ve Ek A2'yi kapsayan 102 alt gereksinim, her biri için Türkçe soru ve beklenen kanıt türü. SAQ A, B, B-IP, C-VT ve P2PE soru listeleri resmi SAQ belgeleriyle birebir eşleşir.
 - **SAQ cevap seçenekleri:**
   - Uygulanıyor
   - Telafi edici kontrolle uygulanıyor (CCW)
@@ -37,35 +37,51 @@ Bu platform süreci denetimden öne çeker:
   - Dosyalar diskte rastgele adla saklanır.
   - Kanıt bütünlüğü için her dosyanın SHA-256 özeti kaydedilir.
 - **Eksik kanıt takibi.** "Uygulanıyor" beyan edilip zorunlu kanıtı yüklenmemiş gereksinimler ayrıca sayılır.
-- **YZ destekli kanıt analizi (RAG).** Bir gereksinimle ilişkilendirilen her belge arka planda Python servisine gönderilir:
+- **YZ destekli kanıt analizi (yerel hibrit RAG).** Dış API kullanılmaz; tüm modeller bilgisayarda çalışır ve belgeler kurum dışına çıkmaz. Bir gereksinimle ilişkilendirilen her belge arka planda Python servisine gönderilir:
   1. Metin çıkarılır (PDF, DOCX, TXT, MD) ve LangChain ile parçalara bölünür.
-  2. Parçalar Gemini embedding'leriyle ChromaDB vektör veritabanına yazılır.
-  3. Gereksinimle anlamca en ilgili parçalar geri getirilir.
-  4. Gemini, yalnızca bu parçalara dayanarak "Uyumlu / Kısmen uyumlu / Uyumsuz" kararını, eksikleri ve belgeden alıntıları JSON olarak döner.
+  2. Parçalar yerel embedding modeliyle (`bge-m3`) ChromaDB vektör veritabanına yazılır.
+  3. **Arama:** her denetçi kontrol maddesi için BM25 (anahtar kelime, Türkçe için 5 harfli kökleme) ve vektör (anlam) araması yapılır, sonuçlar RRF ile birleştirilir.
+  4. **Kural katmanı:** sıklık, süre ve sayı şartları ("en az üç ayda bir", "12 ay saklanır", "en az 12 karakter") belgenin cümlelerinde deterministik olarak kontrol edilir. Kural sağlanmıyorsa madde doğrudan "Karşılanmadı" olur. Olumsuz cümleler ("MFA kullanılmamaktadır") ve standarttan alıntılar kanıt sayılmaz.
+  5. **Yerel dil modeli** (Ollama, `gemma3:4b`) kalan her maddeyi yalnızca getirilen parçalara dayanarak ayrı ayrı değerlendirir ve belgeden alıntı verir.
+  6. **Birleştirme:** modelin alıntısı belgede doğrulanır; belgede bulunamayan alıntıyla "Karşılandı" verilemez. Gereksinim kararı maddelerden kural tabanlı türetilir.
 
-  Model yoğunsa sıradaki yedek modele geçilir.
-- **Gap analizi paneli.** Uyum skoru, 12 gereksinim için ısı haritası ve Kritik/Orta/Düşük bulgular. YZ'nin uyumsuz bulduğu kanıtlar kritik bulgu olarak işaretlenir. Bulgudan tek tıkla ilgili soruya veya belgeye gidilir.
+  `ANALYSIS_MODE=rules` ile dil modeli olmadan, yalnızca arama ve kurallarla da çalışır. Kural testleri: `cd ai-service && .venv\Scripts\python tests\test_rules.py`.
+
+  **Ölçüm** (`ai-service/evaluate.py`, `eval/cases.json`: 5 belge, elle etiketlenmiş 14 kontrol maddesi; küçük bir set olduğu için yön göstergesidir):
+
+  | Yapılandırma | Doğru | Süre |
+  |---|---|---|
+  | Yalnızca kurallar (`ANALYSIS_MODE=rules`) | 12/14 | < 1 sn |
+  | Hibrit + `qwen3:4b` | 8/14 | ~70 sn |
+  | Hibrit + `gemma3:4b` (varsayılan) | 12/14 | ~40 sn |
+
+  Kurallar kesin şartlarda, dil modeli ise anlam gerektiren maddelerde ve Türkçe gerekçe yazmada güçlüdür. Hibrit yapı ikisini birleştirir: model kesin kuralları çiğneyemez, kural da modelin anladığı nüansı kaybetmez.
+- **Gap analizi paneli.** Kaç gereksinimin eksik, kaçının tamam olduğu; 12 gereksinim için eksik sayısını gösteren ısı haritası ve Kritik/Orta/Düşük bulgular. Yüzdelik skor yoktur, eksikler tek tek listelenir. YZ'nin uyumsuz bulduğu kanıtlar kritik bulgu olarak işaretlenir. Bulgudan tek tıkla ilgili soruya veya belgeye gidilir.
 
 ### Yol haritası
 
 | Faz | Kapsam |
 |---|---|
 | **Faz 1** ✅ | Kayıt, kapsam belirleme, beyan anketi, kanıt yükleme |
-| **Faz 2** ✅ | Python RAG servisi (LangChain, ChromaDB, Gemini): belgeleri gereksinimlerle karşılaştırma |
+| **Faz 2** ✅ | Python yerel hibrit RAG servisi (LangChain, ChromaDB, Ollama, kural katmanı): belgeleri gereksinimlerle karşılaştırma |
 | **Faz 3** | Gap analizi paneli ✅; `Finding` varlığıyla bulguların kalıcılaştırılması, raporlama |
 | **Faz 4** | Denetçi rolü, birden fazla kurumu uzaktan değerlendirme ekranı |
 
 ## SAQ tipine göre soru sayısı
 
-| Örnek senaryo | SAQ | Soru |
-|---|---|---|
-| E-ticaret, ödeme sayfası tamamen ödeme kuruluşunda (iframe/yönlendirme) | A | 14 |
-| E-ticaret, ödeme formu kurumun sitesinden geliyor (direct post / JS) | A-EP | 46 |
-| Telefon hattına bağlı, bağımsız POS cihazı | B | 14 |
-| Kart verisini elektronik ortamda saklayan üye işyeri | D (Üye İşyeri) | 53 |
-| Servis sağlayıcı | D (Servis Sağlayıcı) | 55 |
+| Örnek senaryo | SAQ | Soru | Resmi SAQ'da |
+|---|---|---|---|
+| E-ticaret, ödeme sayfası tamamen ödeme kuruluşunda (iframe/yönlendirme) | A | 27 | 27 |
+| E-ticaret, ödeme formu kurumun sitesinden geliyor (direct post / JS) | A-EP | 82 | 139 |
+| Telefon hattına bağlı, bağımsız POS cihazı | B | 27 | 27 |
+| IP bağlantılı, bağımsız PTS onaylı POS cihazı | B-IP | 49 | 49 |
+| İnternete bağlı ödeme uygulaması / POS sistemi | C | 80 | 125 |
+| Sağlayıcının sanal terminaline elle giriş | C-VT | 54 | 54 |
+| Doğrulanmış P2PE çözümü | P2PE | 21 | 21 |
+| Kart verisini elektronik ortamda saklayan üye işyeri | D (Üye İşyeri) | 100 | 252 |
+| Servis sağlayıcı | D (Servis Sağlayıcı) | 102 | 259 |
 
-> ⚠️ Gereksinimlerin SAQ tiplerine eşlemesi ve SAQ belirleme kuralları **ön değerlendirme amaçlı sadeleştirilmiştir**. Platform gerçek kurumlarla kullanılmadan önce PCI SSC'nin güncel SAQ belgeleriyle doğrulanmalıdır. Kesin SAQ tipini kurumun edinci bankası (acquirer) onaylar. Soru metinleri resmi belgelerden kopyalanmamış, Türkçe özet olarak yazılmıştır.
+> ⚠️ SAQ A, B, B-IP, C-VT ve P2PE soru listeleri resmi SAQ belgeleriyle (A için v4.0.1 r1, diğerleri v4.0) karşılaştırılarak tamamlanmıştır. A-EP, C ve D'deki eksikler ile SPoC eşlemesi henüz tamamlanmadı. SAQ belirleme kuralları **ön değerlendirme amaçlı sadeleştirilmiştir**. Platform gerçek kurumlarla kullanılmadan önce PCI SSC'nin güncel SAQ belgeleriyle doğrulanmalıdır. Kesin SAQ tipini kurumun edinci bankası (acquirer) onaylar. Soru metinleri resmi belgelerden kopyalanmamış, Türkçe özet olarak yazılmıştır.
 
 ## Teknolojiler
 
@@ -75,7 +91,7 @@ Bu platform süreci denetimden öne çeker:
 | Veritabanı | SQL Server (geliştirmede LocalDB) |
 | Kimlik doğrulama | JWT, BCrypt ile parola özeti |
 | Frontend | React 18, Vite, React Router, Axios, react-dropzone |
-| YZ servisi | Python, FastAPI, LangChain, ChromaDB, Google Gemini (sohbet + embedding) |
+| YZ servisi | Python, FastAPI, LangChain, ChromaDB, Ollama (yerel `gemma3:4b` + `bge-m3`), BM25 ve kural katmanı |
 
 ## Mimari
 
@@ -89,7 +105,11 @@ frontend/
   src/api.js          → Backend'e giden tek axios istemcisi
   src/pages/          → Giriş/Kayıt, Kapsam Belirleme, Beyan Anketi, Kanıt Yükleme, Gap Analizi
 ai-service/
-  app.py              → FastAPI RAG servisi (/analyze, /health)
+  app.py              → FastAPI hibrit RAG servisi (/analyze, /health), kararların birleştirilmesi
+  retrieval.py        → BM25 + vektör araması, RRF ile birleştirme
+  rules.py            → Kural katmanı: sıklık/süre/sayı şartları, olumsuzluk, alıntı doğrulama
+  knowledge/          → Denetçi kontrol listesi ve maddelerin kuralları (test_procedures.json)
+  tests/              → Kural katmanı testleri
 demo/                 → Sunumda canlı yüklenecek örnek kanıtlar (biri bilerek eksik yazılmıştır)
 ```
 
@@ -107,13 +127,14 @@ Gereksinimleri kurduktan sonra depo klasöründeki **`baslat.bat`** dosyasına �
 
 Giriş ekranındaki **"Demo kurumla giriş"** butonu hazır verili örnek bir kurum açar (her girişte sıfırlanır). `demo/` klasöründe canlı yüklemek için iki örnek kanıt vardır: 1.2.7 için uyumlu bir tutanak ve 10.4.1 için YZ'nin yakalaması gereken eksik bir prosedür.
 
-**YZ anahtarı:** `ai-service/.env.example` dosyasını `ai-service/.env` olarak kopyalayıp `GOOGLE_API_KEY` değerini yazın ([anahtar al](https://aistudio.google.com/apikey)). `.env` depoya girmez; her geliştirici kendi anahtarını kullanır. Anahtar yoksa platform çalışır ama belgeler "Analiz sırada" kalır.
+**Yerel dil modeli:** API anahtarı gerekmez. [Ollama](https://ollama.com/download)'yı kurun; `baslat.bat` ilk açılışta `gemma3:4b` (~3,4 GB) ve `bge-m3` (~1,2 GB) modellerini indirir. Elle: `ollama pull gemma3:4b` ve `ollama pull bge-m3`. Ollama yoksa YZ servisi dil modeli olmadan, yalnızca kural moduyla çalışır. 6 GB ekran kartında rahat çalışır; ayarlar `ai-service/.env.example` içindedir.
 
 ### Gereksinimler
 
 - [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
 - [Node.js](https://nodejs.org) (LTS)
 - [Python](https://www.python.org) 3.11–3.13 (YZ servisi için)
+- [Ollama](https://ollama.com/download) (yerel dil modeli için; yoksa YZ servisi kural moduyla çalışır)
 - SQL Server LocalDB. Visual Studio ile gelir; ayrıca SQL Server Express kurulumunda "LocalDB" seçilerek de kurulabilir.
 - EF Core aracı (yalnızca migration eklerken gerekir): `dotnet tool install --global dotnet-ef --version 9.0.9`
 
@@ -144,7 +165,7 @@ npm run dev        # http://localhost:5173
 2. **Kapsam Belirleme** adımında ödeme kanallarınızı seçin ve SAQ tipinizi görün.
 3. **Beyan Anketi**'nde size ait gereksinimleri cevaplayın.
 4. **Kanıt Yükleme**'de belgelerinizi ilgili gereksinimle ilişkilendirerek yükleyin.
-5. **Gap Analizi**'nde uyum skorunu, gereksinim bazlı ısı haritasını ve bulguları görün.
+5. **Gap Analizi**'nde kaç eksik kaldığını, gereksinim bazlı ısı haritasını ve eksiklerin listesini görün.
 
 ## API uç noktaları
 
@@ -160,7 +181,7 @@ npm run dev        # http://localhost:5173
 | POST | /api/files | multipart dosya yükleme (`file`, `requirementCode`) |
 | GET | /api/files | Kurumun yüklediği belgeler |
 | POST | /api/files/{id}/analyze | Belgeyi yeniden YZ analizine al |
-| GET | /api/gap | Uyum skoru, bölüm skorları ve bulgular |
+| GET | /api/gap | Tamam/eksik sayıları, bölüm bazında eksikler ve bulgular |
 | POST | /api/auth/demo | Demo kurumu sıfırlar ve JWT döner (`Demo:Enabled`) |
 
 ## Birlikte geliştirme notları

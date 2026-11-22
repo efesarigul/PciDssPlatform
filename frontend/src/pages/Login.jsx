@@ -5,8 +5,8 @@ import { Icon, Logo } from "../ui";
 
 const POINTS = [
   { icon: "target", title: "Otomatik kapsam belirleme", text: "Ödeme kanallarınıza göre doğru SAQ tipi ve yalnızca ilgili sorular" },
-  { icon: "sparkles", title: "YZ ile kanıt analizi", text: "Belgeleriniz gereksinimlerle anlamsal olarak karşılaştırılır" },
-  { icon: "chart", title: "Gap analizi paneli", text: "Uyum skoru ve önceliklendirilmiş bulgular tek ekranda" },
+  { icon: "clipboard", title: "Kanıt analizi", text: "Belgeleriniz denetçi kontrol listesiyle madde madde karşılaştırılır" },
+  { icon: "chart", title: "Gap analizi paneli", text: "Kaç eksik kaldığı ve her birinin ne olduğu tek ekranda" },
 ];
 
 export default function Login() {
@@ -42,7 +42,7 @@ export default function Login() {
       <aside className="auth-hero">
         <Logo light />
         <div className="hero-copy">
-          <span className="eyebrow">PCI DSS v4.0.1 · Yapay zekâ destekli</span>
+          <span className="eyebrow">PCI DSS v4.0.1 · Ön değerlendirme platformu</span>
           <h1>Denetimden önce eksiklerinizi görün.</h1>
           <p>Kart ödemesi kabul eden kurumlar için uyum ön değerlendirmesi: beyan edin, kanıt yükleyin,
             hazırlık durumunuzu anında görün.</p>
@@ -86,7 +86,7 @@ export default function Login() {
           </button>
           <div className="divider"><span>veya</span></div>
           <button type="button" className="demo-btn" disabled={busy} onClick={demo}>
-            <span className="hero-icon"><Icon name="sparkles" /></span>
+            <span className="hero-icon"><Icon name="building" /></span>
             <span><strong>Demo kurumla giriş</strong><span>Örnek e-ticaret kurumu, hazır beyan ve kanıtlarla açılır</span></span>
             <Icon name="arrowRight" />
           </button>

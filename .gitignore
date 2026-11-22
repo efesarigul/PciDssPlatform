@@ -22,3 +22,6 @@ dist/
 .idea/
 Thumbs.db
 .DS_Store
+
+# Office belgesi açıkken oluşan geçici kilit dosyaları
+~$*

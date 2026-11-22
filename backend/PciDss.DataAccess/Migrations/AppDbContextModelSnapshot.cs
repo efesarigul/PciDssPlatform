@@ -230,7 +230,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            Applicability = 26,
+                            Applicability = 2,
                             Code = "1.2.1",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "NSC kural setleri için yapılandırma standartları tanımlanmalı, uygulanmalı ve güncel tutulmalıdır.",
@@ -241,7 +241,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 5,
-                            Applicability = 26,
+                            Applicability = 2,
                             Code = "1.2.7",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "NSC yapılandırmaları en az altı ayda bir gözden geçirilerek gereksiz kurallar kaldırılmalıdır.",
@@ -252,7 +252,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 6,
-                            Applicability = 26,
+                            Applicability = 58,
                             Code = "1.3.1",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "CDE'ye gelen trafik yalnızca gerekli olanla sınırlandırılmalı, geri kalanı engellenmelidir.",
@@ -263,7 +263,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 7,
-                            Applicability = 26,
+                            Applicability = 2,
                             Code = "1.4.1",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Güvenilir iç ağlar ile internet gibi güvenilmeyen ağlar arasına NSC yerleştirilmelidir.",
@@ -296,7 +296,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 10,
-                            Applicability = 26,
+                            Applicability = 56,
                             Code = "2.3.1",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "CDE'ye bağlı kablosuz ağlarda şifreleme anahtarları, parolalar ve SNMP gibi tüm varsayılan ayarlar değiştirilmelidir.",
@@ -307,7 +307,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 11,
-                            Applicability = 254,
+                            Applicability = 195,
                             Code = "3.2.1",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Hesap verisi saklama süresi ve yöntemi tanımlı bir saklama/imha politikasıyla sınırlandırılmalıdır.",
@@ -318,7 +318,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 12,
-                            Applicability = 254,
+                            Applicability = 190,
                             Code = "3.3.1",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Yetkilendirme sonrasında tam iz verisi, CVV/CVC ve PIN bilgisi saklanmamalıdır.",
@@ -329,7 +329,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 13,
-                            Applicability = 62,
+                            Applicability = 60,
                             Code = "3.4.1",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "PAN ekranlarda ve çıktılarda maskelenmeli; ilk 6 / son 4 haneden fazlasını yalnızca iş ihtiyacı olanlar görebilmelidir.",
@@ -373,7 +373,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 16,
-                            Applicability = 58,
+                            Applicability = 18,
                             Code = "4.2.1",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "PAN açık/genel ağlar üzerinden iletilirken güçlü kriptografi ve güvenilir sertifikalar kullanılmalıdır.",
@@ -384,7 +384,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 17,
-                            Applicability = 254,
+                            Applicability = 146,
                             Code = "4.2.2",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "PAN e-posta, anlık mesajlaşma, SMS gibi kanallarla gönderiliyorsa güçlü kriptografi ile korunmalıdır.",
@@ -428,7 +428,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 21,
-                            Applicability = 0,
+                            Applicability = 18,
                             Code = "6.2.1",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Özel ve ısmarlama yazılımlar güvenli geliştirme standartlarına göre geliştirilmelidir.",
@@ -483,7 +483,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 26,
-                            Applicability = 50,
+                            Applicability = 0,
                             Code = "7.2.1",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "İş ve erişim ihtiyacına göre erişimi düzenleyen bir erişim kontrol modeli tanımlanmalıdır.",
@@ -494,7 +494,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 27,
-                            Applicability = 58,
+                            Applicability = 62,
                             Code = "7.2.2",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Kullanıcılara yalnızca görevleri için gereken en az yetki verilmelidir.",
@@ -505,7 +505,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 28,
-                            Applicability = 59,
+                            Applicability = 51,
                             Code = "8.2.1",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Sistemlere ve kart verisine erişen her kullanıcıya benzersiz bir kimlik atanmalıdır.",
@@ -516,7 +516,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 29,
-                            Applicability = 51,
+                            Applicability = 59,
                             Code = "8.2.2",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Grup, paylaşılan veya ortak hesaplar yalnızca istisnai durumlarda, onaylı ve izlenebilir şekilde kullanılmalıdır.",
@@ -560,7 +560,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 32,
-                            Applicability = 18,
+                            Applicability = 50,
                             Code = "8.4.1",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "CDE'ye konsol dışı yönetici erişimlerinde çok faktörlü kimlik doğrulama (MFA) kullanılmalıdır.",
@@ -571,7 +571,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 33,
-                            Applicability = 58,
+                            Applicability = 26,
                             Code = "8.4.3",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Kurum ağına dışarıdan yapılan ve CDE'ye ulaşabilen tüm uzaktan erişimlerde MFA kullanılmalıdır.",
@@ -626,7 +626,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 4,
-                            Applicability = 18,
+                            Applicability = 2,
                             Code = "10.2.1",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Tüm sistem bileşenlerinde ve kart verisinde denetim kayıtları (audit log) etkin ve aktif olmalıdır.",
@@ -681,7 +681,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 42,
-                            Applicability = 18,
+                            Applicability = 16,
                             Code = "11.3.1",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "İç zafiyet taramaları en az üç ayda bir yapılmalı, yüksek ve kritik açıklar giderilip yeniden taranmalıdır.",
@@ -736,7 +736,7 @@ namespace PciDss.DataAccess.Migrations
                         new
                         {
                             Id = 47,
-                            Applicability = 62,
+                            Applicability = 126,
                             Code = "12.1.1",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Genel bir bilgi güvenliği politikası oluşturulmalı, yayımlanmalı, güncel tutulmalı ve ilgili herkese duyurulmalıdır.",
@@ -831,6 +831,523 @@ namespace PciDss.DataAccess.Migrations
                             Section = 12,
                             ServiceProviderOnly = false,
                             Title = "Olay müdahale planı"
+                        },
+                        new
+                        {
+                            Id = 56,
+                            Applicability = 10,
+                            Code = "1.2.3",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Kart verisi ortamı ile diğer ağlar arasındaki tüm bağlantıları (kablosuz dahil) gösteren güncel bir ağ diyagramı tutulmalıdır.",
+                            Section = 1,
+                            ServiceProviderOnly = false,
+                            Title = "Doğru ağ diyagramı"
+                        },
+                        new
+                        {
+                            Id = 57,
+                            Applicability = 10,
+                            Code = "1.2.5",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "İzin verilen tüm servis, protokol ve portlar belirlenmeli, onaylanmalı ve her biri için iş gerekçesi bulunmalıdır.",
+                            Section = 1,
+                            ServiceProviderOnly = false,
+                            Title = "İzin verilen servis, protokol ve portlar"
+                        },
+                        new
+                        {
+                            Id = 58,
+                            Applicability = 10,
+                            Code = "1.2.6",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Kullanımda olan ve güvensiz kabul edilen servis, protokol ve portlar için riski azaltan güvenlik önlemleri tanımlanmalı ve uygulanmalıdır.",
+                            Section = 1,
+                            ServiceProviderOnly = false,
+                            Title = "Güvensiz servisler için güvenlik önlemleri"
+                        },
+                        new
+                        {
+                            Id = 59,
+                            Applicability = 58,
+                            Code = "1.3.2",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Kart verisi ortamından çıkan trafik yalnızca gerekli olanla sınırlandırılmalı, geri kalanı engellenmelidir.",
+                            Section = 1,
+                            ServiceProviderOnly = false,
+                            Title = "CDE'den çıkan trafiğin kısıtlanması"
+                        },
+                        new
+                        {
+                            Id = 60,
+                            Applicability = 58,
+                            Code = "1.3.3",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Tüm kablosuz ağlar ile kart verisi ortamı arasında, varsayılan olarak trafiği engelleyen ve yalnızca yetkili trafiğe izin veren NSC bulunmalıdır.",
+                            Section = 1,
+                            ServiceProviderOnly = false,
+                            Title = "Kablosuz ağlar ile CDE arasında NSC"
+                        },
+                        new
+                        {
+                            Id = 61,
+                            Applicability = 10,
+                            Code = "1.4.3",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Sahte kaynak IP adresli trafiğin güvenilir ağa girmesini engelleyen önlemler (anti-spoofing) uygulanmalıdır.",
+                            Section = 1,
+                            ServiceProviderOnly = false,
+                            Title = "Sahte IP adreslerine karşı önlem"
+                        },
+                        new
+                        {
+                            Id = 62,
+                            Applicability = 34,
+                            Code = "1.5.1",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Hem güvenilmeyen ağlara hem kart verisi ortamına bağlanan kurum veya çalışan cihazlarında, kullanıcının değiştiremediği güvenlik kontrolleri uygulanmalıdır.",
+                            Section = 1,
+                            ServiceProviderOnly = false,
+                            Title = "Hem internete hem CDE'ye bağlanan cihazlar"
+                        },
+                        new
+                        {
+                            Id = 63,
+                            Applicability = 50,
+                            Code = "2.1.1",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Sistem bileşenlerinin güvenli yapılandırılmasına ilişkin politika ve prosedürler belgelenmeli, güncel tutulmalı, kullanılmalı ve ilgili herkese bildirilmelidir.",
+                            Section = 2,
+                            ServiceProviderOnly = false,
+                            Title = "Gereksinim 2 politika ve prosedürleri"
+                        },
+                        new
+                        {
+                            Id = 64,
+                            Applicability = 50,
+                            Code = "2.2.4",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Yalnızca gerekli servis, protokol ve işlevler etkin olmalı; gereksiz olanlar kaldırılmalı veya devre dışı bırakılmalıdır.",
+                            Section = 2,
+                            ServiceProviderOnly = false,
+                            Title = "Yalnızca gerekli servislerin etkin olması"
+                        },
+                        new
+                        {
+                            Id = 65,
+                            Applicability = 50,
+                            Code = "2.2.5",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Güvensiz servis, protokol veya daemon varsa iş gerekçesi belgelenmeli ve riski azaltan ek güvenlik özellikleri uygulanmalıdır.",
+                            Section = 2,
+                            ServiceProviderOnly = false,
+                            Title = "Güvensiz servisler için iş gerekçesi"
+                        },
+                        new
+                        {
+                            Id = 66,
+                            Applicability = 50,
+                            Code = "2.2.6",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Sistem güvenlik parametreleri kötüye kullanımı önleyecek şekilde yapılandırılmalıdır.",
+                            Section = 2,
+                            ServiceProviderOnly = false,
+                            Title = "Sistem güvenlik parametreleri"
+                        },
+                        new
+                        {
+                            Id = 67,
+                            Applicability = 58,
+                            Code = "2.2.7",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Konsol dışından yapılan tüm yönetici erişimleri güçlü kriptografiyle şifrelenmelidir.",
+                            Section = 2,
+                            ServiceProviderOnly = false,
+                            Title = "Yönetici erişiminin şifrelenmesi"
+                        },
+                        new
+                        {
+                            Id = 68,
+                            Applicability = 56,
+                            Code = "2.3.2",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "CDE'ye bağlı kablosuz ağların şifreleme anahtarları, anahtarı bilen personel ayrıldığında veya anahtarın ele geçirildiğinden şüphelenildiğinde değiştirilmelidir.",
+                            Section = 2,
+                            ServiceProviderOnly = false,
+                            Title = "Kablosuz şifreleme anahtarlarının değiştirilmesi"
+                        },
+                        new
+                        {
+                            Id = 69,
+                            Applicability = 127,
+                            Code = "3.1.1",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Saklanan hesap verisinin korunmasına ilişkin politika ve prosedürler belgelenmeli, güncel tutulmalı, kullanılmalı ve ilgili herkese bildirilmelidir.",
+                            Section = 3,
+                            ServiceProviderOnly = false,
+                            Title = "Gereksinim 3 politika ve prosedürleri"
+                        },
+                        new
+                        {
+                            Id = 70,
+                            Applicability = 12,
+                            Code = "3.3.1.1",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Yetkilendirme tamamlandıktan sonra kartın iz (track) verisinin tamamı saklanmamalıdır.",
+                            Section = 3,
+                            ServiceProviderOnly = false,
+                            Title = "Manyetik şerit / çip verisinin saklanmaması"
+                        },
+                        new
+                        {
+                            Id = 71,
+                            Applicability = 126,
+                            Code = "3.3.1.2",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Yetkilendirme tamamlandıktan sonra kart doğrulama kodu (CVV2/CVC2 vb.) saklanmamalıdır.",
+                            Section = 3,
+                            ServiceProviderOnly = false,
+                            Title = "Kart doğrulama kodunun saklanmaması"
+                        },
+                        new
+                        {
+                            Id = 72,
+                            Applicability = 30,
+                            Code = "3.3.1.3",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Yetkilendirme tamamlandıktan sonra PIN ve şifreli PIN bloğu saklanmamalıdır.",
+                            Section = 3,
+                            ServiceProviderOnly = false,
+                            Title = "PIN ve PIN bloğunun saklanmaması"
+                        },
+                        new
+                        {
+                            Id = 73,
+                            Applicability = 48,
+                            Code = "4.2.1.2",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Kart verisi ileten veya CDE'ye bağlı kablosuz ağlarda kimlik doğrulama ve iletim için güçlü kriptografi kullanılmalıdır.",
+                            Section = 4,
+                            ServiceProviderOnly = false,
+                            Title = "Kablosuz ağlarda güçlü kriptografi"
+                        },
+                        new
+                        {
+                            Id = 74,
+                            Applicability = 50,
+                            Code = "5.2.2",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Anti-malware çözümü bilinen tüm kötü amaçlı yazılım türlerini tespit etmeli ve kaldırmalı, engellemeli veya kontrol altına almalıdır.",
+                            Section = 5,
+                            ServiceProviderOnly = false,
+                            Title = "Anti-malware çözümünün yetenekleri"
+                        },
+                        new
+                        {
+                            Id = 75,
+                            Applicability = 50,
+                            Code = "5.3.2",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Anti-malware çözümü periyodik tarama ile aktif veya gerçek zamanlı tarama yapmalı ya da sürekli davranış analizi uygulamalıdır.",
+                            Section = 5,
+                            ServiceProviderOnly = false,
+                            Title = "Periyodik ve gerçek zamanlı tarama"
+                        },
+                        new
+                        {
+                            Id = 76,
+                            Applicability = 50,
+                            Code = "5.3.3",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Çıkarılabilir elektronik medya takıldığında anti-malware otomatik tarama veya sürekli davranış analizi yapmalıdır.",
+                            Section = 5,
+                            ServiceProviderOnly = false,
+                            Title = "Çıkarılabilir medyanın taranması"
+                        },
+                        new
+                        {
+                            Id = 77,
+                            Applicability = 50,
+                            Code = "5.3.4",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Anti-malware çözümünün denetim kayıtları etkin olmalı ve log saklama gereksinimine uygun saklanmalıdır.",
+                            Section = 5,
+                            ServiceProviderOnly = false,
+                            Title = "Anti-malware loglarının tutulması"
+                        },
+                        new
+                        {
+                            Id = 78,
+                            Applicability = 50,
+                            Code = "5.3.5",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Anti-malware çözümü, yönetimin vaka bazında ve süreli onayı olmadan kullanıcılarca devre dışı bırakılamamalı veya değiştirilememelidir.",
+                            Section = 5,
+                            ServiceProviderOnly = false,
+                            Title = "Anti-malware'in devre dışı bırakılamaması"
+                        },
+                        new
+                        {
+                            Id = 79,
+                            Applicability = 58,
+                            Code = "8.1.1",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Kullanıcı tanımlama ve kimlik doğrulamaya ilişkin politika ve prosedürler belgelenmeli, güncel tutulmalı, kullanılmalı ve ilgili herkese bildirilmelidir.",
+                            Section = 8,
+                            ServiceProviderOnly = false,
+                            Title = "Gereksinim 8 politika ve prosedürleri"
+                        },
+                        new
+                        {
+                            Id = 80,
+                            Applicability = 50,
+                            Code = "8.2.4",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Kullanıcı kimliklerinin ve kimlik doğrulama faktörlerinin eklenmesi, silinmesi ve değiştirilmesi onaylı ve belgelenmiş yetkiyle yapılmalıdır.",
+                            Section = 8,
+                            ServiceProviderOnly = false,
+                            Title = "Kullanıcı hesabı ekleme, silme ve değiştirme"
+                        },
+                        new
+                        {
+                            Id = 81,
+                            Applicability = 51,
+                            Code = "8.2.5",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "İşten ayrılan kullanıcıların erişimi derhal kaldırılmalıdır.",
+                            Section = 8,
+                            ServiceProviderOnly = false,
+                            Title = "İşten ayrılanların erişiminin kaldırılması"
+                        },
+                        new
+                        {
+                            Id = 82,
+                            Applicability = 26,
+                            Code = "8.2.7",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Üçüncü tarafların uzaktan erişim hesapları yalnızca ihtiyaç süresince etkin tutulmalı ve kullanımı izlenmelidir.",
+                            Section = 8,
+                            ServiceProviderOnly = false,
+                            Title = "Üçüncü tarafların uzaktan erişimi"
+                        },
+                        new
+                        {
+                            Id = 83,
+                            Applicability = 19,
+                            Code = "8.3.5",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "İlk kullanım veya sıfırlama için verilen parolalar her kullanıcıya özgü olmalı ve ilk kullanımda değiştirilmelidir.",
+                            Section = 8,
+                            ServiceProviderOnly = false,
+                            Title = "İlk ve sıfırlanan parolalar"
+                        },
+                        new
+                        {
+                            Id = 84,
+                            Applicability = 19,
+                            Code = "8.3.7",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Kullanıcılar yeni parola olarak son dört parolasından birini kullanamamalıdır.",
+                            Section = 8,
+                            ServiceProviderOnly = false,
+                            Title = "Parola geçmişi"
+                        },
+                        new
+                        {
+                            Id = 85,
+                            Applicability = 19,
+                            Code = "8.3.9",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Parola tek kimlik doğrulama faktörüyse en az 90 günde bir değiştirilmeli veya hesabın güvenlik durumu dinamik olarak analiz edilmelidir.",
+                            Section = 8,
+                            ServiceProviderOnly = false,
+                            Title = "Tek faktörde parola değişim süresi"
+                        },
+                        new
+                        {
+                            Id = 86,
+                            Applicability = 120,
+                            Code = "9.1.1",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Kart verisine fiziksel erişimin kısıtlanmasına ilişkin politika ve prosedürler belgelenmeli, güncel tutulmalı, kullanılmalı ve ilgili herkese bildirilmelidir.",
+                            Section = 9,
+                            ServiceProviderOnly = false,
+                            Title = "Gereksinim 9 politika ve prosedürleri"
+                        },
+                        new
+                        {
+                            Id = 87,
+                            Applicability = 50,
+                            Code = "9.2.1",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Kart verisi ortamındaki sistemlere fiziksel erişimi kısıtlamak için uygun tesis giriş kontrolleri bulunmalıdır.",
+                            Section = 9,
+                            ServiceProviderOnly = false,
+                            Title = "Tesis giriş kontrolleri"
+                        },
+                        new
+                        {
+                            Id = 88,
+                            Applicability = 24,
+                            Code = "9.2.2",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Ziyaretçilerin erişebildiği alanlardaki fiziksel ve mantıksal ağ prizleri kısıtlanmalıdır.",
+                            Section = 9,
+                            ServiceProviderOnly = false,
+                            Title = "Herkese açık ağ prizlerinin kısıtlanması"
+                        },
+                        new
+                        {
+                            Id = 89,
+                            Applicability = 127,
+                            Code = "9.4.1.1",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Kart verisi içeren çevrimdışı medya yedekleri güvenli bir yerde saklanmalıdır.",
+                            Section = 9,
+                            ServiceProviderOnly = false,
+                            Title = "Çevrimdışı medya yedeklerinin güvenliği"
+                        },
+                        new
+                        {
+                            Id = 90,
+                            Applicability = 63,
+                            Code = "9.4.2",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Kart verisi içeren tüm medya, verinin hassasiyetine göre sınıflandırılmalıdır.",
+                            Section = 9,
+                            ServiceProviderOnly = false,
+                            Title = "Medyanın sınıflandırılması"
+                        },
+                        new
+                        {
+                            Id = 91,
+                            Applicability = 63,
+                            Code = "9.4.3",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Tesis dışına gönderilen kart verisi içeren medya güvenli kurye veya takip edilebilir bir yöntemle gönderilmeli ve kayıt altına alınmalıdır.",
+                            Section = 9,
+                            ServiceProviderOnly = false,
+                            Title = "Tesis dışına gönderilen medya"
+                        },
+                        new
+                        {
+                            Id = 92,
+                            Applicability = 63,
+                            Code = "9.4.4",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Tesis dışına taşınan tüm kart verisi içeren medya yönetim tarafından onaylanmalıdır.",
+                            Section = 9,
+                            ServiceProviderOnly = false,
+                            Title = "Medya gönderiminde yönetim onayı"
+                        },
+                        new
+                        {
+                            Id = 93,
+                            Applicability = 92,
+                            Code = "9.5.1.1",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Cihaz markası, modeli, konumu ve seri numarasını içeren güncel bir POI cihaz listesi tutulmalıdır.",
+                            Section = 9,
+                            ServiceProviderOnly = false,
+                            Title = "POI cihaz listesinin tutulması"
+                        },
+                        new
+                        {
+                            Id = 94,
+                            Applicability = 92,
+                            Code = "9.5.1.2",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "POI cihaz yüzeyleri kurcalama ve yetkisiz değişime karşı periyodik olarak incelenmelidir.",
+                            Section = 9,
+                            ServiceProviderOnly = false,
+                            Title = "POI cihazlarının periyodik muayenesi"
+                        },
+                        new
+                        {
+                            Id = 95,
+                            Applicability = 19,
+                            Code = "11.3.2.1",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Önemli değişikliklerden sonra dış zafiyet taraması yapılmalı, yüksek riskli bulgular giderilip yeniden taranmalıdır.",
+                            Section = 11,
+                            ServiceProviderOnly = false,
+                            Title = "Önemli değişiklik sonrası dış tarama"
+                        },
+                        new
+                        {
+                            Id = 96,
+                            Applicability = 26,
+                            Code = "11.4.5",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Segmentasyon kullanılıyorsa segmentasyon kontrolleri en az yılda bir ve değişikliklerden sonra sızma testiyle doğrulanmalıdır.",
+                            Section = 11,
+                            ServiceProviderOnly = false,
+                            Title = "Segmentasyon kontrollerinin testi"
+                        },
+                        new
+                        {
+                            Id = 97,
+                            Applicability = 126,
+                            Code = "12.1.2",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Bilgi güvenliği politikası en az yılda bir ve ortam değiştiğinde gözden geçirilip güncellenmelidir.",
+                            Section = 12,
+                            ServiceProviderOnly = false,
+                            Title = "Güvenlik politikasının gözden geçirilmesi"
+                        },
+                        new
+                        {
+                            Id = 98,
+                            Applicability = 94,
+                            Code = "12.1.3",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Politika tüm personelin bilgi güvenliği rol ve sorumluluklarını tanımlamalı ve personel bunları kabul etmelidir.",
+                            Section = 12,
+                            ServiceProviderOnly = false,
+                            Title = "Güvenlik rol ve sorumlulukları"
+                        },
+                        new
+                        {
+                            Id = 99,
+                            Applicability = 50,
+                            Code = "12.6.3.1",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Güvenlik farkındalık eğitimi oltalama ve sosyal mühendislik gibi kart verisi ortamının güvenliğini etkileyebilecek tehditleri içermelidir.",
+                            Section = 12,
+                            ServiceProviderOnly = false,
+                            Title = "Oltalama ve sosyal mühendislik farkındalığı"
+                        },
+                        new
+                        {
+                            Id = 100,
+                            Applicability = 127,
+                            Code = "12.8.3",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Hizmet sağlayıcılarla çalışmaya başlamadan önce yerleşik bir durum tespiti (due diligence) süreci uygulanmalıdır.",
+                            Section = 12,
+                            ServiceProviderOnly = false,
+                            Title = "Hizmet sağlayıcı seçiminde durum tespiti"
+                        },
+                        new
+                        {
+                            Id = 101,
+                            Applicability = 127,
+                            Code = "12.8.5",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Hangi PCI DSS gereksinimlerinin hizmet sağlayıcı, hangilerinin kurum ya da ikisi tarafından yönetildiğine ilişkin bilgi tutulmalıdır.",
+                            Section = 12,
+                            ServiceProviderOnly = false,
+                            Title = "Hizmet sağlayıcı sorumluluk matrisi"
+                        },
+                        new
+                        {
+                            Id = 102,
+                            Applicability = 24,
+                            Code = "A2.1.1",
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "SSL veya erken TLS kullanan kart-mevcut POS terminallerinin, bu protokollerin bilinen açıklarından etkilenmediği doğrulanmalıdır.",
+                            Section = 4,
+                            ServiceProviderOnly = false,
+                            Title = "Ek A2: POS cihazlarında SSL / erken TLS"
                         });
                 });
 
@@ -960,7 +1477,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Son kural seti gözden geçirme kaydı / toplantı tutanağı",
                             EvidenceRequired = true,
-                            Order = 2,
+                            Order = 5,
                             RequirementId = 5,
                             Text = "Firewall/NSC kural setleriniz en az altı ayda bir gözden geçiriliyor ve gereksiz kurallar kaldırılıyor mu?"
                         },
@@ -970,7 +1487,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "CDE'ye gelen trafik kuralları dökümü",
                             EvidenceRequired = true,
-                            Order = 3,
+                            Order = 6,
                             RequirementId = 6,
                             Text = "Kart verisi ortamına (CDE) gelen ağ trafiği yalnızca iş için gerekli olanla sınırlı mı ve diğer tüm trafik engelleniyor mu?"
                         },
@@ -980,7 +1497,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Ağ topolojisi / veri akış diyagramı",
                             EvidenceRequired = true,
-                            Order = 4,
+                            Order = 9,
                             RequirementId = 7,
                             Text = "İç ağınız ile internet gibi güvenilmeyen ağlar arasında firewall/NSC bulunuyor mu?"
                         },
@@ -990,7 +1507,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Sunucu/cihaz sıkılaştırma (hardening) standardı",
                             EvidenceRequired = true,
-                            Order = 5,
+                            Order = 13,
                             RequirementId = 8,
                             Text = "Sunucular, ağ cihazları ve diğer sistem bileşenleri için yazılı bir sıkılaştırma (hardening) standardınız var mı ve uygulanıyor mu?"
                         },
@@ -1000,7 +1517,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Varsayılan hesap kontrol listesi",
                             EvidenceRequired = false,
-                            Order = 6,
+                            Order = 14,
                             RequirementId = 9,
                             Text = "Cihaz ve yazılımlardaki üretici varsayılan hesap ve parolaları değiştiriliyor ya da devre dışı bırakılıyor mu?"
                         },
@@ -1010,7 +1527,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Kablosuz erişim noktası yapılandırma kaydı",
                             EvidenceRequired = false,
-                            Order = 7,
+                            Order = 19,
                             RequirementId = 10,
                             Text = "Kart verisi ortamına bağlı kablosuz ağlarınızdaki varsayılan anahtar, parola ve ayarlar değiştirildi mi?"
                         },
@@ -1020,7 +1537,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Veri saklama ve imha politikası",
                             EvidenceRequired = true,
-                            Order = 8,
+                            Order = 22,
                             RequirementId = 11,
                             Text = "Kart verisini (kağıt dahil) ne kadar süre ve nerede sakladığınızı belirleyen, süresi dolanın imha edilmesini öngören bir politikanız var mı?"
                         },
@@ -1030,7 +1547,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Veri keşif taraması sonucu veya süreç beyanı",
                             EvidenceRequired = false,
-                            Order = 9,
+                            Order = 23,
                             RequirementId = 12,
                             Text = "Yetkilendirme tamamlandıktan sonra kartın manyetik şerit/çip verisi, güvenlik kodu (CVV/CVC) veya PIN bilgisi hiçbir yerde saklanmıyor mu?"
                         },
@@ -1040,7 +1557,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Ekran görüntüsü / fiş örneği",
                             EvidenceRequired = false,
-                            Order = 10,
+                            Order = 27,
                             RequirementId = 13,
                             Text = "Kart numarası ekranlarda, raporlarda ve fişlerde maskeli mi gösteriliyor; tamamını yalnızca iş ihtiyacı olan kişiler mi görebiliyor?"
                         },
@@ -1050,7 +1567,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Veritabanı şifreleme/tokenizasyon yapılandırması",
                             EvidenceRequired = true,
-                            Order = 11,
+                            Order = 28,
                             RequirementId = 2,
                             Text = "Saklanan kart numaraları (PAN) veritabanı, yedek ve loglar dahil her yerde şifreli, tokenize ya da kırpılmış olarak mı tutuluyor?"
                         },
@@ -1060,7 +1577,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Anahtar yönetimi prosedürü",
                             EvidenceRequired = true,
-                            Order = 12,
+                            Order = 29,
                             RequirementId = 14,
                             Text = "Kart verisini şifrelemekte kullandığınız anahtarların yetkisiz erişime karşı nasıl korunacağını tanımlayan yazılı prosedürler var mı?"
                         },
@@ -1070,7 +1587,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Kriptografik mimari dokümanı",
                             EvidenceRequired = true,
-                            Order = 13,
+                            Order = 30,
                             RequirementId = 15,
                             Text = "Kullandığınız şifreleme algoritmaları, protokoller, anahtarlar ve bunların kullanım yerlerini gösteren güncel bir kriptografik mimari dokümanınız var mı?"
                         },
@@ -1080,7 +1597,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "TLS yapılandırma raporu (ör. SSL tarama çıktısı)",
                             EvidenceRequired = true,
-                            Order = 14,
+                            Order = 31,
                             RequirementId = 16,
                             Text = "Kart verisi internet gibi açık ağlar üzerinden iletilirken güncel TLS sürümleri ve geçerli sertifikalarla şifreleniyor mu?"
                         },
@@ -1090,7 +1607,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Kart verisi iletişim politikası",
                             EvidenceRequired = false,
-                            Order = 15,
+                            Order = 33,
                             RequirementId = 17,
                             Text = "Kart numarası e-posta, SMS veya anlık mesajlaşma ile asla şifresiz gönderilmiyor mu?"
                         },
@@ -1100,7 +1617,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Anti-malware konsolu kurulum raporu",
                             EvidenceRequired = true,
-                            Order = 16,
+                            Order = 34,
                             RequirementId = 18,
                             Text = "Kötü amaçlı yazılım riski taşıyan tüm sistemlerde anti-malware (antivirüs/EDR) çözümü kurulu mu?"
                         },
@@ -1110,7 +1627,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Güncelleme durumu ekran görüntüsü",
                             EvidenceRequired = false,
-                            Order = 17,
+                            Order = 36,
                             RequirementId = 19,
                             Text = "Anti-malware çözümünüz ve imza veritabanı otomatik olarak güncelleniyor mu?"
                         },
@@ -1120,7 +1637,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "E-posta güvenlik ağ geçidi yapılandırması",
                             EvidenceRequired = false,
-                            Order = 18,
+                            Order = 41,
                             RequirementId = 20,
                             Text = "Çalışanlarınızı oltalama e-postalarına karşı koruyan teknik önlemler (e-posta filtresi, DMARC vb.) var mı?"
                         },
@@ -1130,7 +1647,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Güvenli yazılım geliştirme prosedürü",
                             EvidenceRequired = true,
-                            Order = 19,
+                            Order = 42,
                             RequirementId = 21,
                             Text = "Kendi geliştirdiğiniz veya ısmarlattığınız yazılımlar için güvenli kodlama standartlarını içeren bir geliştirme süreciniz var mı?"
                         },
@@ -1140,7 +1657,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Zafiyet takip ve risk derecelendirme prosedürü",
                             EvidenceRequired = true,
-                            Order = 20,
+                            Order = 43,
                             RequirementId = 22,
                             Text = "Yeni güvenlik açıklarını güvenilir kaynaklardan takip edip risk seviyesine göre (kritik/yüksek/orta) sınıflandırıyor musunuz?"
                         },
@@ -1150,7 +1667,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Yama yönetimi raporu",
                             EvidenceRequired = true,
-                            Order = 21,
+                            Order = 44,
                             RequirementId = 23,
                             Text = "Kritik güvenlik yamaları yayımlandıktan sonra en geç bir ay içinde sistemlerinize uygulanıyor mu?"
                         },
@@ -1160,7 +1677,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "WAF yapılandırması veya uygulama güvenlik testi raporu",
                             EvidenceRequired = true,
-                            Order = 22,
+                            Order = 45,
                             RequirementId = 24,
                             Text = "İnternete açık web uygulamalarınız WAF ile ya da düzenli uygulama güvenlik testleriyle korunuyor mu?"
                         },
@@ -1170,7 +1687,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Ödeme sayfası betik envanteri",
                             EvidenceRequired = true,
-                            Order = 23,
+                            Order = 46,
                             RequirementId = 25,
                             Text = "Ödeme sayfanızda çalışan tüm JavaScript dosyalarının envanteri, yetkilendirmesi ve bütünlük kontrolü yapılıyor mu?"
                         },
@@ -1180,7 +1697,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Rol/yetki matrisi",
                             EvidenceRequired = true,
-                            Order = 24,
+                            Order = 47,
                             RequirementId = 26,
                             Text = "Hangi rolün hangi sistem ve veriye erişebileceğini tanımlayan bir erişim kontrol modeliniz (rol/yetki matrisi) var mı?"
                         },
@@ -1190,7 +1707,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Yetki onay kayıtları",
                             EvidenceRequired = false,
-                            Order = 25,
+                            Order = 48,
                             RequirementId = 27,
                             Text = "Kullanıcılara yalnızca işlerini yapmaları için gereken en az yetki mi veriliyor?"
                         },
@@ -1200,7 +1717,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Kullanıcı hesap listesi",
                             EvidenceRequired = false,
-                            Order = 26,
+                            Order = 50,
                             RequirementId = 28,
                             Text = "Sistemlere ve kart verisine erişen her kullanıcının kendine ait benzersiz bir kullanıcı hesabı var mı?"
                         },
@@ -1210,7 +1727,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Ortak hesap istisna kayıtları",
                             EvidenceRequired = false,
-                            Order = 27,
+                            Order = 51,
                             RequirementId = 29,
                             Text = "Paylaşılan/ortak hesaplar yalnızca zorunlu durumlarda, onaylı ve kimin kullandığı izlenebilir şekilde mi kullanılıyor?"
                         },
@@ -1220,7 +1737,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Pasif hesap raporu",
                             EvidenceRequired = false,
-                            Order = 28,
+                            Order = 54,
                             RequirementId = 30,
                             Text = "90 gündür kullanılmayan kullanıcı hesapları kaldırılıyor ya da devre dışı bırakılıyor mu?"
                         },
@@ -1230,7 +1747,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Kimlik doğrulama politikası",
                             EvidenceRequired = false,
-                            Order = 29,
+                            Order = 56,
                             RequirementId = 31,
                             Text = "Sistemlere tüm kullanıcı erişimleri en az bir kimlik doğrulama faktörü (parola, token, biyometri) ile doğrulanıyor mu?"
                         },
@@ -1240,7 +1757,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Parola politikası ve sistem ayarı ekran görüntüsü",
                             EvidenceRequired = true,
-                            Order = 30,
+                            Order = 58,
                             RequirementId = 3,
                             Text = "Parola politikanız en az 12 karakter uzunluk ve hem harf hem rakam içerme zorunluluğu getiriyor mu?"
                         },
@@ -1250,7 +1767,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "MFA yapılandırması",
                             EvidenceRequired = true,
-                            Order = 31,
+                            Order = 61,
                             RequirementId = 32,
                             Text = "Kart verisi ortamındaki sistemlere uzaktan yönetici erişimlerinde çok faktörlü kimlik doğrulama (MFA) kullanılıyor mu?"
                         },
@@ -1260,7 +1777,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "VPN/uzaktan erişim MFA yapılandırması",
                             EvidenceRequired = true,
-                            Order = 32,
+                            Order = 62,
                             RequirementId = 33,
                             Text = "Kurum ağına dışarıdan yapılan tüm uzaktan erişimlerde (VPN, uzak masaüstü vb.) MFA kullanılıyor mu?"
                         },
@@ -1270,7 +1787,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Fiziksel güvenlik prosedürü",
                             EvidenceRequired = false,
-                            Order = 33,
+                            Order = 66,
                             RequirementId = 34,
                             Text = "Kart verisi içeren kağıt belgeler, yedekler ve diğer ortamlar kilitli ve erişimi kısıtlı yerlerde mi saklanıyor?"
                         },
@@ -1280,7 +1797,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "İmha prosedürü / imha tutanağı",
                             EvidenceRequired = false,
-                            Order = 34,
+                            Order = 71,
                             RequirementId = 35,
                             Text = "Kart verisi içeren basılı belgeler artık gerekmediğinde parçalama, yakma gibi yöntemlerle geri getirilemez şekilde imha ediliyor mu?"
                         },
@@ -1290,7 +1807,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "POS/POI cihaz envanteri",
                             EvidenceRequired = true,
-                            Order = 35,
+                            Order = 72,
                             RequirementId = 36,
                             Text = "Ödeme terminallerinizin (POS/POI) seri numaralı envanteri tutuluyor ve cihazlar kurcalanmaya karşı düzenli kontrol ediliyor mu?"
                         },
@@ -1300,7 +1817,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Eğitim katılım kaydı",
                             EvidenceRequired = false,
-                            Order = 36,
+                            Order = 75,
                             RequirementId = 37,
                             Text = "Kasiyerler ve terminal başındaki personel, cihaz kurcalama ve sahte teknisyen girişimlerini tanıyacak şekilde eğitildi mi?"
                         },
@@ -1310,7 +1827,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Log yapılandırması / örnek log kaydı",
                             EvidenceRequired = true,
-                            Order = 37,
+                            Order = 76,
                             RequirementId = 4,
                             Text = "Kart verisi ortamındaki tüm sistemlerde denetim kayıtları (audit log) açık ve aktif mi?"
                         },
@@ -1320,7 +1837,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "SIEM/log inceleme raporu",
                             EvidenceRequired = true,
-                            Order = 38,
+                            Order = 77,
                             RequirementId = 38,
                             Text = "Güvenlik olayları ve kritik sistemlerin logları en az günde bir kez (manuel veya SIEM ile) inceleniyor mu?"
                         },
@@ -1330,7 +1847,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Log saklama politikası",
                             EvidenceRequired = false,
-                            Order = 39,
+                            Order = 78,
                             RequirementId = 39,
                             Text = "Denetim kayıtları en az 12 ay saklanıyor ve son üç aylık kısım anında erişilebilir durumda mı?"
                         },
@@ -1340,7 +1857,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "NTP yapılandırması",
                             EvidenceRequired = false,
-                            Order = 40,
+                            Order = 79,
                             RequirementId = 40,
                             Text = "Tüm sistemlerin saati NTP gibi bir zaman senkronizasyon mekanizmasıyla eşitleniyor mu?"
                         },
@@ -1350,7 +1867,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Kablosuz tarama raporu",
                             EvidenceRequired = true,
-                            Order = 41,
+                            Order = 80,
                             RequirementId = 41,
                             Text = "Yetkisiz kablosuz erişim noktalarını tespit etmek için en az üç ayda bir tarama yapıyor musunuz?"
                         },
@@ -1360,7 +1877,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Son dört çeyreğe ait iç tarama raporları",
                             EvidenceRequired = true,
-                            Order = 42,
+                            Order = 81,
                             RequirementId = 42,
                             Text = "İç ağınızda en az üç ayda bir zafiyet taraması yapılıyor ve yüksek/kritik bulgular giderilip yeniden taranıyor mu?"
                         },
@@ -1370,7 +1887,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Son dört çeyreğe ait ASV tarama raporları",
                             EvidenceRequired = true,
-                            Order = 43,
+                            Order = 82,
                             RequirementId = 43,
                             Text = "İnternete açık sistemleriniz en az üç ayda bir PCI onaylı tarama sağlayıcısı (ASV) tarafından taranıyor ve tarama 'geçti' sonucu alıyor mu?"
                         },
@@ -1380,7 +1897,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Sızma testi raporu",
                             EvidenceRequired = true,
-                            Order = 44,
+                            Order = 84,
                             RequirementId = 44,
                             Text = "Sektörce kabul görmüş bir metodolojiye göre en az yılda bir iç ve dış sızma testi yaptırıyor musunuz?"
                         },
@@ -1390,7 +1907,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "IDS/IPS yapılandırması",
                             EvidenceRequired = true,
-                            Order = 45,
+                            Order = 86,
                             RequirementId = 45,
                             Text = "Kart verisi ortamının çevresinde ve kritik noktalarında saldırı tespit/önleme (IDS/IPS) sistemi çalışıyor mu?"
                         },
@@ -1400,7 +1917,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Değişiklik/kurcalama tespit aracı yapılandırması",
                             EvidenceRequired = true,
-                            Order = 46,
+                            Order = 87,
                             RequirementId = 46,
                             Text = "Müşterinin tarayıcısında görüntülenen ödeme sayfasındaki yetkisiz değişiklikleri tespit edip uyarı üreten bir mekanizmanız var mı?"
                         },
@@ -1410,7 +1927,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Bilgi güvenliği politikası",
                             EvidenceRequired = true,
-                            Order = 47,
+                            Order = 88,
                             RequirementId = 47,
                             Text = "Yönetimce onaylanmış, yılda en az bir kez gözden geçirilen ve çalışanlara duyurulmuş bir bilgi güvenliği politikanız var mı?"
                         },
@@ -1420,7 +1937,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Hedefli risk analizi dokümanı",
                             EvidenceRequired = true,
-                            Order = 48,
+                            Order = 91,
                             RequirementId = 48,
                             Text = "Sıklığını kendinizin belirlediği kontroller (ör. log inceleme sıklığı) için yazılı bir hedefli risk analizi yaptınız mı?"
                         },
@@ -1430,7 +1947,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Üç aylık gözden geçirme kayıtları",
                             EvidenceRequired = true,
-                            Order = 49,
+                            Order = 92,
                             RequirementId = 49,
                             Text = "Log inceleme, firewall gözden geçirme gibi güvenlik görevlerinin yapıldığı en az üç ayda bir kontrol ediliyor ve kayıt altına alınıyor mu?"
                         },
@@ -1440,7 +1957,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Kapsam dokümanı ve veri akış diyagramı",
                             EvidenceRequired = true,
-                            Order = 50,
+                            Order = 93,
                             RequirementId = 50,
                             Text = "Kart verisinin aktığı tüm sistem, süreç ve lokasyonları içeren PCI DSS kapsamınızı en az yılda bir belgeleyip doğruluyor musunuz?"
                         },
@@ -1450,7 +1967,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Farkındalık eğitimi materyali ve katılım kayıtları",
                             EvidenceRequired = true,
-                            Order = 51,
+                            Order = 94,
                             RequirementId = 51,
                             Text = "Tüm çalışanlara işe girişte ve en az yılda bir güvenlik farkındalık eğitimi veriliyor mu?"
                         },
@@ -1460,7 +1977,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "TPSP listesi",
                             EvidenceRequired = true,
-                            Order = 52,
+                            Order = 96,
                             RequirementId = 52,
                             Text = "Kart verisini paylaştığınız veya kart verisinin güvenliğini etkileyebilecek tüm hizmet sağlayıcıların (ödeme kuruluşu, barındırma vb.) güncel bir listesi var mı?"
                         },
@@ -1470,7 +1987,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Sözleşmelerin ilgili maddeleri",
                             EvidenceRequired = true,
-                            Order = 53,
+                            Order = 97,
                             RequirementId = 53,
                             Text = "Bu hizmet sağlayıcılarla, kart verisinin güvenliğinden sorumlu olduklarını kabul ettikleri yazılı sözleşmeleriniz var mı?"
                         },
@@ -1480,7 +1997,7 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "TPSP uyum sertifikaları (AOC)",
                             EvidenceRequired = true,
-                            Order = 54,
+                            Order = 99,
                             RequirementId = 54,
                             Text = "Hizmet sağlayıcılarınızın PCI DSS uyum durumunu (AOC belgeleri vb.) en az yılda bir kontrol ediyor musunuz?"
                         },
@@ -1490,9 +2007,479 @@ namespace PciDss.DataAccess.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EvidenceHint = "Olay müdahale planı",
                             EvidenceRequired = true,
-                            Order = 55,
+                            Order = 101,
                             RequirementId = 55,
                             Text = "Kart verisinin ele geçirildiğinden şüphelenildiğinde uygulanacak, sorumluların ve iletişim adımlarının tanımlı olduğu yazılı bir olay müdahale planınız var mı?"
+                        },
+                        new
+                        {
+                            Id = 56,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Güncel ağ diyagramı",
+                            EvidenceRequired = true,
+                            Order = 2,
+                            RequirementId = 56,
+                            Text = "Kart verisi ortamını ve diğer ağlarla tüm bağlantılarını (kablosuz ağlar dahil) gösteren güncel bir ağ diyagramınız var mı?"
+                        },
+                        new
+                        {
+                            Id = 57,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "İzinli port/servis listesi ve iş gerekçeleri",
+                            EvidenceRequired = true,
+                            Order = 3,
+                            RequirementId = 57,
+                            Text = "Ağ güvenlik kontrollerinde izin verilen tüm servis, protokol ve portların listesi, onayı ve iş gerekçesi var mı?"
+                        },
+                        new
+                        {
+                            Id = 58,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Güvensiz servis listesi ve alınan önlemler",
+                            EvidenceRequired = false,
+                            Order = 4,
+                            RequirementId = 58,
+                            Text = "Telnet, FTP gibi güvensiz kabul edilen bir servis veya protokol kullanıyorsanız, bunun riskini azaltan ek güvenlik önlemleri tanımlı ve uygulanıyor mu?"
+                        },
+                        new
+                        {
+                            Id = 59,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "CDE çıkış trafiği kuralları dökümü",
+                            EvidenceRequired = true,
+                            Order = 7,
+                            RequirementId = 59,
+                            Text = "Kart verisi ortamından (CDE) dışarı çıkan ağ trafiği yalnızca iş için gerekli olanla sınırlı mı ve diğer tüm çıkış trafiği engelleniyor mu?"
+                        },
+                        new
+                        {
+                            Id = 60,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Kablosuz ağ segmentasyon kuralları",
+                            EvidenceRequired = false,
+                            Order = 8,
+                            RequirementId = 60,
+                            Text = "Tüm kablosuz ağlarınız ile kart verisi ortamı arasında, yalnızca yetkili trafiğe izin veren bir firewall/NSC var mı?"
+                        },
+                        new
+                        {
+                            Id = 61,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "NSC anti-spoofing ayarı",
+                            EvidenceRequired = false,
+                            Order = 10,
+                            RequirementId = 61,
+                            Text = "Sahte (spoof) kaynak IP adresiyle gelen trafiğin iç ağınıza girmesini engelleyen önlemler uygulanıyor mu?"
+                        },
+                        new
+                        {
+                            Id = 62,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Uç nokta güvenlik politikası / kişisel firewall ayarı",
+                            EvidenceRequired = false,
+                            Order = 11,
+                            RequirementId = 62,
+                            Text = "Hem internete hem de kart verisi ortamına bağlanan dizüstü bilgisayar gibi cihazlarda, kullanıcının kapatamadığı güvenlik kontrolleri (kişisel firewall vb.) var mı?"
+                        },
+                        new
+                        {
+                            Id = 63,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Güvenli yapılandırma politikası",
+                            EvidenceRequired = true,
+                            Order = 12,
+                            RequirementId = 63,
+                            Text = "Sistem bileşenlerinin güvenli yapılandırılmasına ilişkin politika ve prosedürleriniz belgelenmiş, güncel ve ilgili çalışanlarca biliniyor mu?"
+                        },
+                        new
+                        {
+                            Id = 64,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Etkin servis listesi / sıkılaştırma kontrol çıktısı",
+                            EvidenceRequired = false,
+                            Order = 15,
+                            RequirementId = 64,
+                            Text = "Sistemlerde yalnızca gerekli servis ve işlevler etkin mi; gereksiz olanlar kaldırılıyor veya devre dışı bırakılıyor mu?"
+                        },
+                        new
+                        {
+                            Id = 65,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Güvensiz servis gerekçesi ve önlemleri",
+                            EvidenceRequired = false,
+                            Order = 16,
+                            RequirementId = 65,
+                            Text = "Sistemlerinizde güvensiz servis veya protokol bulunuyorsa bunların iş gerekçesi belgelenmiş ve ek güvenlik önlemleriyle korunuyor mu?"
+                        },
+                        new
+                        {
+                            Id = 66,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Güvenlik parametresi yapılandırma çıktısı",
+                            EvidenceRequired = false,
+                            Order = 17,
+                            RequirementId = 66,
+                            Text = "İşletim sistemi, veritabanı ve uygulamalardaki güvenlik parametreleri kötüye kullanımı önleyecek şekilde (sıkılaştırma kılavuzlarına göre) ayarlanmış mı?"
+                        },
+                        new
+                        {
+                            Id = 67,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Yönetici erişim protokolleri yapılandırması",
+                            EvidenceRequired = true,
+                            Order = 18,
+                            RequirementId = 67,
+                            Text = "Sistemlere uzaktan yapılan tüm yönetici erişimleri (SSH, HTTPS, RDP vb.) güçlü şifrelemeyle mi yapılıyor; telnet gibi şifresiz yöntemler kapalı mı?"
+                        },
+                        new
+                        {
+                            Id = 68,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Kablosuz anahtar değişim prosedürü",
+                            EvidenceRequired = false,
+                            Order = 20,
+                            RequirementId = 68,
+                            Text = "Kart verisi ortamına bağlı kablosuz ağlarınızın şifreleme anahtarları, anahtarı bilen biri işten ayrıldığında ya da anahtarın ele geçtiğinden şüphelenildiğinde değiştiriliyor mu?"
+                        },
+                        new
+                        {
+                            Id = 69,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Kart verisi koruma politikası",
+                            EvidenceRequired = true,
+                            Order = 21,
+                            RequirementId = 69,
+                            Text = "Saklanan kart verisinin korunmasına ilişkin politika ve prosedürleriniz belgelenmiş, güncel ve ilgili çalışanlarca biliniyor mu?"
+                        },
+                        new
+                        {
+                            Id = 70,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Veri keşif taraması sonucu veya süreç beyanı",
+                            EvidenceRequired = false,
+                            Order = 24,
+                            RequirementId = 70,
+                            Text = "Yetkilendirme tamamlandıktan sonra kartın manyetik şerit veya çip (iz) verisi hiçbir sistemde, logda veya belgede saklanmıyor mu?"
+                        },
+                        new
+                        {
+                            Id = 71,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Form örneği / veri keşif taraması",
+                            EvidenceRequired = false,
+                            Order = 25,
+                            RequirementId = 71,
+                            Text = "Yetkilendirme tamamlandıktan sonra kartın güvenlik kodu (CVV2/CVC2) kağıt formlar dahil hiçbir yerde saklanmıyor mu?"
+                        },
+                        new
+                        {
+                            Id = 72,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Süreç beyanı / veri keşif taraması",
+                            EvidenceRequired = false,
+                            Order = 26,
+                            RequirementId = 72,
+                            Text = "Yetkilendirme tamamlandıktan sonra PIN veya şifreli PIN bloğu hiçbir yerde saklanmıyor mu?"
+                        },
+                        new
+                        {
+                            Id = 73,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Kablosuz ağ şifreleme ayarı",
+                            EvidenceRequired = false,
+                            Order = 32,
+                            RequirementId = 73,
+                            Text = "Kart verisi ileten ya da kart verisi ortamına bağlı kablosuz ağlarınızda WPA2/WPA3 gibi güçlü şifreleme kullanılıyor mu?"
+                        },
+                        new
+                        {
+                            Id = 74,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Anti-malware ürün özellikleri / politika ayarları",
+                            EvidenceRequired = false,
+                            Order = 35,
+                            RequirementId = 74,
+                            Text = "Kullandığınız anti-malware çözümü bilinen tüm zararlı yazılım türlerini tespit edip kaldırabiliyor veya engelleyebiliyor mu?"
+                        },
+                        new
+                        {
+                            Id = 75,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Tarama zamanlaması ve gerçek zamanlı koruma ayarı",
+                            EvidenceRequired = false,
+                            Order = 37,
+                            RequirementId = 75,
+                            Text = "Anti-malware çözümünüz düzenli tarama ile birlikte gerçek zamanlı koruma (veya sürekli davranış analizi) yapıyor mu?"
+                        },
+                        new
+                        {
+                            Id = 76,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Çıkarılabilir medya tarama ayarı",
+                            EvidenceRequired = false,
+                            Order = 38,
+                            RequirementId = 76,
+                            Text = "USB bellek gibi çıkarılabilir medya takıldığında anti-malware tarafından otomatik olarak taranıyor mu?"
+                        },
+                        new
+                        {
+                            Id = 77,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Anti-malware log ayarları",
+                            EvidenceRequired = false,
+                            Order = 39,
+                            RequirementId = 77,
+                            Text = "Anti-malware çözümünüzün logları açık mı ve en az 12 ay saklanıyor mu?"
+                        },
+                        new
+                        {
+                            Id = 78,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Merkezi yönetim / kurcalama koruması ayarı",
+                            EvidenceRequired = false,
+                            Order = 40,
+                            RequirementId = 78,
+                            Text = "Kullanıcılar anti-malware çözümünü, yönetimin belirli bir süre için verdiği onay olmadan kapatamıyor veya değiştiremiyor mu?"
+                        },
+                        new
+                        {
+                            Id = 79,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Kimlik ve erişim yönetimi politikası",
+                            EvidenceRequired = true,
+                            Order = 49,
+                            RequirementId = 79,
+                            Text = "Kullanıcı hesapları ve kimlik doğrulamaya ilişkin politika ve prosedürleriniz belgelenmiş, güncel ve ilgili çalışanlarca biliniyor mu?"
+                        },
+                        new
+                        {
+                            Id = 80,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Hesap talep/onay kayıtları",
+                            EvidenceRequired = false,
+                            Order = 52,
+                            RequirementId = 80,
+                            Text = "Kullanıcı hesaplarının açılması, kapatılması ve yetki değişiklikleri onaylı bir talep ile ve kayıt altına alınarak mı yapılıyor?"
+                        },
+                        new
+                        {
+                            Id = 81,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Ayrılan personel hesap kapatma kayıtları",
+                            EvidenceRequired = false,
+                            Order = 53,
+                            RequirementId = 81,
+                            Text = "İşten ayrılan çalışanların tüm sistemlere erişimi derhal kapatılıyor mu?"
+                        },
+                        new
+                        {
+                            Id = 82,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Tedarikçi erişim prosedürü ve kayıtları",
+                            EvidenceRequired = false,
+                            Order = 55,
+                            RequirementId = 82,
+                            Text = "Tedarikçi ve üçüncü tarafların uzaktan erişim hesapları yalnızca ihtiyaç olduğunda açılıyor, kullanım sonrası kapatılıyor ve izleniyor mu?"
+                        },
+                        new
+                        {
+                            Id = 83,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Parola sıfırlama prosedürü",
+                            EvidenceRequired = false,
+                            Order = 57,
+                            RequirementId = 83,
+                            Text = "Yeni hesaplara veya parola sıfırlamada verilen parolalar her kullanıcı için farklı mı ve ilk girişte değiştirilmesi zorunlu mu?"
+                        },
+                        new
+                        {
+                            Id = 84,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Parola geçmişi ayarı",
+                            EvidenceRequired = false,
+                            Order = 59,
+                            RequirementId = 84,
+                            Text = "Sistemleriniz kullanıcıların son dört parolasından birini yeniden kullanmasını engelliyor mu?"
+                        },
+                        new
+                        {
+                            Id = 85,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Parola süre sonu ayarı",
+                            EvidenceRequired = false,
+                            Order = 60,
+                            RequirementId = 85,
+                            Text = "Parolanın tek kimlik doğrulama yöntemi olduğu hesaplarda parolalar en az 90 günde bir değiştiriliyor mu (veya risk tabanlı dinamik analiz yapılıyor mu)?"
+                        },
+                        new
+                        {
+                            Id = 86,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Fiziksel güvenlik politikası",
+                            EvidenceRequired = true,
+                            Order = 63,
+                            RequirementId = 86,
+                            Text = "Kart verisine fiziksel erişimin kısıtlanmasına ilişkin politika ve prosedürleriniz belgelenmiş, güncel ve ilgili çalışanlarca biliniyor mu?"
+                        },
+                        new
+                        {
+                            Id = 87,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Giriş kontrol sistemi kayıtları / fotoğraf",
+                            EvidenceRequired = false,
+                            Order = 64,
+                            RequirementId = 87,
+                            Text = "Kart verisi ortamındaki sistemlerin bulunduğu alanlara (sunucu odası vb.) fiziksel giriş kartlı geçiş, kilit gibi kontrollerle kısıtlanıyor mu?"
+                        },
+                        new
+                        {
+                            Id = 88,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Ağ prizi / port güvenliği ayarı",
+                            EvidenceRequired = false,
+                            Order = 65,
+                            RequirementId = 88,
+                            Text = "Ziyaretçilerin bulunabildiği alanlardaki ağ prizleri kapatılmış veya yalnızca yetkili cihazların bağlanabileceği şekilde kısıtlanmış mı?"
+                        },
+                        new
+                        {
+                            Id = 89,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Yedek saklama yeri ve erişim prosedürü",
+                            EvidenceRequired = false,
+                            Order = 67,
+                            RequirementId = 89,
+                            Text = "Kart verisi içeren yedekler (harici disk, teyp vb.) güvenli ve erişimi kısıtlı bir yerde mi saklanıyor?"
+                        },
+                        new
+                        {
+                            Id = 90,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Veri sınıflandırma politikası",
+                            EvidenceRequired = false,
+                            Order = 68,
+                            RequirementId = 90,
+                            Text = "Kart verisi içeren tüm ortamlar (kağıt, disk vb.) hassasiyetine göre sınıflandırılıp etiketleniyor mu?"
+                        },
+                        new
+                        {
+                            Id = 91,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Medya gönderim kayıtları",
+                            EvidenceRequired = false,
+                            Order = 69,
+                            RequirementId = 91,
+                            Text = "Kart verisi içeren belge veya ortamlar tesis dışına gönderilirken güvenli kurye ya da takip edilebilir bir yöntem kullanılıyor ve kayıt tutuluyor mu?"
+                        },
+                        new
+                        {
+                            Id = 92,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Medya çıkış onay kayıtları",
+                            EvidenceRequired = false,
+                            Order = 70,
+                            RequirementId = 92,
+                            Text = "Kart verisi içeren ortamların tesis dışına çıkarılması için yönetim onayı alınıyor mu?"
+                        },
+                        new
+                        {
+                            Id = 93,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "POI cihaz envanteri",
+                            EvidenceRequired = true,
+                            Order = 73,
+                            RequirementId = 93,
+                            Text = "Ödeme terminallerinizin marka, model, konum ve seri numarasını içeren güncel bir listesi var mı?"
+                        },
+                        new
+                        {
+                            Id = 94,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Cihaz muayene kontrol listesi / kayıtları",
+                            EvidenceRequired = false,
+                            Order = 74,
+                            RequirementId = 94,
+                            Text = "Ödeme terminalleri kurcalama, sahte parça (skimmer) ve cihaz değişimine karşı düzenli olarak inceleniyor mu?"
+                        },
+                        new
+                        {
+                            Id = 95,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Değişiklik sonrası tarama raporu",
+                            EvidenceRequired = false,
+                            Order = 83,
+                            RequirementId = 95,
+                            Text = "İnternete açık sistemlerde önemli bir değişiklikten sonra dış zafiyet taraması yapılıyor ve bulgular giderilip yeniden taranıyor mu?"
+                        },
+                        new
+                        {
+                            Id = 96,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Segmentasyon testi raporu",
+                            EvidenceRequired = true,
+                            Order = 85,
+                            RequirementId = 96,
+                            Text = "Kapsamı daraltmak için ağ segmentasyonu kullanıyorsanız, segmentasyonun etkinliği en az yılda bir sızma testiyle doğrulanıyor mu?"
+                        },
+                        new
+                        {
+                            Id = 97,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Politika revizyon geçmişi",
+                            EvidenceRequired = true,
+                            Order = 89,
+                            RequirementId = 97,
+                            Text = "Bilgi güvenliği politikanız en az yılda bir ve önemli değişikliklerde gözden geçirilip güncelleniyor mu?"
+                        },
+                        new
+                        {
+                            Id = 98,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Rol tanımları ve kabul kayıtları",
+                            EvidenceRequired = false,
+                            Order = 90,
+                            RequirementId = 98,
+                            Text = "Bilgi güvenliği politikanız tüm çalışanların güvenlik sorumluluklarını tanımlıyor ve çalışanlar bunu okuyup kabul ettiklerini onaylıyor mu?"
+                        },
+                        new
+                        {
+                            Id = 99,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Eğitim içeriği",
+                            EvidenceRequired = false,
+                            Order = 95,
+                            RequirementId = 99,
+                            Text = "Güvenlik farkındalık eğitiminiz oltalama (phishing) ve sosyal mühendislik saldırılarını tanımayı ve bildirmeyi içeriyor mu?"
+                        },
+                        new
+                        {
+                            Id = 100,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Tedarikçi değerlendirme prosedürü",
+                            EvidenceRequired = false,
+                            Order = 98,
+                            RequirementId = 100,
+                            Text = "Yeni bir hizmet sağlayıcıyla çalışmaya başlamadan önce PCI DSS uyumu dahil güvenlik durumunu değerlendirdiğiniz bir süreciniz var mı?"
+                        },
+                        new
+                        {
+                            Id = 101,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Sorumluluk matrisi",
+                            EvidenceRequired = true,
+                            Order = 100,
+                            RequirementId = 101,
+                            Text = "Her hizmet sağlayıcı için hangi PCI DSS gereksinimlerinden onun, hangilerinden sizin sorumlu olduğunuzu gösteren bir sorumluluk matrisiniz var mı?"
+                        },
+                        new
+                        {
+                            Id = 102,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EvidenceHint = "Terminal üreticisi beyanı / TLS yapılandırması",
+                            EvidenceRequired = false,
+                            Order = 102,
+                            RequirementId = 102,
+                            Text = "Kart-mevcut ödeme terminalleriniz SSL veya eski TLS (1.0/1.1) kullanıyorsa, bu cihazların bu protokollerin bilinen açıklarından etkilenmediği doğrulandı mı? Kullanmıyorsa 'Uygulanamaz' seçin."
                         });
                 });
 

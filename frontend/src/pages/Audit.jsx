@@ -34,7 +34,7 @@ export function AuditOrgs() {
   return (
     <section>
       <PageHeader eyebrow="Denetçi paneli" title="Kurumlar"
-        subtitle="Size erişim veren kurumlar. Kurumların kanıtlı beyanları önce sistem (YZ) tarafından kontrol edilir, ardından incelemeniz için kuyruğa düşer." />
+        subtitle="Size erişim veren kurumlar. Kurumların kanıtlı beyanları önce sistem tarafından otomatik kontrol edilir, ardından incelemeniz için kuyruğa düşer." />
       {error && <div className="error">{error}</div>}
       <div className="card table-card">
         <table className="table">
@@ -100,7 +100,7 @@ export function AuditReview() {
     <section>
       <Link to="/audit" className="back-link"><Icon name="arrowLeft" size={14} /> Kurumlar</Link>
       <PageHeader eyebrow={`SAQ ${SAQ_LABEL[data.saqType]}`} title={data.name}
-        subtitle="Kurumun beyanını, yüklediği belgeleri ve sistemin (YZ) değerlendirmesini inceleyin. Kararınız kurumun gap analizine yansır; ret gerekçeniz kuruma kritik bulgu olarak gösterilir." />
+        subtitle="Kurumun beyanını, yüklediği belgeleri ve sistemin otomatik değerlendirmesini inceleyin. Kararınız kurumun gap analizine yansır; ret gerekçeniz kuruma kritik bulgu olarak gösterilir." />
 
       {data.declarationOnly > 0 && (
         <div className="hint neutral audit-hint">
@@ -167,7 +167,7 @@ function ReviewItem({ item, orgId, open, onToggle, onSaved }) {
         <span className={`chev ${open ? "open" : ""}`}>›</span>
         <span className="code">{q.requirementCode}</span>
         <span className="review-title">{q.requirementTitle}</span>
-        {q.evidenceAi && <span className={`badge verdict-${q.evidenceAi.verdict.toLowerCase()}`}><Icon name="sparkles" size={12} /> {VERDICT[q.evidenceAi.verdict]}</span>}
+        {q.evidenceAi && <span className={`badge verdict-${q.evidenceAi.verdict.toLowerCase()}`}><Icon name="clipboard" size={12} /> {VERDICT[q.evidenceAi.verdict]}</span>}
         <span className={`badge ${st.cls}`}>{st.label}</span>
       </button>
 
@@ -215,7 +215,7 @@ function ReviewItem({ item, orgId, open, onToggle, onSaved }) {
           )}
 
           {state === "WaitingSystem" ? (
-            <div className="hint neutral"><span className="spinner" /><span>Belgelerin sistem (YZ) kontrolü tamamlanınca karar verebilirsiniz.</span></div>
+            <div className="hint neutral"><span className="spinner" /><span>Belgelerin otomatik kontrolü tamamlanınca karar verebilirsiniz.</span></div>
           ) : (
             <div className="review-actions">
               <label>Denetçi notu <span className="muted small">(ret için zorunlu; kurum bu notu görür)</span>
@@ -236,7 +236,7 @@ function ReviewItem({ item, orgId, open, onToggle, onSaved }) {
 }
 
 function DocStatus({ f }) {
-  if (f.status === "Pending" || f.status === "Processing") return <span className="badge processing"><span className="spinner" />YZ analiz ediyor</span>;
+  if (f.status === "Pending" || f.status === "Processing") return <span className="badge processing"><span className="spinner" />Analiz ediliyor</span>;
   if (f.status === "Failed") return <span className="badge failed">Analiz başarısız</span>;
   return <span className={`badge verdict-${f.ai.verdict.toLowerCase()}`}>{VERDICT[f.ai.verdict]}</span>;
 }

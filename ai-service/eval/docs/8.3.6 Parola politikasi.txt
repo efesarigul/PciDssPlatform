@@ -1,0 +1,7 @@
+Örnek E-Ticaret A.Ş.
+PAROLA POLİTİKASI (Sürüm 2.1, onay: 02.09.2026, Bilgi Güvenliği Yöneticisi)
+
+1. Parolalar en az 8 karakter uzunluğunda olmalıdır.
+2. Parolalar en az bir harf ve en az bir rakam içermelidir.
+3. Bu kurallar Active Directory üzerinde grup ilkesi (GPO) ile tüm kullanıcılar için zorunlu kılınmıştır.
+   GPO ayarının ekran görüntüsü Ek-1'de yer almaktadır.

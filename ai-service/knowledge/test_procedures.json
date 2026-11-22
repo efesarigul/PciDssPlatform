@@ -6,8 +6,22 @@
       {"id": "b", "text": "Standart, izin verilen servisleri, protokolleri ve portları ve bunların iş gerekçesini belirtiyor", "keywords": ["port", "protokol", "servis", "iş gerekçesi", "izin verilen"]},
       {"id": "c", "text": "Standart onaylanmış, sorumlusu belli ve güncel tutuluyor", "keywords": ["onay", "sorumlu", "revizyon", "versiyon", "güncelleme"]}
     ],
+    "1.2.3": [
+      {"id": "a", "text": "Diyagram kart verisi ortamını ve diğer ağlarla bağlantılarını gösteriyor", "keywords": ["ağ diyagramı", "topoloji", "CDE", "network diagram"]},
+      {"id": "b", "text": "Kablosuz ağlar diyagrama dahil edilmiş", "keywords": ["kablosuz", "wireless", "Wi-Fi", "erişim noktası"]},
+      {"id": "c", "text": "Diyagram ağ değiştiğinde güncelleniyor", "keywords": ["güncelleme", "revizyon", "tarih", "değişiklik"]}
+    ],
+    "1.2.5": [
+      {"id": "a", "text": "İzin verilen servis, protokol ve portlar listelenmiş", "keywords": ["port", "protokol", "servis", "izin verilen"]},
+      {"id": "b", "text": "Her biri için iş gerekçesi yazılmış", "keywords": ["iş gerekçesi", "gerekçe", "business justification"]},
+      {"id": "c", "text": "Liste yetkili kişilerce onaylanmış", "keywords": ["onay", "onaylayan", "yetkili"]}
+    ],
+    "1.2.6": [
+      {"id": "a", "text": "Kullanımdaki güvensiz servis ve protokoller belirlenmiş", "keywords": ["güvensiz", "telnet", "FTP", "insecure"]},
+      {"id": "b", "text": "Bunlar için riski azaltan güvenlik önlemleri tanımlı", "keywords": ["önlem", "şifreleme", "tünel", "kısıtlama"]}
+    ],
     "1.2.7": [
-      {"id": "a", "text": "NSC kural setleri en az altı ayda bir gözden geçiriliyor", "keywords": ["6 ay", "altı ay", "gözden geçirme", "periyodik", "review"]},
+      {"id": "a", "text": "NSC kural setleri en az altı ayda bir gözden geçiriliyor", "keywords": ["6 ay", "altı ay", "gözden geçirme", "periyodik", "review"], "rule": {"type": "frequency", "max_days": 180, "context": ["gözden geçir", "incele", "review", "revize", "güncelle", "kural seti"]}},
       {"id": "b", "text": "Gözden geçirmede gereksiz, eski veya hatalı kurallar tespit edilip kaldırılıyor", "keywords": ["gereksiz kural", "kaldırıl", "eski kural", "temizlik", "any"]},
       {"id": "c", "text": "Gözden geçirmenin tarihi, yapan kişi ve sonucu kayıt altında (tutanak/imza)", "keywords": ["tarih", "tutanak", "imza", "katılımcı", "kayıt"]}
     ],
@@ -16,10 +30,30 @@
       {"id": "b", "text": "Bunun dışındaki tüm gelen trafik açıkça reddediliyor (varsayılan red)", "keywords": ["deny", "reddedilir", "varsayılan red", "deny all", "engellen"]},
       {"id": "c", "text": "Kural dökümü güncel ve tarihli; hangi sisteme ait olduğu belli", "keywords": ["tarih", "döküm", "cihaz", "export"]}
     ],
+    "1.3.2": [
+      {"id": "a", "text": "CDE'den çıkış trafiği için kurallar tanımlanmış", "keywords": ["çıkış", "outbound", "egress", "giden"]},
+      {"id": "b", "text": "Tanımlı olmayan trafik varsayılan olarak engelleniyor", "keywords": ["deny", "engelle", "reddet", "varsayılan"]}
+    ],
+    "1.3.3": [
+      {"id": "a", "text": "Kablosuz ağlar ile CDE arasında NSC bulunuyor", "keywords": ["kablosuz", "wireless", "segment", "firewall"]},
+      {"id": "b", "text": "Yalnızca yetkili trafiğe izin veriliyor, geri kalanı engelleniyor", "keywords": ["deny", "yetkili", "izin", "engelle"]}
+    ],
     "1.4.1": [
       {"id": "a", "text": "Güvenilir (iç) ağlar ile güvenilmeyen ağlar arasında ağ güvenlik kontrolleri konumlandırılmış", "keywords": ["güvenilmeyen", "internet", "DMZ", "iç ağ", "firewall"]},
       {"id": "b", "text": "Ağ topolojisi veya veri akış diyagramı bu ayrımı ve CDE sınırlarını gösteriyor", "keywords": ["topoloji", "diyagram", "veri akış", "CDE", "segment"]},
       {"id": "c", "text": "Diyagram güncel ve sorumlusu belli", "keywords": ["tarih", "güncel", "sorumlu", "versiyon"]}
+    ],
+    "1.4.3": [
+      {"id": "a", "text": "Sahte kaynak IP adresli trafiği engelleyen ayar etkin", "keywords": ["spoof", "sahte IP", "anti-spoofing", "uRPF"]}
+    ],
+    "1.5.1": [
+      {"id": "a", "text": "Bu cihazlarda güvenlik kontrolleri (kişisel firewall vb.) uygulanıyor", "keywords": ["kişisel firewall", "uç nokta", "endpoint", "cihaz"]},
+      {"id": "b", "text": "Kullanıcı bu kontrolleri kapatamıyor veya değiştiremiyor", "keywords": ["kullanıcı", "değiştiremez", "devre dışı", "kilitli"]}
+    ],
+    "2.1.1": [
+      {"id": "a", "text": "İlgili politika ve prosedürler yazılı olarak belgelenmiş", "keywords": ["politika", "prosedür", "policy", "procedure"]},
+      {"id": "b", "text": "Belgeler güncel tutuluyor ve periyodik olarak gözden geçiriliyor", "keywords": ["güncel", "revizyon", "gözden geçirme", "versiyon"]},
+      {"id": "c", "text": "Belgeler ilgili çalışanlara duyurulmuş ve erişilebilir durumda", "keywords": ["duyuru", "bildirim", "eğitim", "erişilebilir", "yayımlandı"]}
     ],
     "2.2.1": [
       {"id": "a", "text": "Tüm sistem bileşeni türleri için yapılandırma (sıkılaştırma) standartları var", "keywords": ["sıkılaştırma", "hardening", "yapılandırma standardı", "baseline"]},
@@ -31,19 +65,53 @@
       {"id": "b", "text": "Kullanılacak varsayılan hesapların parolası değiştiriliyor, kullanılmayanlar kaldırılıyor veya devre dışı bırakılıyor", "keywords": ["parola değiş", "devre dışı", "kaldırıl", "disable"]},
       {"id": "c", "text": "Kontrol kurulum sürecinin bir parçası ve kayıt altında", "keywords": ["kontrol listesi", "kurulum", "kayıt", "checklist"]}
     ],
+    "2.2.4": [
+      {"id": "a", "text": "Gereksiz servis ve işlevler kaldırılıyor veya devre dışı bırakılıyor", "keywords": ["gereksiz", "devre dışı", "kaldır", "servis"]},
+      {"id": "b", "text": "Etkin servislerin listesi tutuluyor", "keywords": ["liste", "envanter", "etkin"]}
+    ],
+    "2.2.5": [
+      {"id": "a", "text": "Güvensiz servisler için iş gerekçesi belgelenmiş", "keywords": ["gerekçe", "güvensiz", "insecure", "iş ihtiyacı"]},
+      {"id": "b", "text": "Ek güvenlik önlemleri uygulanmış", "keywords": ["önlem", "şifreleme", "kısıtlama", "izleme"]}
+    ],
+    "2.2.6": [
+      {"id": "a", "text": "Güvenlik parametreleri bir kılavuza göre tanımlanmış", "keywords": ["parametre", "ayar", "CIS", "benchmark", "sıkılaştırma"]},
+      {"id": "b", "text": "Parametrelerin uygulandığı doğrulanıyor", "keywords": ["uygulan", "kontrol", "doğrulama", "tarama"]}
+    ],
+    "2.2.7": [
+      {"id": "a", "text": "Yönetici erişimi şifreli protokollerle yapılıyor", "keywords": ["SSH", "TLS", "HTTPS", "şifreli"]},
+      {"id": "b", "text": "Şifresiz yönetim protokolleri kapalı", "keywords": ["telnet", "kapalı", "devre dışı", "şifresiz"]}
+    ],
     "2.3.1": [
       {"id": "a", "text": "Kablosuz erişim noktalarında varsayılan şifreleme anahtarları ve parolalar değiştirilmiş", "keywords": ["kablosuz", "wireless", "varsayılan", "anahtar", "SSID"]},
       {"id": "b", "text": "SNMP topluluk adları ve yönetici parolaları gibi diğer varsayılanlar değiştirilmiş", "keywords": ["SNMP", "community", "yönetici parolası"]},
       {"id": "c", "text": "Kablosuz yapılandırma kaydı tarihli ve cihaz bazında", "keywords": ["tarih", "cihaz", "yapılandırma"]}
     ],
+    "2.3.2": [
+      {"id": "a", "text": "Personel ayrıldığında veya şüphe durumunda anahtar değiştiriliyor", "keywords": ["anahtar", "değişim", "ayrılma", "şüphe", "PSK"]}
+    ],
+    "3.1.1": [
+      {"id": "a", "text": "İlgili politika ve prosedürler yazılı olarak belgelenmiş", "keywords": ["politika", "prosedür", "policy", "procedure"]},
+      {"id": "b", "text": "Belgeler güncel tutuluyor ve periyodik olarak gözden geçiriliyor", "keywords": ["güncel", "revizyon", "gözden geçirme", "versiyon"]},
+      {"id": "c", "text": "Belgeler ilgili çalışanlara duyurulmuş ve erişilebilir durumda", "keywords": ["duyuru", "bildirim", "eğitim", "erişilebilir", "yayımlandı"]}
+    ],
     "3.2.1": [
       {"id": "a", "text": "Hesap verisi için saklama süreleri ve saklama gerekçeleri tanımlı", "keywords": ["saklama süresi", "retention", "gerekçe", "yasal"]},
       {"id": "b", "text": "Süresi dolan verinin güvenli silinmesi için bir süreç var", "keywords": ["imha", "silme", "güvenli silme", "süresi dolan"]},
-      {"id": "c", "text": "Gereksiz saklanan veriyi bulmak için en az üç ayda bir kontrol yapılıyor", "keywords": ["üç ay", "3 ay", "çeyrek", "tarama", "kontrol"]}
+      {"id": "c", "text": "Gereksiz saklanan veriyi bulmak için en az üç ayda bir kontrol yapılıyor", "keywords": ["üç ay", "3 ay", "çeyrek", "tarama", "kontrol"], "rule": {"type": "frequency", "max_days": 90, "context": ["kontrol", "tara", "incele", "tespit"]}}
     ],
     "3.3.1": [
       {"id": "a", "text": "Yetkilendirmeden sonra hassas doğrulama verisi (tam iz verisi, CVV, PIN) saklanmıyor", "keywords": ["CVV", "CVC", "PIN", "iz verisi", "track", "hassas doğrulama"]},
       {"id": "b", "text": "Log, veritabanı ve dosyalarda bu verinin bulunmadığı tarama veya inceleme ile doğrulanmış", "keywords": ["veri keşif", "tarama", "discovery", "log", "veritabanı"]}
+    ],
+    "3.3.1.1": [
+      {"id": "a", "text": "Yetkilendirme sonrası iz verisi saklanmıyor", "keywords": ["iz verisi", "track", "manyetik şerit", "çip"]}
+    ],
+    "3.3.1.2": [
+      {"id": "a", "text": "Yetkilendirme sonrası kart doğrulama kodu saklanmıyor", "keywords": ["CVV", "CVC", "güvenlik kodu", "doğrulama kodu"]},
+      {"id": "b", "text": "Kağıt formlardaki kod karartılıyor veya imha ediliyor", "keywords": ["kağıt", "form", "karart", "imha"]}
+    ],
+    "3.3.1.3": [
+      {"id": "a", "text": "Yetkilendirme sonrası PIN ve PIN bloğu saklanmıyor", "keywords": ["PIN", "PIN bloğu", "PIN block"]}
     ],
     "3.4.1": [
       {"id": "a", "text": "PAN ekranlarda ve çıktılarda maskelenerek gösteriliyor (en fazla ilk 6 ve son 4 hane)", "keywords": ["maske", "ilk 6", "son 4", "masking", "****"]},
@@ -67,6 +135,10 @@
       {"id": "b", "text": "Güvensiz protokol ve sürümler (SSL, TLS 1.0/1.1, zayıf şifre takımları) kapalı", "keywords": ["SSL", "TLS 1.0", "TLS 1.1", "cipher", "zayıf"]},
       {"id": "c", "text": "Sertifikalar geçerli ve güvenilir; envanteri tutuluyor", "keywords": ["sertifika", "geçerlilik", "envanter", "certificate"]}
     ],
+    "4.2.1.2": [
+      {"id": "a", "text": "Kablosuz ağlarda güçlü şifreleme kullanılıyor", "keywords": ["WPA2", "WPA3", "AES", "şifreleme"]},
+      {"id": "b", "text": "Zayıf protokoller (WEP vb.) kullanılmıyor", "keywords": ["WEP", "WPA", "eski", "kapalı"]}
+    ],
     "4.2.2": [
       {"id": "a", "text": "PAN'ın e-posta, anlık mesajlaşma, SMS gibi son kullanıcı kanallarıyla gönderilmesi yasaklanmış veya güçlü kriptografiyle korunuyor", "keywords": ["e-posta", "mesajlaşma", "SMS", "chat", "yasak"]},
       {"id": "b", "text": "Politika çalışanlara duyurulmuş", "keywords": ["duyuru", "çalışan", "eğitim", "taahhüt"]}
@@ -76,9 +148,27 @@
       {"id": "b", "text": "Çözüm kurulmayan sistemler için risk değerlendirmesi var", "keywords": ["risk", "değerlendirme", "istisna", "kurulmayan"]},
       {"id": "c", "text": "Kurulum durumu sistem listesiyle karşılaştırılmış (konsol raporu)", "keywords": ["konsol", "rapor", "sistem listesi", "envanter"]}
     ],
+    "5.2.2": [
+      {"id": "a", "text": "Çözüm zararlı yazılımı tespit edip kaldırıyor veya engelliyor", "keywords": ["tespit", "engelle", "karantina", "kaldır"]}
+    ],
     "5.3.1": [
       {"id": "a", "text": "Anti-malware çözümü ve imzaları otomatik olarak güncel tutuluyor", "keywords": ["güncelleme", "imza", "signature", "otomatik"]},
       {"id": "b", "text": "Güncel olmayan istemciler raporlanıp izleniyor", "keywords": ["güncel olmayan", "rapor", "uyarı", "izleme"]}
+    ],
+    "5.3.2": [
+      {"id": "a", "text": "Periyodik tarama zamanlanmış", "keywords": ["periyodik", "zamanlanmış", "tarama", "scheduled"]},
+      {"id": "b", "text": "Gerçek zamanlı koruma veya davranış analizi etkin", "keywords": ["gerçek zamanlı", "real-time", "davranış"]}
+    ],
+    "5.3.3": [
+      {"id": "a", "text": "Çıkarılabilir medya takıldığında otomatik taranıyor", "keywords": ["USB", "çıkarılabilir", "removable", "otomatik tarama"]}
+    ],
+    "5.3.4": [
+      {"id": "a", "text": "Anti-malware logları etkin", "keywords": ["log", "kayıt", "audit"]},
+      {"id": "b", "text": "Loglar en az 12 ay saklanıyor", "keywords": ["12 ay", "saklama", "retention"], "rule": {"type": "min_duration", "days": 365, "context": ["sakla", "tutul", "arşiv"]}}
+    ],
+    "5.3.5": [
+      {"id": "a", "text": "Kullanıcılar çözümü kapatamıyor veya değiştiremiyor", "keywords": ["devre dışı", "kullanıcı", "tamper", "kilit"]},
+      {"id": "b", "text": "İstisnalar yönetim onaylı ve süreli", "keywords": ["onay", "süreli", "istisna"]}
     ],
     "5.4.1": [
       {"id": "a", "text": "Oltalama e-postalarını tespit eden teknik önlemler var (e-posta filtresi, sandbox vb.)", "keywords": ["oltalama", "phishing", "e-posta filtresi", "gateway", "sandbox"]},
@@ -94,11 +184,11 @@
       {"id": "b", "text": "Açıklara risk derecesi (kritik, yüksek vb.) atanıyor", "keywords": ["risk derecesi", "kritik", "yüksek", "CVSS", "önceliklendirme"]}
     ],
     "6.3.3": [
-      {"id": "a", "text": "Kritik ve yüksek riskli yamalar yayımlandıktan sonra bir ay içinde uygulanıyor", "keywords": ["30 gün", "bir ay", "kritik yama", "patch"]},
+      {"id": "a", "text": "Kritik ve yüksek riskli yamalar yayımlandıktan sonra bir ay içinde uygulanıyor", "keywords": ["30 gün", "bir ay", "kritik yama", "patch"], "rule": {"type": "max_duration", "days": 30, "context": ["yama", "patch", "güncelleme"]}},
       {"id": "b", "text": "Yama durumu sistem bazında raporlanıyor; gecikenler izleniyor", "keywords": ["rapor", "yama durumu", "eksik yama", "WSUS"]}
     ],
     "6.4.1": [
-      {"id": "a", "text": "Herkese açık web uygulamaları WAF ile korunuyor veya en az yılda bir ve değişiklik sonrası güvenlik testinden geçiyor", "keywords": ["WAF", "web uygulama güvenlik duvarı", "uygulama güvenlik testi", "yıllık"]},
+      {"id": "a", "text": "Herkese açık web uygulamaları WAF ile korunuyor veya en az yılda bir ve değişiklik sonrası güvenlik testinden geçiyor", "keywords": ["WAF", "web uygulama güvenlik duvarı", "uygulama güvenlik testi", "yıllık"], "rule": {"type": "frequency", "max_days": 365, "context": ["test", "tarama", "değerlendir"], "alternatives": ["waf", "web uygulama güvenlik duvarı"]}},
       {"id": "b", "text": "WAF aktif engelleme modunda ve güncel tutuluyor ya da test bulguları düzeltiliyor", "keywords": ["engelleme", "blocking", "kural", "bulgu", "düzeltme"]}
     ],
     "6.4.3": [
@@ -114,6 +204,11 @@
       {"id": "a", "text": "Yetkiler iş gereğine göre en az yetki ilkesiyle veriliyor", "keywords": ["en az yetki", "least privilege", "iş gereği"]},
       {"id": "b", "text": "Yetki talepleri yetkili bir kişi tarafından onaylanıyor ve kaydı tutuluyor", "keywords": ["onay", "talep", "yönetici onayı", "kayıt"]}
     ],
+    "8.1.1": [
+      {"id": "a", "text": "İlgili politika ve prosedürler yazılı olarak belgelenmiş", "keywords": ["politika", "prosedür", "policy", "procedure"]},
+      {"id": "b", "text": "Belgeler güncel tutuluyor ve periyodik olarak gözden geçiriliyor", "keywords": ["güncel", "revizyon", "gözden geçirme", "versiyon"]},
+      {"id": "c", "text": "Belgeler ilgili çalışanlara duyurulmuş ve erişilebilir durumda", "keywords": ["duyuru", "bildirim", "eğitim", "erişilebilir", "yayımlandı"]}
+    ],
     "8.2.1": [
       {"id": "a", "text": "Her kullanıcıya benzersiz bir kimlik atanıyor", "keywords": ["benzersiz", "unique", "kullanıcı kimliği", "kişisel hesap"]},
       {"id": "b", "text": "Kullanıcı hesap listesi kişilerle eşleştirilebiliyor", "keywords": ["hesap listesi", "personel", "eşleştir"]}
@@ -122,18 +217,39 @@
       {"id": "a", "text": "Ortak/grup hesapları yalnızca istisnai durumlarda ve onayla kullanılıyor", "keywords": ["ortak hesap", "grup hesabı", "shared", "istisna"]},
       {"id": "b", "text": "Ortak hesabı kimin, ne zaman kullandığı izlenebiliyor", "keywords": ["izlenebilir", "kim kullandı", "kayıt", "kasa"]}
     ],
+    "8.2.4": [
+      {"id": "a", "text": "Hesap işlemleri onaylı talep ile yapılıyor", "keywords": ["onay", "talep", "yetki"]},
+      {"id": "b", "text": "İşlemler kayıt altına alınıyor", "keywords": ["kayıt", "belgelenmiş", "iz"]}
+    ],
+    "8.2.5": [
+      {"id": "a", "text": "Ayrılan kullanıcıların erişimi derhal kaldırılıyor", "keywords": ["ayrılan", "işten çıkış", "derhal", "iptal"]}
+    ],
     "8.2.6": [
-      {"id": "a", "text": "90 gün boyunca kullanılmayan hesaplar kaldırılıyor veya devre dışı bırakılıyor", "keywords": ["90 gün", "pasif", "kullanılmayan", "devre dışı"]},
+      {"id": "a", "text": "90 gün boyunca kullanılmayan hesaplar kaldırılıyor veya devre dışı bırakılıyor", "keywords": ["90 gün", "pasif", "kullanılmayan", "devre dışı"], "rule": {"type": "max_duration", "days": 90, "context": ["kullanılmayan", "pasif", "inaktif", "devre dışı"]}},
       {"id": "b", "text": "Pasif hesap kontrolü düzenli yapılıp raporlanıyor", "keywords": ["rapor", "düzenli", "son giriş", "last logon"]}
+    ],
+    "8.2.7": [
+      {"id": "a", "text": "Hesaplar yalnızca gerektiğinde etkinleştiriliyor", "keywords": ["gerektiğinde", "etkinleştir", "devre dışı", "geçici"]},
+      {"id": "b", "text": "Kullanım izleniyor", "keywords": ["izle", "log", "monitor"]}
     ],
     "8.3.1": [
       {"id": "a", "text": "Kullanıcı erişimi en az bir doğrulama faktörüyle (parola, token, biyometri) doğrulanıyor", "keywords": ["kimlik doğrulama", "parola", "token", "faktör"]},
       {"id": "b", "text": "Kimlik doğrulama yöntemleri politikada tanımlı", "keywords": ["politika", "yöntem", "authentication"]}
     ],
+    "8.3.5": [
+      {"id": "a", "text": "İlk/sıfırlanan parolalar kullanıcıya özgü", "keywords": ["benzersiz", "kullanıcıya özgü", "farklı"]},
+      {"id": "b", "text": "İlk girişte değiştirilmesi zorunlu", "keywords": ["ilk giriş", "ilk kullanım", "değiştir"]}
+    ],
     "8.3.6": [
-      {"id": "a", "text": "Parolalar en az 12 karakter (sistem desteklemiyorsa en az 8)", "keywords": ["12 karakter", "uzunluk", "minimum", "8 karakter"]},
+      {"id": "a", "text": "Parolalar en az 12 karakter (sistem desteklemiyorsa en az 8)", "keywords": ["12 karakter", "uzunluk", "minimum", "8 karakter"], "rule": {"type": "min_count", "value": 12, "unit": "karakter", "context": ["parola", "şifre", "password"]}},
       {"id": "b", "text": "Parolalar hem harf hem rakam içeriyor", "keywords": ["harf", "rakam", "karmaşıklık", "complexity"]},
       {"id": "c", "text": "Ayar sistemde zorunlu kılınmış (politika ayarı ekran görüntüsü vb.)", "keywords": ["GPO", "ayar", "zorunlu", "ekran görüntüsü"]}
+    ],
+    "8.3.7": [
+      {"id": "a", "text": "Son dört parola yeniden kullanılamıyor", "keywords": ["son dört", "parola geçmişi", "history", "yeniden kullanım"]}
+    ],
+    "8.3.9": [
+      {"id": "a", "text": "Parolalar en az 90 günde bir değiştiriliyor veya dinamik analiz yapılıyor", "keywords": ["90 gün", "süre", "değişim", "expiry"], "rule": {"type": "frequency", "max_days": 90, "context": ["parola", "şifre", "password"], "alternatives": ["dinamik analiz"]}}
     ],
     "8.4.1": [
       {"id": "a", "text": "CDE'ye tüm yönetici erişimlerinde çok faktörlü doğrulama (MFA) kullanılıyor", "keywords": ["MFA", "çok faktörlü", "yönetici", "admin", "2FA"]},
@@ -143,9 +259,33 @@
       {"id": "a", "text": "Kurum ağına dışarıdan tüm uzaktan erişimlerde MFA kullanılıyor", "keywords": ["uzaktan erişim", "VPN", "MFA", "RDP", "remote"]},
       {"id": "b", "text": "Üçüncü taraf ve tedarikçi uzaktan erişimleri de kapsanıyor", "keywords": ["tedarikçi", "üçüncü taraf", "vendor"]}
     ],
+    "9.1.1": [
+      {"id": "a", "text": "İlgili politika ve prosedürler yazılı olarak belgelenmiş", "keywords": ["politika", "prosedür", "policy", "procedure"]},
+      {"id": "b", "text": "Belgeler güncel tutuluyor ve periyodik olarak gözden geçiriliyor", "keywords": ["güncel", "revizyon", "gözden geçirme", "versiyon"]},
+      {"id": "c", "text": "Belgeler ilgili çalışanlara duyurulmuş ve erişilebilir durumda", "keywords": ["duyuru", "bildirim", "eğitim", "erişilebilir", "yayımlandı"]}
+    ],
+    "9.2.1": [
+      {"id": "a", "text": "Sistemlerin bulunduğu alanlara giriş kısıtlanmış", "keywords": ["giriş kontrol", "kartlı geçiş", "kilit", "sunucu odası"]}
+    ],
+    "9.2.2": [
+      {"id": "a", "text": "Açık alanlardaki ağ prizleri kısıtlanmış", "keywords": ["ağ prizi", "port güvenliği", "802.1X", "ziyaretçi"]}
+    ],
     "9.4.1": [
       {"id": "a", "text": "Kart verisi içeren tüm ortam ve medya fiziksel olarak güvence altında", "keywords": ["fiziksel", "kilit", "kasa", "medya", "erişim kontrolü"]},
       {"id": "b", "text": "Yedek medyanın saklandığı yer ve erişimi kontrol ediliyor", "keywords": ["yedek", "arşiv", "saklama yeri"]}
+    ],
+    "9.4.1.1": [
+      {"id": "a", "text": "Yedekler güvenli ve erişimi kısıtlı bir yerde saklanıyor", "keywords": ["yedek", "backup", "güvenli", "kasa"]}
+    ],
+    "9.4.2": [
+      {"id": "a", "text": "Medya hassasiyetine göre sınıflandırılıyor", "keywords": ["sınıflandırma", "gizli", "hassas", "etiket"]}
+    ],
+    "9.4.3": [
+      {"id": "a", "text": "Güvenli kurye veya takip edilebilir yöntem kullanılıyor", "keywords": ["kurye", "takip", "gönderim"]},
+      {"id": "b", "text": "Gönderimler kayıt altına alınıyor", "keywords": ["kayıt", "log", "tutanak"]}
+    ],
+    "9.4.4": [
+      {"id": "a", "text": "Medyanın tesis dışına çıkışı yönetimce onaylanıyor", "keywords": ["onay", "yönetim", "çıkış"]}
     ],
     "9.4.6": [
       {"id": "a", "text": "Basılı kart verisi artık gerekmediğinde geri döndürülemez biçimde imha ediliyor (çapraz kesim, yakma vb.)", "keywords": ["imha", "çapraz kesim", "kağıt", "yakma", "öğütme"]},
@@ -155,6 +295,14 @@
     "9.5.1": [
       {"id": "a", "text": "POI (POS) cihazlarının marka, model, seri no ve konumunu içeren güncel envanteri var", "keywords": ["envanter", "seri no", "model", "konum", "POS"]},
       {"id": "b", "text": "Cihazlar kurcalama ve değiştirmeye karşı düzenli kontrol ediliyor", "keywords": ["kurcalama", "kontrol", "değiştirme", "tamper", "periyodik"]}
+    ],
+    "9.5.1.1": [
+      {"id": "a", "text": "Liste marka, model, konum ve seri numarasını içeriyor", "keywords": ["seri numarası", "model", "konum", "envanter"]},
+      {"id": "b", "text": "Liste güncel tutuluyor", "keywords": ["güncel", "tarih", "güncelleme"]}
+    ],
+    "9.5.1.2": [
+      {"id": "a", "text": "Cihazlar kurcalamaya karşı periyodik olarak inceleniyor", "keywords": ["muayene", "inceleme", "kurcalama", "skimmer"]},
+      {"id": "b", "text": "İncelemeler kayıt altına alınıyor", "keywords": ["kayıt", "tarih", "kontrol listesi"]}
     ],
     "9.5.1.3": [
       {"id": "a", "text": "POS cihazı bulunan alandaki personele kurcalama belirtileri konusunda eğitim veriliyor", "keywords": ["eğitim", "kurcalama", "personel", "farkındalık"]},
@@ -166,12 +314,12 @@
       {"id": "c", "text": "Örnek kayıtlar kullanıcı, olay türü, tarih-saat ve sonuç bilgisi içeriyor", "keywords": ["tarih", "saat", "kullanıcı", "olay türü", "sonuç"]}
     ],
     "10.4.1": [
-      {"id": "a", "text": "Güvenlik olayları ve kritik sistem logları en az günde bir inceleniyor", "keywords": ["günlük", "her gün", "günde bir", "inceleme", "daily"]},
+      {"id": "a", "text": "Güvenlik olayları ve kritik sistem logları en az günde bir inceleniyor", "keywords": ["günlük", "her gün", "günde bir", "inceleme", "daily"], "rule": {"type": "frequency", "max_days": 1, "context": ["gözden geçir", "incele", "review", "revize", "güncelle", "analiz"]}},
       {"id": "b", "text": "İnceleme otomatik araçla (SIEM vb.) destekleniyor", "keywords": ["SIEM", "otomatik", "korelasyon", "alarm"]},
       {"id": "c", "text": "Tespit edilen şüpheli olaylar takip edilip kayıt altına alınıyor", "keywords": ["şüpheli", "takip", "olay kaydı", "eskalasyon"]}
     ],
     "10.5.1": [
-      {"id": "a", "text": "Denetim kayıtları en az 12 ay saklanıyor", "keywords": ["12 ay", "bir yıl", "saklama", "retention"]},
+      {"id": "a", "text": "Denetim kayıtları en az 12 ay saklanıyor", "keywords": ["12 ay", "bir yıl", "saklama", "retention"], "rule": {"type": "min_duration", "days": 365, "context": ["sakla", "tutul", "arşiv"]}},
       {"id": "b", "text": "Son üç aya ait kayıtlar analiz için hemen erişilebilir durumda", "keywords": ["3 ay", "üç ay", "erişilebilir", "çevrimiçi"]}
     ],
     "10.6.1": [
@@ -179,23 +327,31 @@
       {"id": "b", "text": "Zaman sunucuları belirlenmiş ve yalnızca onaylı kaynaklardan zaman alınıyor", "keywords": ["zaman sunucusu", "kaynak", "stratum", "onaylı"]}
     ],
     "11.2.1": [
-      {"id": "a", "text": "Yetkisiz kablosuz erişim noktaları en az üç ayda bir tespit ediliyor (tarama veya WIDS)", "keywords": ["kablosuz tarama", "rogue", "üç ay", "WIDS", "erişim noktası"]},
+      {"id": "a", "text": "Yetkisiz kablosuz erişim noktaları en az üç ayda bir tespit ediliyor (tarama veya WIDS)", "keywords": ["kablosuz tarama", "rogue", "üç ay", "WIDS", "erişim noktası"], "rule": {"type": "frequency", "max_days": 90, "context": ["tara", "tespit", "kablosuz", "wids"]}},
       {"id": "b", "text": "Yetkili erişim noktalarının envanteri tutuluyor", "keywords": ["envanter", "yetkili", "erişim noktası"]},
       {"id": "c", "text": "Yetkisiz cihaz bulunursa olay müdahalesi başlatılıyor", "keywords": ["müdahale", "olay", "bulgu"]}
     ],
     "11.3.1": [
-      {"id": "a", "text": "İç zafiyet taramaları en az üç ayda bir yapılıyor", "keywords": ["üç ay", "çeyrek", "iç tarama", "internal scan"]},
+      {"id": "a", "text": "İç zafiyet taramaları en az üç ayda bir yapılıyor", "keywords": ["üç ay", "çeyrek", "iç tarama", "internal scan"], "rule": {"type": "frequency", "max_days": 90, "context": ["tara", "zafiyet", "scan"]}},
       {"id": "b", "text": "Kritik ve yüksek riskli bulgular giderilip yeniden taramayla doğrulanıyor", "keywords": ["yeniden tarama", "rescan", "giderildi", "kritik", "yüksek"]},
       {"id": "c", "text": "Taramalar yetkin kişilerce yapılıyor ve raporları tarihli", "keywords": ["rapor", "tarih", "araç", "yetkin"]}
     ],
     "11.3.2": [
-      {"id": "a", "text": "Dış zafiyet taramaları en az üç ayda bir PCI SSC onaylı tarayıcı (ASV) ile yapılıyor", "keywords": ["ASV", "dış tarama", "üç ay", "external"]},
+      {"id": "a", "text": "Dış zafiyet taramaları en az üç ayda bir PCI SSC onaylı tarayıcı (ASV) ile yapılıyor", "keywords": ["ASV", "dış tarama", "üç ay", "external"], "rule": {"type": "frequency", "max_days": 90, "context": ["tara", "asv", "zafiyet", "scan"]}},
       {"id": "b", "text": "Taramalar 'geçti' (passing) sonucuyla tamamlanmış", "keywords": ["geçti", "passing", "pass", "uyumlu"]}
+    ],
+    "11.3.2.1": [
+      {"id": "a", "text": "Önemli değişiklik sonrası dış tarama yapılıyor", "keywords": ["değişiklik", "sonrası", "tarama", "scan"]},
+      {"id": "b", "text": "Bulgular giderilip yeniden taranıyor", "keywords": ["yeniden tarama", "rescan", "giderildi"]}
     ],
     "11.4.1": [
       {"id": "a", "text": "Sızma testi için tanımlı bir metodoloji var (kapsam, ağ ve uygulama katmanı)", "keywords": ["metodoloji", "kapsam", "sızma testi", "penetration"]},
-      {"id": "b", "text": "Sızma testi en az yılda bir ve önemli değişikliklerden sonra yapılıyor", "keywords": ["yılda bir", "yıllık", "değişiklik sonrası", "12 ay"]},
+      {"id": "b", "text": "Sızma testi en az yılda bir ve önemli değişikliklerden sonra yapılıyor", "keywords": ["yılda bir", "yıllık", "değişiklik sonrası", "12 ay"], "rule": {"type": "frequency", "max_days": 365, "context": ["sızma", "penetrasyon", "pentest"]}},
       {"id": "c", "text": "Bulgular düzeltilip yeniden testle doğrulanıyor", "keywords": ["bulgu", "düzeltme", "yeniden test", "retest"]}
+    ],
+    "11.4.5": [
+      {"id": "a", "text": "Segmentasyon kontrolleri sızma testiyle doğrulanıyor", "keywords": ["segmentasyon", "izolasyon", "sızma testi"]},
+      {"id": "b", "text": "Test en az yılda bir ve değişiklik sonrası yapılıyor", "keywords": ["yılda bir", "yıllık", "değişiklik sonrası"], "rule": {"type": "frequency", "max_days": 365, "context": ["test", "segmentasyon"]}}
     ],
     "11.5.1": [
       {"id": "a", "text": "CDE çevresinde ve kritik noktalarda saldırı tespit/önleme (IDS/IPS) kullanılıyor", "keywords": ["IDS", "IPS", "saldırı tespit", "intrusion"]},
@@ -204,31 +360,42 @@
     "11.6.1": [
       {"id": "a", "text": "Ödeme sayfasındaki yetkisiz değişiklikleri tespit eden bir mekanizma var", "keywords": ["değişiklik tespit", "kurcalama", "ödeme sayfası", "tamper"]},
       {"id": "b", "text": "Mekanizma HTTP başlıklarını ve sayfa içeriğini kontrol ediyor", "keywords": ["HTTP başlık", "header", "içerik", "CSP"]},
-      {"id": "c", "text": "Kontrol en az haftada bir (veya hedefli risk analizine göre) yapılıyor ve uyarı üretiyor", "keywords": ["haftalık", "haftada bir", "uyarı", "alarm"]}
+      {"id": "c", "text": "Kontrol en az haftada bir (veya hedefli risk analizine göre) yapılıyor ve uyarı üretiyor", "keywords": ["haftalık", "haftada bir", "uyarı", "alarm"], "rule": {"type": "frequency", "max_days": 7, "context": ["kontrol", "izle", "tara", "değişiklik"], "alternatives": ["hedefli risk analiz"]}}
     ],
     "12.1.1": [
       {"id": "a", "text": "Bilgi güvenliği politikası yazılı, yayımlanmış ve ilgili kişilere duyurulmuş", "keywords": ["bilgi güvenliği politikası", "yayım", "duyuru"]},
-      {"id": "b", "text": "Politika en az yılda bir gözden geçirilip güncelleniyor", "keywords": ["yılda bir", "yıllık", "gözden geçirme", "revizyon"]},
+      {"id": "b", "text": "Politika en az yılda bir gözden geçirilip güncelleniyor", "keywords": ["yılda bir", "yıllık", "gözden geçirme", "revizyon"], "rule": {"type": "frequency", "max_days": 365, "context": ["gözden geçir", "incele", "review", "revize", "güncelle"]}},
       {"id": "c", "text": "Politika üst yönetim tarafından onaylanmış", "keywords": ["onay", "üst yönetim", "imza", "yönetim kurulu"]}
+    ],
+    "12.1.2": [
+      {"id": "a", "text": "Politika en az yılda bir gözden geçiriliyor", "keywords": ["yılda bir", "gözden geçirme", "revizyon"], "rule": {"type": "frequency", "max_days": 365, "context": ["gözden geçir", "incele", "review", "revize", "güncelle"]}},
+      {"id": "b", "text": "Ortam değiştiğinde politika güncelleniyor", "keywords": ["değişiklik", "güncelleme", "versiyon"]}
+    ],
+    "12.1.3": [
+      {"id": "a", "text": "Rol ve sorumluluklar tanımlanmış", "keywords": ["rol", "sorumluluk"]},
+      {"id": "b", "text": "Personel sorumluluklarını kabul ettiğini onaylıyor", "keywords": ["kabul", "onay", "imza"]}
     ],
     "12.3.1": [
       {"id": "a", "text": "Esnek sıklık tanınan her gereksinim için hedefli risk analizi yapılmış", "keywords": ["hedefli risk analizi", "TRA", "sıklık", "risk"]},
       {"id": "b", "text": "Analiz korunan varlıkları, tehditleri ve seçilen sıklığın gerekçesini içeriyor", "keywords": ["varlık", "tehdit", "olasılık", "gerekçe"]},
-      {"id": "c", "text": "Analiz en az yılda bir gözden geçiriliyor ve onaylanıyor", "keywords": ["yılda bir", "onay", "gözden geçirme"]}
+      {"id": "c", "text": "Analiz en az yılda bir gözden geçiriliyor ve onaylanıyor", "keywords": ["yılda bir", "onay", "gözden geçirme"], "rule": {"type": "frequency", "max_days": 365, "context": ["gözden geçir", "incele", "review", "revize", "güncelle", "onay"]}}
     ],
     "12.4.2": [
-      {"id": "a", "text": "Operasyonel güvenlik görevlerinin yapıldığı en az üç ayda bir gözden geçiriliyor", "keywords": ["üç ay", "çeyrek", "gözden geçirme", "operasyonel"]},
+      {"id": "a", "text": "Operasyonel güvenlik görevlerinin yapıldığı en az üç ayda bir gözden geçiriliyor", "keywords": ["üç ay", "çeyrek", "gözden geçirme", "operasyonel"], "rule": {"type": "frequency", "max_days": 90, "context": ["gözden geçir", "incele", "review", "revize", "güncelle", "kontrol"]}},
       {"id": "b", "text": "Gözden geçirme, görevi yapandan farklı bir kişi tarafından yapılıyor ve kayıt altında", "keywords": ["farklı kişi", "bağımsız", "kayıt", "imza"]}
     ],
     "12.5.2": [
       {"id": "a", "text": "PCI DSS kapsamı belgelenmiş: tüm veri akışları, CDE ve bağlı sistemler", "keywords": ["kapsam", "veri akışı", "CDE", "bağlı sistem"]},
-      {"id": "b", "text": "Kapsam en az yılda bir ve önemli değişikliklerden sonra doğrulanıyor", "keywords": ["yılda bir", "doğrulama", "değişiklik"]},
+      {"id": "b", "text": "Kapsam en az yılda bir ve önemli değişikliklerden sonra doğrulanıyor", "keywords": ["yılda bir", "doğrulama", "değişiklik"], "rule": {"type": "frequency", "max_days": 365, "context": ["doğrula", "kapsam", "gözden geçir", "incele", "review", "revize", "güncelle"]}},
       {"id": "c", "text": "Segmentasyon kullanılıyorsa kapsam dışı sistemler ve gerekçesi belirtilmiş", "keywords": ["segmentasyon", "kapsam dışı", "gerekçe"]}
     ],
     "12.6.1": [
       {"id": "a", "text": "Tüm personeli kapsayan resmi bir güvenlik farkındalık programı var", "keywords": ["farkındalık", "eğitim programı", "personel"]},
-      {"id": "b", "text": "Eğitim işe girişte ve en az yılda bir veriliyor; oltalama gibi güncel tehditleri içeriyor", "keywords": ["işe giriş", "yılda bir", "oltalama", "phishing"]},
+      {"id": "b", "text": "Eğitim işe girişte ve en az yılda bir veriliyor; oltalama gibi güncel tehditleri içeriyor", "keywords": ["işe giriş", "yılda bir", "oltalama", "phishing"], "rule": {"type": "frequency", "max_days": 365, "context": ["eğitim", "farkındalık"]}},
       {"id": "c", "text": "Katılım kayıt altında ve personel politikaları okuduğunu onaylıyor", "keywords": ["katılım", "kayıt", "onay", "imza"]}
+    ],
+    "12.6.3.1": [
+      {"id": "a", "text": "Eğitim oltalama ve sosyal mühendislik tehditlerini kapsıyor", "keywords": ["oltalama", "phishing", "sosyal mühendislik"]}
     ],
     "12.8.1": [
       {"id": "a", "text": "Hesap verisini paylaşılan veya güvenliğini etkileyebilecek tüm servis sağlayıcıların listesi tutuluyor", "keywords": ["servis sağlayıcı", "TPSP", "liste", "tedarikçi"]},
@@ -238,14 +405,25 @@
       {"id": "a", "text": "Servis sağlayıcılarla yazılı sözleşmeler var", "keywords": ["sözleşme", "yazılı", "contract"]},
       {"id": "b", "text": "Sözleşmede sağlayıcı, sahip olduğu veya etkileyebildiği hesap verisinin güvenliğinden sorumlu olduğunu kabul ediyor", "keywords": ["sorumluluk", "kabul", "güvenlik", "hesap verisi"]}
     ],
+    "12.8.3": [
+      {"id": "a", "text": "Sözleşme öncesi durum tespiti süreci tanımlı", "keywords": ["durum tespiti", "due diligence", "değerlendirme", "seçim"]}
+    ],
     "12.8.4": [
-      {"id": "a", "text": "Servis sağlayıcıların PCI DSS uyum durumu en az yılda bir kontrol ediliyor", "keywords": ["yılda bir", "uyum durumu", "AOC", "izleme"]},
+      {"id": "a", "text": "Servis sağlayıcıların PCI DSS uyum durumu en az yılda bir kontrol ediliyor", "keywords": ["yılda bir", "uyum durumu", "AOC", "izleme"], "rule": {"type": "frequency", "max_days": 365, "context": ["kontrol", "izle", "uyum", "aoc"]}},
       {"id": "b", "text": "Geçerli uyum belgeleri (AOC) dosyalanmış ve tarihleri takip ediliyor", "keywords": ["AOC", "geçerlilik", "tarih", "sertifika"]}
+    ],
+    "12.8.5": [
+      {"id": "a", "text": "Hizmet sağlayıcı başına sorumluluk matrisi var", "keywords": ["sorumluluk matrisi", "responsibility", "paylaşılan"]},
+      {"id": "b", "text": "Matris PCI DSS gereksinimlerini tek tek eşliyor", "keywords": ["gereksinim", "PCI DSS", "kurum", "sağlayıcı"]}
     ],
     "12.10.1": [
       {"id": "a", "text": "Güvenlik olayı müdahale planı yazılı ve devreye alınmaya hazır", "keywords": ["olay müdahale", "incident response", "plan"]},
       {"id": "b", "text": "Plan roller, sorumluluklar ve iletişim (kart markaları ve edinci banka bildirimi dahil) içeriyor", "keywords": ["rol", "sorumluluk", "iletişim", "bildirim", "banka"]},
-      {"id": "c", "text": "Plan en az yılda bir test edilip güncelleniyor", "keywords": ["test", "tatbikat", "yılda bir", "güncelleme"]}
+      {"id": "c", "text": "Plan en az yılda bir test edilip güncelleniyor", "keywords": ["test", "tatbikat", "yılda bir", "güncelleme"], "rule": {"type": "frequency", "max_days": 365, "context": ["test", "tatbikat", "güncelle"]}}
+    ],
+    "A2.1.1": [
+      {"id": "a", "text": "Terminallerde SSL / erken TLS kullanımı belirlenmiş", "keywords": ["SSL", "TLS 1.0", "erken TLS", "POS"]},
+      {"id": "b", "text": "Bilinen açıklardan etkilenmediği doğrulanmış", "keywords": ["açık", "zafiyet", "doğrulama", "üretici"]}
     ]
   }
 }

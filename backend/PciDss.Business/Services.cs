@@ -308,12 +308,16 @@ public class GapService(ISurveyService survey) : IGapService
         var qs = s.Questions;
         // OrderBy kararlıdır: aynı önem seviyesinde soru sırası korunur
         var findings = qs.Select(ToFinding).OfType<FindingDto>().OrderBy(f => f.Severity).ToList();
+        var open = findings.Where(IsOpen).Select(f => f.QuestionId).ToHashSet();
+        int Na(IEnumerable<QuestionDto> g) => g.Count(q => q.CurrentAnswer == AnswerValue.NotApplicable);
+        int Open(IEnumerable<QuestionDto> g) => g.Count(q => open.Contains(q.Id));
         var sections = qs.GroupBy(q => q.Section).OrderBy(g => g.Key)
-            .Select(g => new SectionScoreDto(g.Key, g.Count(), Score(g),
+            .Select(g => new SectionStatusDto(g.Key, g.Count(), g.Count() - Na(g) - Open(g), Open(g), Na(g),
                 findings.Count(f => f.Section == g.Key && f.Severity == FindingSeverity.Critical)))
             .ToList();
 
-        return new GapAnalysisDto(s.SaqType, Score(qs), qs.Count, qs.Count(q => q.CurrentAnswer != null),
+        return new GapAnalysisDto(s.SaqType, qs.Count, qs.Count - Na(qs) - Open(qs), Open(qs), Na(qs),
+            qs.Count(q => q.CurrentAnswer != null),
             qs.Count(q => q.CurrentAnswer is AnswerValue.InPlace or AnswerValue.InPlaceWithCcw),
             qs.Count(q => q.CurrentAnswer == AnswerValue.NotInPlace),
             qs.Count(MissingEvidence), sections, findings,
@@ -327,33 +331,13 @@ public class GapService(ISurveyService survey) : IGapService
     private static bool ReviewIs(QuestionDto q, ReviewDecision d) =>
         q.CurrentAnswer is AnswerValue.InPlace or AnswerValue.InPlaceWithCcw && q.Review is { Stale: false } r && r.Decision == d;
 
-    // Denetçi kararı YZ kararının önüne geçer: onay = 1, ret = 0.
-    // Aksi halde: Uygulanıyor = 1 puan; kanıtı eksikse veya YZ kısmen uyumlu bulduysa 0,5; YZ uyumsuz bulduysa 0.
-    // Uygulanmıyor / test edilmedi / cevapsız = 0. "Uygulanamaz" cevapları paydaya katılmaz.
-    private static double Points(QuestionDto q) => q.CurrentAnswer switch
-    {
-        AnswerValue.InPlace or AnswerValue.InPlaceWithCcw when ReviewIs(q, ReviewDecision.Approved) => 1,
-        AnswerValue.InPlace or AnswerValue.InPlaceWithCcw when ReviewIs(q, ReviewDecision.Rejected) => 0,
-        AnswerValue.InPlace or AnswerValue.InPlaceWithCcw when MissingEvidence(q) => 0.5,
-        AnswerValue.InPlace or AnswerValue.InPlaceWithCcw => q.EvidenceAi?.Verdict switch
-        {
-            ComplianceVerdict.NonCompliant => 0,
-            ComplianceVerdict.Partial => 0.5,
-            _ => 1
-        },
-        _ => 0
-    };
+    // Düşük önemli bulgu (telafi edici kontrol) bir hatırlatmadır; gereksinimi eksik saymaz
+    private static bool IsOpen(FindingDto f) => f.Severity is FindingSeverity.Critical or FindingSeverity.Medium;
 
     // Denetçinin onayladığı kanıt için YZ bulgusu gösterilmez
     private static bool AiVerdictIs(QuestionDto q, ComplianceVerdict v) =>
         q.CurrentAnswer is AnswerValue.InPlace or AnswerValue.InPlaceWithCcw && q.EvidenceAi?.Verdict == v &&
         !ReviewIs(q, ReviewDecision.Approved);
-
-    private static int Score(IEnumerable<QuestionDto> qs)
-    {
-        var scored = qs.Where(q => q.CurrentAnswer != AnswerValue.NotApplicable).ToList();
-        return scored.Count == 0 ? 100 : (int)Math.Round(100 * scored.Sum(Points) / scored.Count);
-    }
 
     private static FindingDto? ToFinding(QuestionDto q)
     {
@@ -374,9 +358,9 @@ public class GapService(ISurveyService survey) : IGapService
             _ when MissingEvidence(q) => (FindingKind.MissingEvidence, FindingSeverity.Medium,
                 "Uygulandığı beyan edildi ancak kanıt yüklenmedi.", "Kanıt belgesini yükleyin." + hint),
             _ when AiVerdictIs(q, ComplianceVerdict.NonCompliant) => (FindingKind.AiNonCompliant, FindingSeverity.Critical,
-                "YZ analizi: yüklenen kanıt gereksinimi karşılamıyor.", aiGaps),
+                "Otomatik analiz: yüklenen kanıt gereksinimi karşılamıyor.", aiGaps),
             _ when AiVerdictIs(q, ComplianceVerdict.Partial) => (FindingKind.AiPartial, FindingSeverity.Medium,
-                "YZ analizi: yüklenen kanıt gereksinimi kısmen karşılıyor.", aiGaps),
+                "Otomatik analiz: yüklenen kanıt gereksinimi kısmen karşılıyor.", aiGaps),
             AnswerValue.InPlaceWithCcw => (FindingKind.Compensating, FindingSeverity.Low, "Telafi edici kontrolle karşılanıyor.",
                 "Telafi edici kontrol çalışma sayfasını (CCW) hazırlayın ve yılda en az bir kez gözden geçirin."),
             _ => null
@@ -483,7 +467,7 @@ public class AuditService(IRepository<AuditorAccess> access, IRepository<Auditor
         var item = (await ItemsAsync(orgId)).FirstOrDefault(i => i.Question.Id == questionId)
                    ?? throw new BusinessException("Bu gereksinim için incelenecek kanıtlı beyan yok.");
         if (item.State == AuditItemState.WaitingSystem)
-            throw new BusinessException("Kanıtın sistem (YZ) kontrolü tamamlanmadan karar verilemez.");
+            throw new BusinessException("Kanıtın otomatik kontrolü tamamlanmadan karar verilemez.");
 
         var requirementId = await questions.Query().Where(q => q.Id == questionId).Select(q => q.RequirementId).FirstAsync();
         var r = await reviews.Query().FirstOrDefaultAsync(x => x.OrganizationId == orgId && x.RequirementId == requirementId);
@@ -574,10 +558,19 @@ public class DemoService(IAuthService auth, IScopeService scope, IRepository<Use
     public async Task<AuthResultDto> AuditorLoginAsync()
     {
         if (!cfg.GetValue<bool>("Demo:Enabled")) throw new BusinessException("Demo hesabı bu ortamda kapalı.");
-        if (!await users.Query().AnyAsync(u => u.Email == Email)) await ResetAndLoginAsync();
-        await EnsureAuditorAccessAsync(await users.Query().Where(u => u.Email == Email).Select(u => u.OrganizationId).FirstAsync());
+        await Gate.WaitAsync();
+        try
+        {
+            if (!await users.Query().AnyAsync(u => u.Email == Email)) await ResetCoreAsync();
+            await EnsureAuditorAccessAsync(await users.Query().Where(u => u.Email == Email).Select(u => u.OrganizationId).FirstAsync());
+        }
+        finally { Gate.Release(); }
         return await auth.LoginAsync(new LoginDto(AuditorEmail, Password));
     }
+
+    // Demo kurumu aynı anda iki istekle sıfırlanmasın (ör. iki sekmeden tıklama): biri diğerinin sildiği kayıtlara
+    // yazmaya çalışıp hata verir. Sıfırlamalar sırayla yapılır.
+    private static readonly SemaphoreSlim Gate = new(1, 1);
 
     private async Task EnsureAuditorAccessAsync(int orgId)
     {
@@ -600,7 +593,7 @@ public class DemoService(IAuthService auth, IScopeService scope, IRepository<Use
         ["11.4.1"] = (AnswerValue.NotTested, "Yıllık sızma testi 2027'nin ilk çeyreğine planlandı."),
         ["8.3.6"] = (AnswerValue.InPlaceWithCcw,
             "Eski ERP sistemi 12 karakter parolayı desteklemiyor; 8 karakter + MFA + hesap kilitleme ile telafi ediliyor."),
-        ["2.3.1"] = (AnswerValue.NotApplicable, "Kart verisi ortamında kablosuz ağ bulunmuyor."),
+        ["1.3.3"] = (AnswerValue.NotApplicable, "Kart verisi ortamında kablosuz ağ bulunmuyor."),
     };
     // Sunumda canlı cevaplanmak üzere boş bırakılır
     private static readonly string[] LeftEmpty = ["12.8.2", "12.10.1"];
@@ -611,6 +604,14 @@ public class DemoService(IAuthService auth, IScopeService scope, IRepository<Use
     public async Task<AuthResultDto> ResetAndLoginAsync()
     {
         if (!cfg.GetValue<bool>("Demo:Enabled")) throw new BusinessException("Demo hesabı bu ortamda kapalı.");
+        await Gate.WaitAsync();
+        try { await ResetCoreAsync(); }
+        finally { Gate.Release(); }
+        return await auth.LoginAsync(new LoginDto(Email, Password));
+    }
+
+    private async Task ResetCoreAsync()
+    {
 
         if (!await users.Query().AnyAsync(u => u.Email == Email))
             await auth.RegisterAsync(new RegisterDto("Demo Kullanıcı", Email, Password, OrgName));
@@ -668,7 +669,6 @@ public class DemoService(IAuthService auth, IScopeService scope, IRepository<Use
         }
         await answers.SaveChangesAsync();
         await EnsureAuditorAccessAsync(orgId); // "Denetçi Erişimi" ekranında hazır bir denetçi görünsün
-        return await auth.LoginAsync(new LoginDto(Email, Password));
     }
 }
 
@@ -808,7 +808,7 @@ public class AnalysisService(HttpClient http, IRepository<Policy> policies, IRep
             if (!res.IsSuccessStatusCode)
             {
                 var err = await res.Content.ReadFromJsonAsync<Dictionary<string, object>>(ct);
-                throw new InvalidOperationException(err?.GetValueOrDefault("detail")?.ToString() ?? $"YZ servisi {(int)res.StatusCode} döndü.");
+                throw new InvalidOperationException(err?.GetValueOrDefault("detail")?.ToString() ?? $"Analiz servisi {(int)res.StatusCode} döndü.");
             }
             var r = (await res.Content.ReadFromJsonAsync<AiResponse>(ct))!;
             var now = DateTime.UtcNow;
@@ -832,8 +832,8 @@ public class AnalysisService(HttpClient http, IRepository<Policy> policies, IRep
             p.AiChecks = null;
             p.AiSummary = ex switch
             {
-                HttpRequestException => "YZ servisine ulaşılamadı. ai-service çalışıyor mu?",
-                TaskCanceledException => "YZ servisi zamanında yanıt vermedi.",
+                HttpRequestException => "Analiz servisine ulaşılamadı. ai-service çalışıyor mu?",
+                TaskCanceledException => "Analiz servisi zamanında yanıt vermedi.",
                 _ => ex.Message
             };
             p.Status = AnalysisStatus.Failed;
@@ -866,7 +866,7 @@ public class AnalysisWorker(IServiceScopeFactory scopes, ILogger<AnalysisWorker>
                 var svc = scope.ServiceProvider.GetRequiredService<AnalysisService>();
                 while (await svc.ProcessNextAsync(ct)) { }
             }
-            catch (Exception ex) when (!ct.IsCancellationRequested) { log.LogError(ex, "YZ analiz döngüsünde hata"); }
+            catch (Exception ex) when (!ct.IsCancellationRequested) { log.LogError(ex, "Analiz döngüsünde hata"); }
             await Task.Delay(TimeSpan.FromSeconds(2), ct);
         }
     }

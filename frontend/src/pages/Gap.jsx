@@ -8,16 +8,17 @@ import { SECTIONS } from "./SurveyWizard";
 const SEVERITY = { Critical: "Kritik", Medium: "Orta", Low: "Düşük" };
 const SEVERITY_ICON = { Critical: "alert", Medium: "info", Low: "help" };
 const EVIDENCE_KINDS = ["MissingEvidence", "AiNonCompliant", "AiPartial", "AuditorRejected"];
-const level = (score) => (score >= 90 ? "good" : score >= 70 ? "mid" : "bad");
+// Renk: kritik eksik varsa kırmızı, eksik varsa sarı, hiç eksik yoksa yeşil
+const level = (open, critical) => (critical > 0 ? "bad" : open > 0 ? "mid" : "good");
 
-// Kritik bulgu varken skor ne olursa olsun denetime hazır sayılmaz
-function verdict(score, critical) {
-  if (critical > 0) return { cls: "bad", icon: "alert", text: "Denetime hazır değil", sub: `${critical} kritik bulgu kapatılmalı` };
-  if (score >= 90) return { cls: "good", icon: "checkCircle", text: "Denetime hazır", sub: "Kritik bulgu yok" };
-  return { cls: "mid", icon: "info", text: "Kısmen hazır", sub: "Eksikler tamamlanmalı" };
+// Tek bir eksik bile kaldıysa denetime hazır sayılmaz
+function verdict(open, critical) {
+  if (critical > 0) return { cls: "bad", icon: "alert", text: "Denetime hazır değil", sub: `${critical} kritik eksik var` };
+  if (open > 0) return { cls: "mid", icon: "info", text: "Denetime hazır değil", sub: `${open} eksik kapatılmalı` };
+  return { cls: "good", icon: "checkCircle", text: "Denetime hazır", sub: "Kapsamdaki tüm gereksinimler tamam" };
 }
 
-// Skor açılışta 0'dan sayarak gelir
+// Sayı açılışta 0'dan sayarak gelir
 function useCountUp(target) {
   const [v, setV] = useState(0);
   useEffect(() => {
@@ -34,16 +35,19 @@ function useCountUp(target) {
   return v;
 }
 
-function ScoreRing({ score }) {
-  const shown = useCountUp(score);
-  const r = 54, c = 2 * Math.PI * r;
+// Büyük sayı: kaç gereksinim eksik. Altında kaç tanesinin tamam olduğu açıkça yazar.
+function OpenCount({ data, critical }) {
+  const shown = useCountUp(data.open);
+  const applicable = data.total - data.notApplicable;
   return (
-    <svg className={`ring ${level(score)}`} viewBox="0 0 140 140" role="img" aria-label={`Uyum skoru %${score}`}>
-      <circle cx="70" cy="70" r={r} className="track" />
-      <circle cx="70" cy="70" r={r} className="value" strokeDasharray={c} strokeDashoffset={c * (1 - shown / 100)} />
-      <text x="70" y="70" className="pct">%{shown}</text>
-      <text x="70" y="92" className="lbl">uyum skoru</text>
-    </svg>
+    <div className={`open-count ${level(data.open, critical)}`}>
+      <span className="open-num">{shown}</span>
+      <span className="open-lbl">{data.open === 0 ? "eksik yok" : "eksik gereksinim"}</span>
+      <span className="open-sub">
+        {applicable} gereksinimden <b>{data.complete}</b> tanesi tamam
+        {data.notApplicable > 0 && <> · {data.notApplicable} uygulanamaz</>}
+      </span>
+    </div>
   );
 }
 
@@ -80,7 +84,7 @@ export default function Gap() {
 
   const count = (s) => data.findings.filter((f) => f.severity === s).length;
   const critical = count("Critical");
-  const v = verdict(data.score, critical);
+  const v = verdict(data.open, critical);
   const bySection = Object.fromEntries(data.sections.map((s) => [s.section, s]));
   const visible = data.findings.filter((f) => (!severity || f.severity === severity) && (!section || f.section === section));
 
@@ -91,11 +95,11 @@ export default function Gap() {
   return (
     <section>
       <PageHeader eyebrow="Adım 4 / 4" title="Gap Analizi"
-        subtitle={`SAQ ${SAQ_LABEL[data.saqType]} · Beyanlarınız, kanıtlarınız ve YZ değerlendirmelerinden anlık hesaplanır. Bir bulguyu kapattığınızda skor hemen güncellenir.`} />
+        subtitle={`SAQ ${SAQ_LABEL[data.saqType]} · Beyanlarınız, kanıtlarınız ve otomatik analiz sonuçlarından anlık hesaplanır. Bir eksiği kapattığınızda sayılar hemen güncellenir.`} />
 
       <div className="gap-top">
         <div className="card score-card">
-          <ScoreRing score={data.score} />
+          <OpenCount data={data} critical={critical} />
           <div className={`verdict ${v.cls}`}>
             <Icon name={v.icon} size={18} />
             <span><strong>{v.text}</strong><span>{v.sub}</span></span>
@@ -118,7 +122,7 @@ export default function Gap() {
       <div className="section-head">
         <h2>PCI DSS gereksinimlerine göre durum</h2>
         <div className="legend">
-          <span><i className="good" />%90+</span><span><i className="mid" />%70–89</span><span><i className="bad" />%70 altı</span>
+          <span><i className="good" />Eksik yok</span><span><i className="mid" />Eksik var</span><span><i className="bad" />Kritik eksik var</span>
         </div>
       </div>
       <div className="heatmap">
@@ -132,11 +136,12 @@ export default function Gap() {
           );
           const active = section === s.section;
           return (
-            <button key={n} className={`cell ${level(s.score)} ${active ? "active" : ""}`}
-              onClick={() => setSection(active ? null : s.section)} title={`${s.total} gereksinim · bulguları süzmek için tıklayın`}>
-              <div className="cell-top"><span className="cell-no">{n}</span><span className="cell-score">%{s.score}</span></div>
+            <button key={n} className={`cell ${level(s.open, s.criticalCount)} ${active ? "active" : ""}`}
+              onClick={() => setSection(active ? null : s.section)} title={`${s.total} gereksinim · eksikleri süzmek için tıklayın`}>
+              <div className="cell-top"><span className="cell-no">{n}</span>
+                <span className="cell-score">{s.open === 0 ? "Tamam" : `${s.open} eksik`}</span></div>
               <span className="cell-name">{name}</span>
-              <div className="cell-bar"><div style={{ width: `${s.score}%` }} /></div>
+              <span className="cell-count">{s.complete}/{s.total - s.notApplicable} gereksinim tamam</span>
               {s.criticalCount > 0 && <span className="cell-crit"><Icon name="alert" size={12} /> {s.criticalCount} kritik</span>}
             </button>
           );
@@ -144,7 +149,7 @@ export default function Gap() {
       </div>
 
       <div className="section-head">
-        <h2>Bulgular {section && <span className="filter-pill">Gereksinim {section}
+        <h2>Eksikler ve notlar {section && <span className="filter-pill">Gereksinim {section}
           <button className="link" onClick={() => setSection(null)} aria-label="Filtreyi temizle">×</button></span>}</h2>
         <div className="chips">
           <button className={`chip ${!severity ? "on" : ""}`} onClick={() => setSeverity("")}>Tümü <b>{data.findings.length}</b></button>
@@ -164,7 +169,7 @@ export default function Gap() {
             <div className="finding-main">
               <div className="finding-meta">
                 <span className={`sev ${f.severity.toLowerCase()}`}>{SEVERITY[f.severity]}</span>
-                {f.kind.startsWith("Ai") && <span className="ai-tag"><Icon name="sparkles" size={12} /> YZ</span>}
+                {f.kind.startsWith("Ai") && <span className="ai-tag"><Icon name="clipboard" size={12} /> Otomatik analiz</span>}
                 {f.kind === "AuditorRejected" && <span className="ai-tag auditor-tag"><Icon name="shield" size={12} /> Denetçi</span>}
                 <span className="code">{f.requirementCode}</span>
                 <span className="finding-req">{f.requirementTitle}</span>

@@ -15,7 +15,11 @@ api.interceptors.response.use(
       localStorage.removeItem("token");
       window.location.href = "/login";
     }
-    return Promise.reject(new Error(err.response?.data?.error ?? "Beklenmeyen bir hata oluştu."));
+    if (!err.response) {
+      // Backend kapalı veya henüz açılıyor (ilk derleme birkaç saniye sürebilir)
+      return Promise.reject(new Error("Sunucuya ulaşılamadı. Backend açılıyor olabilir; birkaç saniye sonra sayfayı yenileyin."));
+    }
+    return Promise.reject(new Error(err.response.data?.error ?? `Beklenmeyen bir hata oluştu (HTTP ${err.response.status}).`));
   }
 );
 

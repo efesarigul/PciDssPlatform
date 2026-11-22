@@ -34,9 +34,12 @@ public record SurveyProgressDto(SaqType SaqType, int Total, int Answered, int In
 // Gap analizi
 public record FindingDto(int QuestionId, string RequirementCode, string RequirementTitle, int Section,
                          FindingKind Kind, FindingSeverity Severity, string Issue, string Recommendation);
-public record SectionScoreDto(int Section, int Total, int Score, int CriticalCount);
-public record GapAnalysisDto(SaqType SaqType, int Score, int Total, int Answered, int InPlace, int NotInPlace,
-                             int MissingEvidence, List<SectionScoreDto> Sections, List<FindingDto> Findings,
+// Eksik = Kritik veya Orta bulgusu olan gereksinim. Tamam = uygulanabilir olup eksiği olmayan gereksinim.
+// "Uygulanamaz" cevaplananlar ne tamam ne eksik sayılır (NotApplicable).
+public record SectionStatusDto(int Section, int Total, int Complete, int Open, int NotApplicable, int CriticalCount);
+public record GapAnalysisDto(SaqType SaqType, int Total, int Complete, int Open, int NotApplicable, int Answered,
+                             int InPlace, int NotInPlace,
+                             int MissingEvidence, List<SectionStatusDto> Sections, List<FindingDto> Findings,
                              int AuditorApproved = 0, int AuditorRejected = 0);
 
 // Denetçi erişimi (kurum tarafı)

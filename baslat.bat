@@ -13,6 +13,9 @@ where sqllocaldb >nul 2>&1 || (echo [HATA] SQL Server LocalDB bulunamadi. README
 rem LocalDB ornegi yoksa olusturur, kapaliysa baslatir
 sqllocaldb info MSSQLLocalDB >nul 2>&1 || sqllocaldb create MSSQLLocalDB >nul
 sqllocaldb start MSSQLLocalDB >nul
+rem Yerel dil modeli bellegi doldurdugunda veritabani sorgulari bellek bekleyip yavaslamasin diye
+rem LocalDB'nin elinde en az 512 MB tutmasi saglanir (sqlcmd yoksa atlanir)
+where sqlcmd >nul 2>&1 && sqlcmd -S "(localdb)\MSSQLLocalDB" -E -b -Q "EXEC sp_configure 'show advanced options', 1; RECONFIGURE; EXEC sp_configure 'min server memory (MB)', 512; RECONFIGURE;" >nul 2>&1
 
 if not exist "frontend\node_modules" (
   echo Frontend paketleri kuruluyor, ilk seferde birkac dakika surebilir...
@@ -33,15 +36,27 @@ echo YZ servisi paketleri kuruluyor ^(%PY%^), ilk seferde birkac dakika surebili
 %PY% -m venv ai-service\.venv
 ai-service\.venv\Scripts\python.exe -m pip install -q --disable-pip-version-check -r ai-service\requirements.txt
 :ai_env
-if exist "ai-service\.env" goto ai_start
-copy ai-service\.env.example ai-service\.env >nul
-echo [UYARI] ai-service\.env olusturuldu ama GOOGLE_API_KEY bos. Anahtari yazip baslat.bat'i yeniden calistirin.
-echo         Anahtar: https://aistudio.google.com/apikey  -- YZ analizi bu calistirmada atlaniyor.
-goto ai_skip
+rem Mevcut sanal ortamda yeni paket eksikse (ornegin Gemini'den yerel modele gecis) yeniden kur
+ai-service\.venv\Scripts\python.exe -c "import langchain_ollama" >nul 2>&1 || ai-service\.venv\Scripts\python.exe -m pip install -q --disable-pip-version-check -r ai-service\requirements.txt
+
+rem Yerel dil modeli (Ollama). API anahtari gerekmez; belgeler bilgisayardan cikmaz.
+set "AI_MODE=rules"
+set "OLLAMA="
+where ollama >nul 2>&1 && set "OLLAMA=ollama"
+if not defined OLLAMA if exist "%LOCALAPPDATA%\Programs\Ollama\ollama.exe" set "OLLAMA=%LOCALAPPDATA%\Programs\Ollama\ollama.exe"
+if not defined OLLAMA (
+  echo [UYARI] Ollama bulunamadi: https://ollama.com/download
+  echo         YZ servisi dil modeli olmadan, yalnizca kural moduyla calisacak.
+  goto ai_start
+)
+curl -s -m 3 http://127.0.0.1:11434/api/version >nul 2>&1 || (start "Ollama" /min "%OLLAMA%" serve & timeout /t 6 /nobreak >nul)
+rem Model adlari ai-service\.env icinde degistirildiyse onlari elle indirin (ollama pull ...)
+"%OLLAMA%" list | findstr /c:"gemma3:4b" >nul || (echo Dil modeli indiriliyor, ilk seferde ~3.4 GB... & "%OLLAMA%" pull gemma3:4b)
+"%OLLAMA%" list | findstr /c:"bge-m3" >nul || (echo Embedding modeli indiriliyor, ilk seferde ~1.2 GB... & "%OLLAMA%" pull bge-m3)
+set "AI_MODE=hybrid"
 :ai_start
-findstr /r /c:"^GOOGLE_API_KEY=..*" ai-service\.env >nul || (echo [UYARI] ai-service\.env icinde GOOGLE_API_KEY bos. YZ analizi atlaniyor. & goto ai_skip)
-echo YZ servisi baslatiliyor -^> http://localhost:8000
-start "PCI DSS - YZ Servisi" cmd /k "cd /d "%~dp0ai-service" && .venv\Scripts\python.exe -m uvicorn app:app --port 8000"
+echo YZ servisi baslatiliyor ^(%AI_MODE%^) -^> http://localhost:8000
+start "PCI DSS - YZ Servisi" cmd /k "cd /d "%~dp0ai-service" && set ANALYSIS_MODE=%AI_MODE%&& .venv\Scripts\python.exe -m uvicorn app:app --port 8000"
 :ai_skip
 
 echo Backend baslatiliyor    -^> http://localhost:5000
