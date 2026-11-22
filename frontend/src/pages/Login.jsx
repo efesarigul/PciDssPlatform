@@ -5,7 +5,7 @@ import { Icon, Logo } from "../ui";
 
 const POINTS = [
   { icon: "target", title: "Otomatik kapsam belirleme", text: "Ödeme kanallarınıza göre doğru SAQ tipi ve yalnızca ilgili sorular" },
-  { icon: "clipboard", title: "Kanıt analizi", text: "Belgeleriniz denetçi kontrol listesiyle madde madde karşılaştırılır" },
+  { icon: "clipboard", title: "Kanıtlı beyan", text: "Her beyan belgeyle desteklenir, belgelerin bütünlüğü kayıt altına alınır" },
   { icon: "chart", title: "Gap analizi paneli", text: "Kaç eksik kaldığı ve her birinin ne olduğu tek ekranda" },
 ];
 

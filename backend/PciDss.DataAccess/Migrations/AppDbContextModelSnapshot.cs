@@ -123,30 +123,6 @@ namespace PciDss.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AiChecks")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("AiConfidence")
-                        .HasColumnType("float");
-
-                    b.Property<string>("AiGaps")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AiModel")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AiQuotes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AiSummary")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("AiVerdict")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("AnalyzedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("ContentType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -170,9 +146,6 @@ namespace PciDss.DataAccess.Migrations
 
                     b.Property<long>("SizeBytes")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<string>("StoredFileName")
                         .IsRequired()

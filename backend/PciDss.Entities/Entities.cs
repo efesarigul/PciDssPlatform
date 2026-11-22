@@ -72,28 +72,12 @@ public class Policy : BaseEntity
     public string ContentType { get; set; } = null!;
     public long SizeBytes { get; set; }
     public string Sha256 { get; set; } = null!;
-    public AnalysisStatus Status { get; set; } = AnalysisStatus.Pending; // AnalysisWorker günceller
-
-    // YZ (RAG) analiz sonucu. Failed durumunda AiSummary hata mesajını taşır.
-    public ComplianceVerdict? AiVerdict { get; set; }
-    public double? AiConfidence { get; set; }
-    public string? AiSummary { get; set; }
-    public string? AiGaps { get; set; }    // satır satır eksikler
-    public string? AiQuotes { get; set; }  // satır satır belgeden alıntılar
-    public string? AiChecks { get; set; }  // kontrol listesi maddelerinin sonucu (JSON); analiz gereksinimin tüm belgeleriyle yapılır
-    public string? AiModel { get; set; }
-    public DateTime? AnalyzedAt { get; set; }
 
     public int OrganizationId { get; set; }
     public Organization Organization { get; set; } = null!;
     public int? RequirementId { get; set; }
     public Requirement? Requirement { get; set; }
 }
-
-public enum AnalysisStatus { Pending, Processing, Completed, Failed }
-
-// YZ'nin kanıt belgesi için kararı. Sıra önemli: küçük değer daha iyi (birden fazla belgede en iyisi seçilir).
-public enum ComplianceVerdict { Compliant, Partial, NonCompliant }
 
 // ---------------- DENETÇİ ----------------
 /// <summary>Kurumun bir denetçiye verdiği erişim. Erişimi yalnızca kurum verir ve geri alır.</summary>
@@ -131,8 +115,6 @@ public enum FindingKind
     NotTested,       // Kontrol test edilmedi
     Unanswered,      // Beyan verilmedi
     MissingEvidence, // Uygulanıyor denildi ama zorunlu kanıt yok
-    AiNonCompliant,  // Kanıt yüklendi ama YZ'ye göre gereksinimi karşılamıyor
-    AiPartial,       // Kanıt YZ'ye göre gereksinimi kısmen karşılıyor
     AuditorRejected, // Denetçi kanıtlı beyanı reddetti
     Compensating     // Telafi edici kontrolle karşılanıyor (CCW)
 }

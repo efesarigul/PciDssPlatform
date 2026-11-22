@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { auditApi } from "../api";
-import { Checklist, Icon, PageHeader } from "../ui";
+import { Icon, PageHeader } from "../ui";
 import { SAQ_LABEL } from "./Scope";
 import { ANSWER_LABEL } from "./SurveyWizard";
 
-const VERDICT = { Compliant: "Uyumlu", Partial: "Kısmen uyumlu", NonCompliant: "Uyumsuz" };
 const fmtDate = (d) => new Date(d).toLocaleString("tr-TR", { dateStyle: "short", timeStyle: "short" });
 
 // Denetçi kuyruğundaki bir kalemin durumu
 const STATE = {
   Ready: { label: "İnceleme bekliyor", cls: "state-ready" },
   Stale: { label: "Kanıt değişti, yeniden incele", cls: "state-stale" },
-  WaitingSystem: { label: "Sistem kontrolünde", cls: "state-waiting" },
   Approved: { label: "Onaylandı", cls: "state-approved" },
   Rejected: { label: "Reddedildi", cls: "state-rejected" },
 };
@@ -20,7 +18,6 @@ const FILTERS = [
   { key: "todo", label: "İncelenecek", match: (s) => s === "Ready" || s === "Stale" },
   { key: "Approved", label: "Onaylanan", match: (s) => s === "Approved" },
   { key: "Rejected", label: "Reddedilen", match: (s) => s === "Rejected" },
-  { key: "WaitingSystem", label: "Sistem kontrolünde", match: (s) => s === "WaitingSystem" },
   { key: "all", label: "Tümü", match: () => true },
 ];
 
@@ -34,7 +31,7 @@ export function AuditOrgs() {
   return (
     <section>
       <PageHeader eyebrow="Denetçi paneli" title="Kurumlar"
-        subtitle="Size erişim veren kurumlar. Kurumların kanıtlı beyanları önce sistem tarafından otomatik kontrol edilir, ardından incelemeniz için kuyruğa düşer." />
+        subtitle="Size erişim veren kurumlar. Kurumların kanıt yüklediği beyanlar incelemeniz için kuyruğa düşer." />
       {error && <div className="error">{error}</div>}
       <div className="card table-card">
         <table className="table">
@@ -76,14 +73,6 @@ export function AuditReview() {
   const load = () => auditApi.org(orgId).then(setData).catch((e) => setError(e.message));
   useEffect(() => { load(); }, [orgId]);
 
-  // Sistem kontrolü süren kalem varken listeyi tazele
-  const waiting = data?.items.some((i) => i.state === "WaitingSystem");
-  useEffect(() => {
-    if (!waiting) return;
-    const t = setInterval(load, 4000);
-    return () => clearInterval(t);
-  }, [waiting, orgId]);
-
   if (error && !data) return (
     <section>
       <Link to="/audit" className="back-link"><Icon name="arrowLeft" size={14} /> Kurumlar</Link>
@@ -100,7 +89,7 @@ export function AuditReview() {
     <section>
       <Link to="/audit" className="back-link"><Icon name="arrowLeft" size={14} /> Kurumlar</Link>
       <PageHeader eyebrow={`SAQ ${SAQ_LABEL[data.saqType]}`} title={data.name}
-        subtitle="Kurumun beyanını, yüklediği belgeleri ve sistemin otomatik değerlendirmesini inceleyin. Kararınız kurumun gap analizine yansır; ret gerekçeniz kuruma kritik bulgu olarak gösterilir." />
+        subtitle="Kurumun beyanını ve yüklediği belgeleri inceleyin. Kararınız kurumun gap analizine yansır; ret gerekçeniz kuruma kritik bulgu olarak gösterilir." />
 
       {data.declarationOnly > 0 && (
         <div className="hint neutral audit-hint">
@@ -167,7 +156,6 @@ function ReviewItem({ item, orgId, open, onToggle, onSaved }) {
         <span className={`chev ${open ? "open" : ""}`}>›</span>
         <span className="code">{q.requirementCode}</span>
         <span className="review-title">{q.requirementTitle}</span>
-        {q.evidenceAi && <span className={`badge verdict-${q.evidenceAi.verdict.toLowerCase()}`}><Icon name="clipboard" size={12} /> {VERDICT[q.evidenceAi.verdict]}</span>}
         <span className={`badge ${st.cls}`}>{st.label}</span>
       </button>
 
@@ -182,26 +170,19 @@ function ReviewItem({ item, orgId, open, onToggle, onSaved }) {
               {q.evidenceHint && <p className="muted small">Beklenen kanıt: {q.evidenceHint}</p>}
             </div>
             <div className="review-block">
-              <h4>Belgeler ve sistem kontrolü</h4>
+              <h4>Belgeler</h4>
               {files.map((f) => (
                 <div key={f.id} className="doc">
                   <div className="doc-row">
                     <Icon name="file" size={16} className="file-icon" />
                     <span className="file-name" title={f.fileName}>{f.fileName}</span>
-                    <DocStatus f={f} />
                     <button className="link sm" onClick={() => openFile(f)}><Icon name="external" size={14} /> Aç</button>
                   </div>
-                  {/* Kontrol listesi yoksa (eski analiz) belge bazlı özet gösterilir */}
-                  {!q.evidenceAi?.checks && f.ai?.summary && <p className="doc-summary">{f.ai.summary}</p>}
-                  {!q.evidenceAi?.checks && f.ai?.gaps?.length > 0 && <ul className="doc-gaps">{f.ai.gaps.map((g) => <li key={g}>{g}</li>)}</ul>}
-                  <span className="muted small">Yüklendi {fmtDate(f.uploadedAt)}{f.ai?.model ? ` · ${f.ai.model}` : ""}</span>
+                  <span className="muted small">Yüklendi {fmtDate(f.uploadedAt)}</span>
                 </div>
               ))}
-              {q.evidenceAi?.summary && q.evidenceAi.checks && <p className="doc-summary">{q.evidenceAi.summary}</p>}
             </div>
           </div>
-
-          {state !== "WaitingSystem" && <Checklist checks={q.evidenceAi?.checks} />}
 
           {r && (
             <div className={`review-last ${r.decision === "Approved" ? "ok" : "bad"}`}>
@@ -214,29 +195,19 @@ function ReviewItem({ item, orgId, open, onToggle, onSaved }) {
             </div>
           )}
 
-          {state === "WaitingSystem" ? (
-            <div className="hint neutral"><span className="spinner" /><span>Belgelerin otomatik kontrolü tamamlanınca karar verebilirsiniz.</span></div>
-          ) : (
-            <div className="review-actions">
-              <label>Denetçi notu <span className="muted small">(ret için zorunlu; kurum bu notu görür)</span>
-                <textarea rows={2} value={note} onChange={(e) => setNote(e.target.value)} maxLength={2000}
-                  placeholder="Örn. Kural setinde gözden geçirme tarihi yok; son 6 aya ait imzalı tutanağı yükleyin." />
-              </label>
-              {error && <div className="error">{error}</div>}
-              <div className="review-buttons">
-                <button className="danger" disabled={busy} onClick={() => decide("Rejected")}><Icon name="x" size={16} /> Reddet</button>
-                <button className="approve" disabled={busy} onClick={() => decide("Approved")}><Icon name="check" size={16} /> Onayla</button>
-              </div>
+          <div className="review-actions">
+            <label>Denetçi notu <span className="muted small">(ret için zorunlu; kurum bu notu görür)</span>
+              <textarea rows={2} value={note} onChange={(e) => setNote(e.target.value)} maxLength={2000}
+                placeholder="Örn. Kural setinde gözden geçirme tarihi yok; son 6 aya ait imzalı tutanağı yükleyin." />
+            </label>
+            {error && <div className="error">{error}</div>}
+            <div className="review-buttons">
+              <button className="danger" disabled={busy} onClick={() => decide("Rejected")}><Icon name="x" size={16} /> Reddet</button>
+              <button className="approve" disabled={busy} onClick={() => decide("Approved")}><Icon name="check" size={16} /> Onayla</button>
             </div>
-          )}
+          </div>
         </div>
       )}
     </div>
   );
-}
-
-function DocStatus({ f }) {
-  if (f.status === "Pending" || f.status === "Processing") return <span className="badge processing"><span className="spinner" />Analiz ediliyor</span>;
-  if (f.status === "Failed") return <span className="badge failed">Analiz başarısız</span>;
-  return <span className={`badge verdict-${f.ai.verdict.toLowerCase()}`}>{VERDICT[f.ai.verdict]}</span>;
 }

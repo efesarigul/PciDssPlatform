@@ -83,7 +83,4 @@ public class FilesController(IFileService files) : CustomerControllerBase
         => Ok(await files.UploadAsync(OrgId, file, requirementCode));
 
     [HttpGet] public async Task<ActionResult<List<PolicyDto>>> List() => Ok(await files.ListAsync(OrgId));
-
-    [HttpPost("{id:int}/analyze")]
-    public async Task<IActionResult> Reanalyze(int id) { await files.ReanalyzeAsync(OrgId, id); return NoContent(); }
 }

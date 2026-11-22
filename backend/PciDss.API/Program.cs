@@ -20,18 +20,6 @@ builder.Services.AddScoped<IDemoService, DemoService>();
 builder.Services.AddScoped<IAuditorAccessService, AuditorAccessService>();
 builder.Services.AddScoped<IAuditService, AuditService>();
 
-// Faz 2: Python RAG servisi (ai-service). Kapalıysa belgeler "Analiz bekliyor" durumunda kalır.
-if (cfg.GetValue("AiService:Enabled", true))
-{
-    builder.Services.AddHttpClient<AnalysisService>(c =>
-    {
-        c.BaseAddress = new Uri(cfg["AiService:Url"] ?? "http://localhost:8000/");
-        // Yerel model maddeleri tek tek değerlendirir; ilk çağrıda model belleğe yüklenir (LLM_TIMEOUT, varsayılan 3 dk)
-        c.Timeout = TimeSpan.FromMinutes(7);
-    });
-    builder.Services.AddHostedService<AnalysisWorker>();
-}
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(o => o.TokenValidationParameters = new TokenValidationParameters
     {

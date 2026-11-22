@@ -34,7 +34,7 @@ export default function Auditors() {
   return (
     <section>
       <PageHeader eyebrow="Paylaşım" title="Denetçi Erişimi"
-        subtitle="Erişim verdiğiniz denetçiler, sistemin otomatik olarak kontrol ettiği kanıtlı beyanlarınızı inceleyip onaylar veya reddeder. Denetçiler verinizi değiştiremez; kararları Gap Analizi ekranınıza yansır." />
+        subtitle="Erişim verdiğiniz denetçiler, kanıt yüklediğiniz beyanlarınızı inceleyip onaylar veya reddeder. Denetçiler verinizi değiştiremez; kararları Gap Analizi ekranınıza yansır." />
 
       <form className="card grant-card" onSubmit={grant}>
         <label>Denetçinin e-posta adresi

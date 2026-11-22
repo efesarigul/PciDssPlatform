@@ -7,7 +7,7 @@ import { SECTIONS } from "./SurveyWizard";
 
 const SEVERITY = { Critical: "Kritik", Medium: "Orta", Low: "Düşük" };
 const SEVERITY_ICON = { Critical: "alert", Medium: "info", Low: "help" };
-const EVIDENCE_KINDS = ["MissingEvidence", "AiNonCompliant", "AiPartial", "AuditorRejected"];
+const EVIDENCE_KINDS = ["MissingEvidence", "AuditorRejected"];
 // Renk: kritik eksik varsa kırmızı, eksik varsa sarı, hiç eksik yoksa yeşil
 const level = (open, critical) => (critical > 0 ? "bad" : open > 0 ? "mid" : "good");
 
@@ -95,7 +95,7 @@ export default function Gap() {
   return (
     <section>
       <PageHeader eyebrow="Adım 4 / 4" title="Gap Analizi"
-        subtitle={`SAQ ${SAQ_LABEL[data.saqType]} · Beyanlarınız, kanıtlarınız ve otomatik analiz sonuçlarından anlık hesaplanır. Bir eksiği kapattığınızda sayılar hemen güncellenir.`} />
+        subtitle={`SAQ ${SAQ_LABEL[data.saqType]} · Beyanlarınız, kanıtlarınız ve denetçi kararlarından anlık hesaplanır. Bir eksiği kapattığınızda sayılar hemen güncellenir.`} />
 
       <div className="gap-top">
         <div className="card score-card">
@@ -169,7 +169,6 @@ export default function Gap() {
             <div className="finding-main">
               <div className="finding-meta">
                 <span className={`sev ${f.severity.toLowerCase()}`}>{SEVERITY[f.severity]}</span>
-                {f.kind.startsWith("Ai") && <span className="ai-tag"><Icon name="clipboard" size={12} /> Otomatik analiz</span>}
                 {f.kind === "AuditorRejected" && <span className="ai-tag auditor-tag"><Icon name="shield" size={12} /> Denetçi</span>}
                 <span className="code">{f.requirementCode}</span>
                 <span className="finding-req">{f.requirementTitle}</span>

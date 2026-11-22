@@ -63,7 +63,6 @@ export const surveyApi = {
 
 export const filesApi = {
   list: () => api.get("/files").then((r) => r.data),
-  reanalyze: (id) => api.post(`/files/${id}/analyze`),
   upload: (file, requirementCode, onProgress) => {
     const form = new FormData();
     form.append("file", file);

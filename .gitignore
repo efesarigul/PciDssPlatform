@@ -7,7 +7,7 @@ obj/
 # Yüklenen kanıt dosyaları (kuruma ait veri, depoya girmemeli)
 backend/PciDss.API/uploads/
 
-# YZ servisi: API anahtarı, sanal ortam ve vektör veritabanı yereldir
+# YZ servisinin yerel dosyaları (servis main'den çıkarıldı, kodu yz-analizi dalında)
 ai-service/.env
 ai-service/.venv/
 ai-service/chroma_db/

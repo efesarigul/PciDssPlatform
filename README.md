@@ -1,8 +1,8 @@
 # PCI DSS Ön Değerlendirme Platformu
 
-Kurumların PCI DSS uyumluluklarını resmi denetimden **önce** kendi başlarına değerlendirip eksiklerini görebildikleri, yapay zekâ destekli bir ön değerlendirme platformu.
+Kurumların PCI DSS uyumluluklarını resmi denetimden **önce** kendi başlarına değerlendirip eksiklerini görebildikleri bir ön değerlendirme platformu.
 
-> **Durum:** Kapsam belirleme, beyan anketi, kanıt yükleme, yerel hibrit RAG ile YZ belge analizi, gap analizi paneli ve denetçi paneli çalışıyor. Sırada bulguların kalıcılaştırılması (`Finding`) ve raporlama var.
+> **Durum:** Kapsam belirleme, beyan anketi, kanıt yükleme, gap analizi paneli ve denetçi paneli çalışıyor. Sırada bulguların kalıcılaştırılması (`Finding`) ve raporlama var. Yapay zekâ ile belge analizi sonraki aşamaya bırakıldı; o çalışma [`yz-analizi`](https://github.com/efesarigul/PciDssPlatform/tree/yz-analizi) dalında duruyor.
 
 ## Proje hakkında
 
@@ -13,9 +13,9 @@ Bu platform süreci denetimden öne çeker:
 1. **Kapsam belirleme.** Kurum kart ödemelerini nasıl kabul ettiğini beyan eder. Platform buna göre uygun **SAQ** (öz değerlendirme anketi) tipini belirler.
 2. **Adım adım beyan.** Kurum yalnızca kendi SAQ tipine ait PCI DSS gereksinimlerini görür ve her biri için durumunu beyan eder.
 3. **Dijital kanıt.** Beyanlar politika belgeleri, sistem raporları ve konfigürasyon çıktılarıyla desteklenir.
-4. **YZ ile analiz.** Yüklenen belgeler yerel bir hibrit RAG servisiyle gereksinimin denetçi kontrol listesine göre madde madde karşılaştırılır. Beyan, sistemin süzgecinden geçmeden kabul edilmez.
+4. **Kanıtlı beyan.** "Uygulanıyor" beyanı, zorunlu kanıtı yüklenmeden tamam sayılmaz.
 5. **Gap analizi paneli.** Kritik bulgular süreci durdurmaz; sayılır ve panelde tek tek takip edilir.
-6. **Uzaktan denetim.** Kurumun yetki verdiği denetçi, sistemin kontrol ettiği kanıtlı beyanları kendi panelinden inceler, onaylar veya gerekçeyle reddeder.
+6. **Uzaktan denetim.** Kurumun yetki verdiği denetçi, kanıtlı beyanları kendi panelinden inceler, onaylar veya gerekçeyle reddeder.
 
 ## Özellikler
 
@@ -37,34 +37,12 @@ Bu platform süreci denetimden öne çeker:
   - Dosyalar diskte rastgele adla saklanır.
   - Kanıt bütünlüğü için her dosyanın SHA-256 özeti kaydedilir.
 - **Eksik kanıt takibi.** "Uygulanıyor" beyan edilip zorunlu kanıtı yüklenmemiş gereksinimler ayrıca sayılır.
-- **YZ destekli kanıt analizi (yerel hibrit RAG).** Dış API kullanılmaz; tüm modeller bilgisayarda çalışır ve belgeler kurum dışına çıkmaz. Bir gereksinimle ilişkilendirilen her belge arka planda Python servisine gönderilir:
-  1. Metin çıkarılır (PDF, DOCX, TXT, MD) ve LangChain ile parçalara bölünür.
-  2. Parçalar yerel embedding modeliyle (`bge-m3`) ChromaDB vektör veritabanına yazılır.
-  3. **Arama:** her denetçi kontrol maddesi için BM25 (anahtar kelime, Türkçe için 5 harfli kökleme) ve vektör (anlam) araması yapılır, sonuçlar RRF ile birleştirilir.
-  4. **Kural katmanı:** sıklık, süre ve sayı şartları ("en az üç ayda bir", "12 ay saklanır", "en az 12 karakter") belgenin cümlelerinde deterministik olarak kontrol edilir. Kural sağlanmıyorsa madde doğrudan "Karşılanmadı" olur. Olumsuz cümleler ("MFA kullanılmamaktadır") ve standarttan alıntılar kanıt sayılmaz.
-  5. **Yerel dil modeli** (Ollama, `gemma3:4b`) kalan her maddeyi yalnızca getirilen parçalara dayanarak ayrı ayrı değerlendirir ve belgeden alıntı verir.
-  6. **Birleştirme:** modelin alıntısı belgede doğrulanır; belgede bulunamayan alıntıyla "Karşılandı" verilemez. Gereksinim kararı maddelerden kural tabanlı türetilir.
-
-  Her analiz, aynı gereksinime yüklenmiş **tüm** belgeleri birlikte değerlendirir (bir belgede eksik kalan madde diğerinde karşılanabilir). Bu yüzden gereksinimin durumu en iyi değil, **en son** analizden alınır. Sonuç ekranında her kontrol maddesi durumu, gerekçesi ve belgeden alıntısıyla listelenir.
-
-  `ANALYSIS_MODE=rules` ile dil modeli olmadan, yalnızca arama ve kurallarla da çalışır. Kural testleri: `cd ai-service && .venv\Scripts\python tests\test_rules.py`.
-
-  **Ölçüm** (`ai-service/evaluate.py`, `eval/cases.json`: 5 belge, elle etiketlenmiş 14 kontrol maddesi; küçük bir set olduğu için yön göstergesidir):
-
-  | Yapılandırma | Doğru | Süre |
-  |---|---|---|
-  | Yalnızca kurallar (`ANALYSIS_MODE=rules`) | 12/14 | < 1 sn |
-  | Hibrit + `qwen3:4b` | 8/14 | ~70 sn |
-  | Hibrit + `gemma3:4b` (varsayılan) | 12/14 | ~40 sn |
-
-  Kurallar kesin şartlarda, dil modeli ise anlam gerektiren maddelerde ve Türkçe gerekçe yazmada güçlüdür. Hibrit yapı ikisini birleştirir: model kesin kuralları çiğneyemez, kural da modelin anladığı nüansı kaybetmez.
-- **Gap analizi paneli.** Kaç gereksinimin eksik, kaçının tamam olduğu; 12 gereksinim için eksik sayısını gösteren ısı haritası ve Kritik/Orta/Düşük bulgular. Yüzdelik skor yoktur, eksikler tek tek listelenir. YZ'nin uyumsuz bulduğu kanıtlar kritik bulgu olarak işaretlenir. Bulgudan tek tıkla ilgili soruya veya belgeye gidilir. Denetçinin reddettiği gereksinimler de bulgu olarak görünür.
+- **Gap analizi paneli.** Kaç gereksinimin eksik, kaçının tamam olduğu; 12 gereksinim için eksik sayısını gösteren ısı haritası ve Kritik/Orta/Düşük bulgular. Yüzdelik skor yoktur, eksikler tek tek listelenir. Bulgudan tek tıkla ilgili soruya veya belgeye gidilir. Denetçinin reddettiği gereksinimler de bulgu olarak görünür.
 - **Denetçi paneli.**
   - Kayıt ekranında "Denetçi" seçilerek denetçi hesabı açılır. Denetçi, denetim firmasının kurumuna bağlıdır ve müşteri kurumların verisini yalnızca verilen yetkiyle görür.
   - Müşteri kurum **Denetçiler** sayfasından denetçiye e-posta adresiyle erişim verir ve istediği an geri alır.
-  - Denetçi yetkili olduğu kurumları listeler; her gereksinim için kurumun beyanını, yüklenen belgeleri (indirerek) ve YZ'nin madde madde sonucunu görür, **Onayla** veya **Reddet** der. Reddetmek için not zorunludur.
-  - Belgelerden biri hâlâ YZ analizindeyse karar verilemez ("Sistem kontrolü bekleniyor").
-  - Karardan sonra yeni kanıt yüklenir veya yeniden analiz yapılırsa karar **eskimiş** sayılır ve gap analizinde hesaba katılmaz; denetçinin yeniden bakması gerekir.
+  - Denetçi yetkili olduğu kurumları listeler; her gereksinim için kurumun beyanını ve yüklenen belgeleri (indirerek) görür, **Onayla** veya **Reddet** der. Reddetmek için not zorunludur.
+  - Karardan sonra yeni kanıt yüklenirse karar **eskimiş** sayılır ve gap analizinde hesaba katılmaz; denetçinin yeniden bakması gerekir.
   - Roller ayrıdır: denetçi müşteri ekranlarına, müşteri denetçi ekranlarına erişemez (403).
 
 ### Yol haritası
@@ -72,9 +50,10 @@ Bu platform süreci denetimden öne çeker:
 | Faz | Kapsam |
 |---|---|
 | **Faz 1** ✅ | Kayıt, kapsam belirleme, beyan anketi, kanıt yükleme |
-| **Faz 2** ✅ | Python yerel hibrit RAG servisi (LangChain, ChromaDB, Ollama, kural katmanı): belgeleri gereksinimlerle karşılaştırma |
-| **Faz 3** | Gap analizi paneli ✅; `Finding` varlığıyla bulguların kalıcılaştırılması, raporlama |
-| **Faz 4** ✅ | Denetçi rolü, kurum bazlı erişim yetkisi, birden fazla kurumu uzaktan değerlendirme paneli |
+| **Faz 2** ✅ | Gap analizi paneli, demo kurumu, arayüz yenilemesi |
+| **Faz 3** ✅ | Denetçi rolü, kurum bazlı erişim yetkisi, birden fazla kurumu uzaktan değerlendirme paneli |
+| **Faz 4** | `Finding` varlığıyla bulguların kalıcılaştırılması, raporlama |
+| **Sonraki aşama** | Yapay zekâ ile kanıt belgelerinin gereksinimlerle karşılaştırılması |
 
 ## SAQ tipine göre soru sayısı
 
@@ -100,7 +79,6 @@ Bu platform süreci denetimden öne çeker:
 | Veritabanı | SQL Server (geliştirmede LocalDB) |
 | Kimlik doğrulama | JWT, BCrypt ile parola özeti |
 | Frontend | React 18, Vite, React Router, Axios, react-dropzone |
-| YZ servisi | Python, FastAPI, LangChain, ChromaDB, Ollama (yerel `gemma3:4b` + `bge-m3`), BM25 ve kural katmanı |
 
 ## Mimari
 
@@ -108,24 +86,15 @@ Bu platform süreci denetimden öne çeker:
 backend/
   PciDss.Entities     → Varlıklar ve enum'lar (Organization, User, ScopeProfile, Requirement, SurveyQuestion, SurveyAnswer, Policy, AuditorAccess, AuditorReview)
   PciDss.DataAccess   → AppDbContext (EF Core + seed verisi), Generic Repository, migration'lar
-  PciDss.Business     → DTO'lar ve servisler (Auth, Scope/SAQ kuralları, Survey, File, Gap, Demo, Denetçi erişimi, Denetim, YZ analiz kuyruğu)
+  PciDss.Business     → DTO'lar ve servisler (Auth, Scope/SAQ kuralları, Survey, File, Gap, Demo, Denetçi erişimi, Denetim)
   PciDss.API          → Controller'lar, JWT / CORS / Swagger yapılandırması
 frontend/
   src/api.js          → Backend'e giden tek axios istemcisi
   src/pages/          → Giriş/Kayıt, Kapsam Belirleme, Beyan Anketi, Kanıt Yükleme, Gap Analizi, Denetçiler, Denetçi paneli
-ai-service/
-  app.py              → FastAPI hibrit RAG servisi (/analyze, /health), kararların birleştirilmesi
-  retrieval.py        → BM25 + vektör araması, RRF ile birleştirme
-  rules.py            → Kural katmanı: sıklık/süre/sayı şartları, olumsuzluk, alıntı doğrulama
-  knowledge/          → Denetçi kontrol listesi ve maddelerin kuralları (test_procedures.json)
-  tests/              → Kural katmanı testleri
 demo/                 → Sunumda canlı yüklenecek örnek kanıtlar (biri bilerek eksik yazılmıştır)
-docs/                 → RAG mimarisi ve "Sistem nasıl çalışır" anlatım belgeleri
 ```
 
-YZ akışı: `Kanıt yükle → Policy (Pending) → AnalysisWorker → ai-service /analyze → Policy (Completed + karar) → Gap analizi`
-
-Denetim akışı: `Müşteri denetçiye erişim verir → Denetçi kanıtlı beyanı ve YZ sonucunu inceler → Onay / Ret (not) → Gap analizi`
+Denetim akışı: `Müşteri denetçiye erişim verir → Denetçi kanıtlı beyanı ve belgeleri inceler → Onay / Ret (not) → Gap analizi`
 
 - **Tek yönlü katman bağımlılığı:** `API → Business → DataAccess → Entities`.
 - **Controller'lar** entity değil, DTO döner.
@@ -135,18 +104,14 @@ Denetim akışı: `Müşteri denetçiye erişim verir → Denetçi kanıtlı bey
 
 ### En kolay yol (Windows)
 
-Gereksinimleri kurduktan sonra depo klasöründeki **`baslat.bat`** dosyasına çift tıklayın. Paketleri kurar, LocalDB'yi başlatır, YZ servisi, backend ve frontend'i ayrı pencerelerde açar ve tarayıcıda http://localhost:5173 adresini açar. Veritabanı ilk açılışta otomatik oluşturulur.
+Gereksinimleri kurduktan sonra depo klasöründeki **`baslat.bat`** dosyasına çift tıklayın. Paketleri kurar, LocalDB'yi başlatır, backend ve frontend'i ayrı pencerelerde açar ve tarayıcıda http://localhost:5173 adresini açar. Veritabanı ilk açılışta otomatik oluşturulur.
 
-Giriş ekranındaki **"Demo kurumla giriş"** butonu hazır verili örnek bir kurum açar (her girişte sıfırlanır). **"Demo denetçiyle giriş"** butonu, demo kurumu sıfırlamadan onun beyanlarını denetçi gözüyle açar. `demo/` klasöründe canlı yüklemek için iki örnek kanıt vardır: 1.2.7 için uyumlu bir tutanak ve 10.4.1 için YZ'nin yakalaması gereken eksik bir prosedür.
-
-**Yerel dil modeli:** API anahtarı gerekmez. [Ollama](https://ollama.com/download)'yı kurun; `baslat.bat` ilk açılışta `gemma3:4b` (~3,4 GB) ve `bge-m3` (~1,2 GB) modellerini indirir. Elle: `ollama pull gemma3:4b` ve `ollama pull bge-m3`. Ollama yoksa YZ servisi dil modeli olmadan, yalnızca kural moduyla çalışır. 6 GB ekran kartında rahat çalışır; ayarlar `ai-service/.env.example` içindedir.
+Giriş ekranındaki **"Demo kurumla giriş"** butonu hazır verili örnek bir kurum açar (her girişte sıfırlanır). **"Demo denetçiyle giriş"** butonu, demo kurumu sıfırlamadan onun beyanlarını denetçi gözüyle açar. `demo/` klasöründe canlı yüklemek için iki örnek kanıt vardır: 1.2.7 için bir tutanak ve 10.4.1 için bir log yönetimi prosedürü.
 
 ### Gereksinimler
 
 - [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
 - [Node.js](https://nodejs.org) (LTS)
-- [Python](https://www.python.org) 3.11–3.13 (YZ servisi için)
-- [Ollama](https://ollama.com/download) (yerel dil modeli için; yoksa YZ servisi kural moduyla çalışır)
 - SQL Server LocalDB. Visual Studio ile gelir; ayrıca SQL Server Express kurulumunda "LocalDB" seçilerek de kurulabilir.
 - EF Core aracı (yalnızca migration eklerken gerekir): `dotnet tool install --global dotnet-ef --version 9.0.9`
 
@@ -195,7 +160,6 @@ Denetçi olarak: kayıtta "Denetçi"yi seçin, giriş yapınca yetkili olduğunu
 | GET | /api/survey/progress | Cevap ve eksik kanıt istatistikleri |
 | POST | /api/files | multipart dosya yükleme (`file`, `requirementCode`) |
 | GET | /api/files | Kurumun yüklediği belgeler |
-| POST | /api/files/{id}/analyze | Belgeyi yeniden YZ analizine al |
 | GET | /api/gap | Tamam/eksik sayıları, bölüm bazında eksikler ve bulgular |
 | POST | /api/auth/demo | Demo kurumu sıfırlar ve JWT döner (`Demo:Enabled`) |
 | POST | /api/auth/demo-auditor | Demo kuruma erişimi olan demo denetçiyle giriş |
@@ -203,7 +167,7 @@ Denetçi olarak: kayıtta "Denetçi"yi seçin, giriş yapınca yetkili olduğunu
 | POST | /api/auditors | Denetçiye e-posta adresiyle erişim ver |
 | DELETE | /api/auditors/{id} | Denetçi erişimini geri al |
 | GET | /api/audit/orgs | *(denetçi)* Yetkili olunan kurumlar |
-| GET | /api/audit/orgs/{orgId} | *(denetçi)* Kurumun beyanları, belgeleri, YZ sonuçları ve kararlar |
+| GET | /api/audit/orgs/{orgId} | *(denetçi)* Kurumun beyanları, belgeleri ve kararlar |
 | PUT | /api/audit/orgs/{orgId}/reviews/{questionId} | *(denetçi)* Onay / ret kararı (retle not zorunlu) |
 | GET | /api/audit/orgs/{orgId}/files/{id} | *(denetçi)* Kanıt belgesini indir |
 

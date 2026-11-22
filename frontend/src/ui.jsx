@@ -42,38 +42,6 @@ export function Logo({ light = false }) {
   );
 }
 
-const CHECK = {
-  Met: { icon: "check", label: "Karşılandı" },
-  Partial: { icon: "info", label: "Kısmen" },
-  NotMet: { icon: "x", label: "Karşılanmadı" },
-};
-
-// YZ'nin denetçi kontrol listesi maddelerine göre değerlendirmesi (madde, gerekçe, belgeden alıntı)
-export function Checklist({ checks }) {
-  if (!checks?.length) return null;
-  const met = checks.filter((c) => c.status === "Met").length;
-  return (
-    <div className="checklist">
-      <div className="checklist-head">
-        <h4>Kontrol listesi</h4>
-        <span className="muted small">{met}/{checks.length} madde karşılandı</span>
-      </div>
-      <ul>
-        {checks.map((c) => (
-          <li key={c.id} className={`check ${c.status.toLowerCase()}`}>
-            <span className="check-icon" title={CHECK[c.status]?.label}><Icon name={CHECK[c.status]?.icon ?? "help"} size={13} /></span>
-            <div>
-              <strong>{c.text}</strong>
-              <span className="check-finding">{c.finding}</span>
-              {c.quote && <blockquote>“{c.quote}”{c.file && <cite>{c.file}</cite>}</blockquote>}
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
 export function PageHeader({ eyebrow, title, subtitle, children }) {
   return (
     <header className="page-head">
